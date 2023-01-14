@@ -1,4 +1,9 @@
 $font: 'Comfortaa', cursive;
+$inputFocusColor: #3369f3;
+$textColor: rgb(109, 109, 109);
+$shadowColor: rgba(34, 60, 80, 0.2);
+$borderColor: rgba(109, 109, 109, 0.295);
+$outlineColor: rgba(128, 128, 128, 0.167);
 
 .registr {
   width: 340px;
@@ -8,8 +13,8 @@ $font: 'Comfortaa', cursive;
   flex-direction: column;
   padding: 30px;
   padding-top: 50px;
-  outline: solid rgba(128, 128, 128, 0.167);
-  box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+  outline: solid $outlineColor;
+  box-shadow: 4px 4px 8px 0px $shadowColor;
   border-radius: 0.5em;
   text-align: center;
   font-family: $font;
@@ -18,7 +23,7 @@ $font: 'Comfortaa', cursive;
 .registr-txt {
   font-size: 20px;
   margin-bottom: 30px;
-  color: rgb(109, 109, 109);
+  color: $textColor;
 }
 
 .registr-input {
@@ -26,12 +31,12 @@ $font: 'Comfortaa', cursive;
   padding: 5px;
   margin-bottom: 15px;
   border-radius: 0.3em;
-  border-color: rgba(109, 109, 109, 0.295);
+  border-color: $borderColor;
 }
 
 .registr-input:focus {
-  outline: #3369f3 solid 1px;
-  border-color: #3369f3;
+  outline: $inputFocusColor solid 1px;
+  border-color: $inputFocusColor;
 }
 
 .pass-text {

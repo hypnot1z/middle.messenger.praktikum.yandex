@@ -2,18 +2,19 @@
   <div class='wrapper__form wrapper-txt'>
     <label class='auth-txt'>Вход</label>
     <input type='text' name='login' class='auth-input' placeholder='Логин' />
+    <input type='password' name="password" class='auth-input' placeholder='Пароль' />
     <span class='login-text'>Неверный логин</span>
-    <input type='password' class='auth-input' placeholder='Пароль' />
   </div>
   <div class='wrapper__form wrapper-btn'>
     {{> Button id='login-btn' value='Авторизоваться'}}
     <a href='#/registration'>Нет аккунта?</a>
   </div>
 </form>
-<div class='links'>
+<nav class='links'>
   <a href='#/login'>Login</a>
   <a href='#/registration'>Registration</a>
+  <a href='#/profile'>Profile</a>
   <a href='#/404'>Page not found</a>
   <a href='#/500'>Server error</a>
+</nav>
 
-</div>

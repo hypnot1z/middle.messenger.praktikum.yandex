@@ -1,4 +1,10 @@
 $font: 'Comfortaa', cursive;
+$inputFocusColor: #3369f3;
+$textColor: rgb(109, 109, 109);
+$shadowColor: rgba(34, 60, 80, 0.2);
+$borderColor: rgba(109, 109, 109, 0.295);
+$outlineColor: rgba(128, 128, 128, 0.167);
+$invalidColor: red;
 
 .auth {
   width: 340px;
@@ -8,8 +14,8 @@ $font: 'Comfortaa', cursive;
   justify-content: space-between;
   padding: 30px;
   padding-top: 50px;
-  outline: solid rgba(128, 128, 128, 0.167);
-  box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+  outline: solid $outlineColor;
+  box-shadow: 4px 4px 8px 0px $shadowColor;
   border-radius: 0.5em;
   text-align: center;
   font-family: $font;
@@ -18,7 +24,7 @@ $font: 'Comfortaa', cursive;
 .auth-txt {
   font-size: 20px;
   margin-bottom: 30px;
-  color: rgb(109, 109, 109);
+  color: $textColor;
 }
 
 .auth-input {
@@ -26,21 +32,21 @@ $font: 'Comfortaa', cursive;
   padding: 5px;
   margin-bottom: 15px;
   border-radius: 0.3em;
-  border-color: rgba(109, 109, 109, 0.295);
+  border-color: $borderColor;
 }
 
 .auth-input:focus {
-  outline: #3369f3 solid 2px;
-  border-color: #3369f3;
-}
-
-.login-text {
-  font-size: 8px;
-  color: red;
-  display: none;
+  outline: $inputFocusColor solid 2px;
+  border-color: $inputFocusColor;
 }
 
 .wrapper__form {
   display: flex;
   flex-direction: column;
+}
+
+.login-text {
+  font-size: 8px;
+  color: $invalidColor;
+  display: none;
 }

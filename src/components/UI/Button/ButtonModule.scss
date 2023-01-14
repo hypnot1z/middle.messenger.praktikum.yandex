@@ -1,6 +1,9 @@
+$bgColor: #3369f3;
+$btnTextColor: white;
+
 .btn {
-  background-color: #3369f3;
-  color: white;
+  background-color: $bgColor;
+  color: $btnTextColor;
   border-radius: 0.5em;
   font-family: 'Comfortaa', cursive;
   font-weight: 500;
