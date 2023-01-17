@@ -1,0 +1,57 @@
+<nav class='links'>
+  <a href='#/login'>Login</a>
+  <a href='#/registration'>Registration</a>
+  <a href='#/profile'>Profile</a>
+  <a href='#/404'>Page not found</a>
+  <a href='#/500'>Server error</a>
+</nav>
+
+<img class='avatar' />
+
+<form action="#/profile" class="profile">
+<table class='profile__list'>
+  <thead>
+    <tr>
+      <th colspan='2'>Иван</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Почта</td>
+      <td><input type="text" name="email" placeholder="ivan@mail.mu">
+        </td>
+    </tr>
+    <tr>
+      <td>Логин</td>
+      <td> <input type="text" name="login" placeholder="ivan">
+        </td>
+    </tr>
+    <tr>
+      <td>Имя</td>
+      <td> <input type="text" name="first_name" placeholder="Иван">
+        </td>
+    </tr>
+    <tr>
+      <td>Фамилия</td>
+      <td> <input type="text" name="second_name" placeholder="Иванов">
+        </td>
+    </tr>
+    <tr>
+      <td>Имя в чате</td>
+      <td> <input type="text" name="display_name" placeholder="Иван">
+        </td>
+    </tr>
+    <tr>
+      <td>Телефон</td>
+      <td>
+        <input type="tel" name="phone" placeholder="+7(999) 999 99 99">
+        </td>
+    </tr>
+  </tbody>
+</table>
+
+</form>
+
+<div class='wrapper__form wrapper-btn'>
+    {{> Button type='submit' id='edit-btn' value='Сохранить'}}
+  </div>

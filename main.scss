@@ -1,0 +1,28 @@
+$linkColor: rgb(17, 125, 248);
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+a:active,
+a {
+  text-decoration: none;
+  color: $linkColor;
+}
+
+.hbs__page {
+  outline: solid;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.links {
+  margin: 30px;
+}

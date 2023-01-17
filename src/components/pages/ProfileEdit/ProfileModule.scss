@@ -1,0 +1,48 @@
+$bgColor: rgba(194, 191, 191, 0.452);
+$redColor: red;
+
+.profile__list {
+  width: 510px;
+  margin: 0 auto;
+}
+
+.profile__list th {
+  padding-bottom: 20px;
+}
+
+.profile__list tbody {
+  width: 100%;
+  text-align: start;
+}
+
+.profile__list td {
+  height: 35px;
+  border-bottom: 1px solid $bgColor;
+}
+
+.profile__list td:last-child {
+  text-align: end;
+}
+
+.avatar {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: $bgColor;
+  margin-bottom: 20px;
+}
+
+.profile__nav {
+  width: 510px;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile__nav a {
+  padding-bottom: 10px;
+}
+
+.exit-link {
+  color: $redColor;
+}

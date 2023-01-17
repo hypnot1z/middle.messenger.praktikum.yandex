@@ -1,0 +1,29 @@
+<form class='registr' action="#/login">
+  <div class='wrapper__form wrapper-txt'>
+    <label class='registr-txt'>Регистрация</label>
+    <input type='email' name="email" placeholder='Почта' class='registr-input' />
+    <input type='text' name='login' class='registr-input' placeholder='Логин' />
+    <input type='text' name="first_name" placeholder='Имя' class='registr-input' />
+    <input type='text' name="second_name" placeholder='Фамилия' class='registr-input' />
+    <input type='tel' name="phone" placeholder='Телефон' class='registr-input' />
+    <input type='password' name="password" class='registr-input' placeholder='Пароль' />
+    <input
+      type='password'
+      name="password"
+      class='registr-input'
+      placeholder='Пароль (ещё раз)'
+    />
+    <p class='pass-text'>Пароли не совпадают</p>
+  </div>
+  <div class='wrapper__form wrapper-btn'>
+    {{> Button type='submit' id='register-btn' value='Зарегистрироваться'}}
+    <a href='#/login'>Войти</a>
+  </div>
+</form>
+<nav class='links'>
+  <a href='#/login'>Login</a>
+  <a href='#/registration'>Registration</a>
+  <a href='#/profile'>Profile</a>
+  <a href='#/404'>Page not found</a>
+  <a href='#/500'>Server error</a>
+</nav>

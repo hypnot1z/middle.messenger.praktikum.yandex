@@ -1,0 +1,45 @@
+<nav class='links'>
+  <a href='#/login'>Login</a>
+  <a href='#/registration'>Registration</a>
+  <a href='#/profile'>Profile</a>
+  <a href='#/404'>Page not found</a>
+  <a href='#/500'>Server error</a>
+</nav>
+
+<img class='avatar' />
+
+<form action="#/profile" class="profile">
+<table class='profile__list'>
+  <thead>
+    <tr>
+      <th colspan='2'>Изменение пароля</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Старый пароль</td>
+      <td>
+        <input type="password" name="oldPassword" value="oldPass">
+      </td>
+    </tr>
+    <tr>
+      <td>Новый пароль</td>
+      <td>
+        <input type="password" name="newPassword" value="newPassword">
+      </td>
+    </tr>
+    <tr>
+      <td>Повторите новый пароль</td>
+      <td>
+        <input  type="password" name="" value="newPassword">
+      </td>
+    </tr>
+   
+  </tbody>
+</table>
+
+</form>
+
+<div class='wrapper__form wrapper-btn'>
+    {{> Button type='submit' id='edit-btn' value='Сохранить'}}
+  </div>
