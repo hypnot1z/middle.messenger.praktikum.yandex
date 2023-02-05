@@ -23,14 +23,13 @@ $invalidColor: red;
 
 .auth-txt {
   font-size: 20px;
-  margin-bottom: 30px;
   color: $textColor;
 }
 
 .auth-input {
   font-size: 13px;
   padding: 5px;
-  margin-bottom: 15px;
+  margin-top: 15px;
   border-radius: 0.3em;
   border-color: $borderColor;
 }
@@ -45,8 +44,13 @@ $invalidColor: red;
   flex-direction: column;
 }
 
-.login-text {
+.for-error {
   font-size: 8px;
   color: $invalidColor;
+  vertical-align: top;
   display: none;
+}
+
+.error {
+  border-color: $invalidColor;
 }

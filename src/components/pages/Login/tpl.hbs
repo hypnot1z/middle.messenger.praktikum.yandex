@@ -1,12 +1,18 @@
-<form class='auth' action="#/chat">
+<form class='auth' action='#/chat'>
   <div class='wrapper__form wrapper-txt'>
     <label class='auth-txt'>Вход</label>
     <input type='text' name='login' class='auth-input' placeholder='Логин' />
-    <input type='password' name="password" class='auth-input' placeholder='Пароль' />
-    <span class='login-text'>Неверный логин</span>
+    <span class='for-error'>bad login</span>
+    <input
+      type='password'
+      name='password'
+      class='auth-input'
+      placeholder='Пароль'
+    />
+    <span class='for-error'>to short password</span>
   </div>
   <div class='wrapper__form wrapper-btn'>
-    {{> Button id='login-btn' value='Авторизоваться'}}
+    {{{button}}}
     <a href='#/registration'>Нет аккунта?</a>
   </div>
 </form>
@@ -16,5 +22,5 @@
   <a href='#/profile'>Profile</a>
   <a href='#/404'>Page not found</a>
   <a href='#/500'>Server error</a>
+  <a href='#/chat'>Chat</a>
 </nav>
-

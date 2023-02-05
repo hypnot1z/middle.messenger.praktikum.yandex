@@ -1,4 +1,5 @@
 $linkColor: rgb(17, 125, 248);
+$invalidColor: red;
 
 * {
   box-sizing: border-box;
@@ -14,8 +15,8 @@ a {
   color: $linkColor;
 }
 
-.hbs__page {
-  outline: solid;
+.wrapper {
+  margin: 10px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;

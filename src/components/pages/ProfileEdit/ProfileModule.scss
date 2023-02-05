@@ -46,3 +46,16 @@ $redColor: red;
 .exit-link {
   color: $redColor;
 }
+
+.profile__edit input {
+  text-align: end;
+  border: none;
+}
+
+.profile__edit {
+  margin-bottom: 40px;
+}
+
+.profile__edit input::placeholder {
+  text-align: right;
+}
