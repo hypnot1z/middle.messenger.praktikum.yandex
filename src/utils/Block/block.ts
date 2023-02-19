@@ -1,5 +1,5 @@
 import EventBus from './event-bus'
-import Pattern from '../pattern.js'
+import Pattern from '../pattern'
 
 export default class Block {
   static EVENTS = {
@@ -9,30 +9,58 @@ export default class Block {
     FLOW_RENDER: 'flow:render',
   }
 
-  private _meta: { tagName: string; props: Record<string, any> }
+  private _meta: {
+    tagName: string
+    props: any
+  }
   private eventBus: () => EventBus
-  protected _element: HTMLElement | null = null
-  protected props: Record<string, any>
+  private _element: HTMLElement | null = null
+  protected props: any
+  public children: Record<string, Block>
 
-  constructor(tagName = 'div', props = {}) {
+  constructor(tagName = 'div', propsWithChildren: any = {}) {
     const eventBus = new EventBus()
+    const { props, children } = this._getChildrenAndProps(propsWithChildren)
     this._meta = {
       tagName,
       props,
     }
-
     // const pattern: Record<string, string> = pattern
-
+    this.children = children
     this.props = this._makePropsProxy(props)
 
     this.eventBus = () => eventBus
 
     this._registerEvents(eventBus)
+
     eventBus.emit(Block.EVENTS.INIT)
   }
 
+  private _getChildrenAndProps(ChildrenAndProps: any) {
+    const props: Record<string, any> = {}
+    const children: Record<string, Block> = {}
+
+    Object.entries(ChildrenAndProps).forEach(([key, value]) => {
+      if (value instanceof Block) {
+        children[key] = value
+      } else {
+        props[key] = value
+      }
+    })
+
+    return { props, children }
+  }
+
+  private _addEvents() {
+    const { events = {} } = this.props as { events: Record<string, () => void> }
+
+    Object.keys(events).forEach((eventName) => {
+      this._element?.addEventListener(eventName, events[eventName])
+    })
+  }
+
   private _registerEvents(eventBus: EventBus) {
-    eventBus.on(Block.EVENTS.INIT, this.init.bind(this))
+    eventBus.on(Block.EVENTS.INIT, this._init.bind(this))
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this))
     eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this))
     eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this))
@@ -41,46 +69,54 @@ export default class Block {
   private _createResources() {
     const { tagName } = this._meta
     this._element = this._createDocumentElement(tagName)
-    this._element.classList.add('wrapper')
+    if (tagName === 'div') {
+      this._element.classList.add('wrapper')
+    }
   }
 
-  private init() {
+  private _createDocumentElement(tagName: string) {
+    // Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
+    return document.createElement(tagName)
+  }
+
+  private _init() {
     this._createResources()
+
+    this.init()
 
     this.eventBus().emit(Block.EVENTS.FLOW_RENDER)
   }
+
+  protected init() {}
 
   private _componentDidMount() {
     this.componentDidMount()
   }
 
   // Может переопределять пользователь, необязательно трогать
-  componentDidMount(oldProps: Record<string, any>) {}
+  protected componentDidMount() {}
 
-  private dispatchComponentDidMount() {
+  protected dispatchComponentDidMount() {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM)
+
+    Object.values(this.children).forEach((child) =>
+      child.dispatchComponentDidMount()
+    )
   }
 
-  private _componentDidUpdate(
-    oldProps: Record<string, any>,
-    newProps: Record<string, any>
-  ) {
+  private _componentDidUpdate(oldProps: any, newProps: any) {
     const response = this.componentDidUpdate(oldProps, newProps)
     if (!response) {
-      return
+      this.eventBus().emit(Block.EVENTS.FLOW_RENDER)
     }
-    this._render()
   }
 
   // Может переопределять пользователь, необязательно трогать
-  private componentDidUpdate(
-    oldProps: Record<string, any>,
-    newProps: Record<string, any>
-  ) {
+  protected componentDidUpdate(oldProps: any, newProps: any) {
     return true
   }
 
-  setProps = (nextProps: Record<string, any>) => {
+  protected setProps = (nextProps: any) => {
     if (!nextProps) {
       return
     }
@@ -92,27 +128,57 @@ export default class Block {
     return this._element
   }
 
-  _render() {
-    const block = this.render()
+  private _render() {
+    const fragment = this.render()
+    this._element!.innerHTML = ''
+    this._element!.append(fragment)
+    this._addEvents()
     // Этот небезопасный метод для упрощения логики
     // Используйте шаблонизатор из npm или напишите свой безопасный
     // Нужно не в строку компилировать (или делать это правильно),
     // либо сразу в DOM-элементы возвращать из compile DOM-ноду
-    this._element.innerHTML = block
+    // this._element!.innerHTML = block
   }
 
-  // Может переопределять пользователь, необязательно трогать
-  render() {}
+  protected compile(template: (context: any) => string, context: any) {
+    const contextAndStubs = { ...context }
+
+    Object.entries(this.children).forEach(([name, component]) => {
+      contextAndStubs[name] = `<div data-id="{component.id}"></div>`
+    })
+
+    const html = template(contextAndStubs)
+
+    const temp = document.createElement('template')
+
+    temp.innerHTML = html
+
+    Object.entries(this.children).forEach(([_, component]) => {
+      const stub = temp.content.querySelector(`[data-id="{component.id}"]`)
+
+      if (!stub) {
+        return
+      }
+
+      component.getContent()?.append(...Array.from(stub.childNodes))
+
+      stub.replaceWith(component.getContent()!)
+    })
+
+    return temp.content
+  }
+
+  protected render(): DocumentFragment {
+    return new DocumentFragment()
+  }
 
   getContent() {
-    const inputs: NodeList = this.element.querySelectorAll('input') //Select all inputs on page
-    inputs.forEach((el) => el.addEventListener('focus', this.validation))
     return this.element
   }
 
   validation(event: Event) {
-    console.log('validation')
-    const element: HTMLElement = event.target
+    console.log(typeof event.target)
+    const element: HTMLElement | null = event.target
     const elementName: string = element.name
     const etarget = element.nextElementSibling
     event.target.addEventListener('blur', () => {
@@ -126,22 +192,22 @@ export default class Block {
     })
   }
 
-  _makePropsProxy(props: Record<string, any>) {
+  private _makePropsProxy(props: any) {
     // Можно и так передать this
     // Такой способ больше не применяется с приходом ES6+
     const self = this
-
     return new Proxy(props, {
       get(target, prop: string) {
         const value = target[prop]
         return typeof value === 'function' ? value.bind(target) : value
       },
       set(target, prop: string, value) {
+        const oldTarget = { ...target }
         target[prop] = value
 
         // Запускаем обновление компоненты
         // Плохой cloneDeep, в следующей итерации нужно заставлять добавлять cloneDeep им самим
-        self.eventBus().emit(Block.EVENTS.FLOW_CDU, { ...target }, target)
+        self.eventBus().emit(Block.EVENTS.FLOW_CDU, oldTarget, target)
         return true
       },
       deleteProperty() {
@@ -150,16 +216,11 @@ export default class Block {
     })
   }
 
-  _createDocumentElement(tagName: string) {
-    // Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
-    return document.createElement(tagName)
-  }
-
   show() {
-    this.getContent().style.display = 'block'
+    this.getContent()!.style.display = 'block'
   }
 
   hide() {
-    this.getContent().style.display = 'none'
+    this.getContent()!.style.display = 'none'
   }
 }

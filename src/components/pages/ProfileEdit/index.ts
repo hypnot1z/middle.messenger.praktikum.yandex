@@ -1,55 +1,77 @@
-import Handlebars from 'handlebars'
-import tpl from 'bundle-text:./tpl.hbs'
+import tpl from './tpl.hbs'
 import Button from '../../UI/Button'
-import './ProfileModule.scss'
+import Input from '../../UI/Input'
 import Block from '../../../utils/Block/block'
+import FormData from '../../../utils/FormData'
+import Validation from '../../../utils/Validation'
+import './ProfileModule.scss'
 
-const button = new Button({
-  text: 'Сохранить',
-  id: 'edit-btn',
-  type: 'submit',
-  class: 'btn',
-})
 class PageEditProfile extends Block {
-  constructor(props) {
+  constructor(props: any) {
     super('div', props)
   }
 
   render() {
-    const compile = Handlebars.compile(tpl)
-    const res = compile({
-      button: button.render(),
-    })
-
-    return res
+    return this.compile(tpl, this.props)
   }
 
-  //form data
-  formData() {
-    const form: HTMLFormElement = document.querySelector('.profile__edit')
-    form.addEventListener('submit', getFormValue)
-    function getFormValue(event: SubmitEvent): void {
-      event.preventDefault()
-      const log: HTMLElement = form.querySelector('[name="login"]')
-      const displayName: HTMLElement = form.querySelector(
-        '[name="display_name"]'
-      )
-      const email: HTMLElement = form.querySelector('[name="email"]')
-      const firstName: HTMLElement = form.querySelector('[name="first_name"]')
-      const secondName: HTMLElement = form.querySelector('[name="second_name"]')
-      const phone: HTMLElement = form.querySelector('[name="phone"]')
-      const data: Record<string, string> = {
-        login: log.value,
-        displayName: displayName.value,
-        email: email.value,
-        firstName: firstName.value,
-        secondName: secondName.value,
-        phone: phone.value,
-      }
-      console.log('Profile edit data :', data)
-    }
+  init() {
+    this.children.inputMail = new Input({
+      type: 'email',
+      name: 'email',
+      placeholder: 'ivan@mail.mu',
+      events: {
+        blur: Validation,
+      },
+    })
+    this.children.inputLogin = new Input({
+      type: 'text',
+      name: 'login',
+      placeholder: 'ivan',
+      events: {
+        blur: Validation,
+      },
+    })
+    this.children.inputFname = new Input({
+      type: 'text',
+      name: 'first_name',
+      placeholder: 'Иван',
+      events: {
+        blur: Validation,
+      },
+    })
+    this.children.inputSname = new Input({
+      type: 'text',
+      name: 'second_name',
+      placeholder: 'Иванов',
+      events: {
+        blur: Validation,
+      },
+    })
+    this.children.inputDname = new Input({
+      type: 'text',
+      name: 'display_name',
+      placeholder: 'Иван01',
+      events: {
+        blur: Validation,
+      },
+    })
+    this.children.inputTel = new Input({
+      type: 'tel',
+      name: 'phone',
+      placeholder: 'Телефон',
+      events: {
+        blur: Validation,
+      },
+    })
+    this.children.button = new Button({
+      text: 'Сохранить',
+      id: 'edit-btn',
+      type: 'submit',
+      class: 'btn',
+    })
   }
 }
 
-const ProfileEdit = new PageEditProfile()
+const ProfileEdit = new PageEditProfile({ events: { submit: FormData } })
 export default ProfileEdit

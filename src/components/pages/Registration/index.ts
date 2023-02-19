@@ -1,53 +1,92 @@
-import Handlebars from 'handlebars'
-import tpl from 'bundle-text:./tpl.hbs'
+import tpl from './tpl.hbs'
 import './RegistrModule.scss'
 import Button from '../../UI/Button'
+import Input from '../../UI/Input'
 import Block from '../../../utils/Block/block'
+import FormData from '../../../utils/FormData'
+import Validation from '../../../utils/Validation'
 
-const button = new Button({
-  text: 'Регистрация',
-  id: 'register-btn',
-  type: 'submit',
-  class: 'btn',
-})
 class PageRegistr extends Block {
-  constructor(props) {
+  constructor(props: any) {
     super('div', props)
   }
 
   render() {
-    const compile = Handlebars.compile(tpl)
-    const res = compile({
-      button: button.render(),
-    })
-
-    return res
+    return this.compile(tpl, this.props)
   }
 
-  //form data
-  formData() {
-    const form: HTMLFormElement = document.querySelector('.registr')
-    form.addEventListener('submit', getFormValue)
-    function getFormValue(event: SubmitEvent): void {
-      event.preventDefault()
-      const log: HTMLElement = form.querySelector('[name="login"]')
-      const pass: HTMLElement = form.querySelector('[name="password"]')
-      const email: HTMLElement = form.querySelector('[name="email"]')
-      const firstName: HTMLElement = form.querySelector('[name="first_name"]')
-      const secondName: HTMLElement = form.querySelector('[name="second_name"]')
-      const phone: HTMLElement = form.querySelector('[name="phone"]')
-      const data: Record<string, string> = {
-        login: log.value,
-        password: pass.value,
-        email: email.value,
-        firstName: firstName.value,
-        secondName: secondName.value,
-        phone: phone.value,
-      }
-      console.log('Registr data :', data)
-    }
+  init() {
+    this.children.inputMail = new Input({
+      type: 'email',
+      name: 'email',
+      placeholder: 'Почта',
+      class: 'registr-input',
+      events: {
+        blur: Validation,
+      },
+    })
+    this.children.inputLogin = new Input({
+      type: 'text',
+      name: 'login',
+      placeholder: 'Логин',
+      class: 'registr-input',
+      events: {
+        blur: Validation,
+      },
+    })
+    this.children.inputFname = new Input({
+      type: 'text',
+      name: 'first_name',
+      placeholder: 'Имя',
+      class: 'registr-input',
+      events: {
+        blur: Validation,
+      },
+    })
+    this.children.inputSname = new Input({
+      type: 'text',
+      name: 'second_name',
+      placeholder: 'Фамилия',
+      class: 'registr-input',
+      events: {
+        blur: Validation,
+      },
+    })
+    this.children.inputTel = new Input({
+      type: 'tel',
+      name: 'phone',
+      placeholder: 'Телефон',
+      class: 'registr-input',
+      events: {
+        blur: Validation,
+      },
+    })
+    this.children.inputPass = new Input({
+      type: 'password',
+      name: 'password',
+      placeholder: 'Пароль',
+      class: 'registr-input',
+      events: {
+        blur: Validation,
+      },
+    })
+    this.children.inputPassRep = new Input({
+      type: 'password',
+      name: 'password',
+      placeholder: 'Пароль еще раз',
+      class: 'registr-input',
+      events: {
+        blur: Validation,
+      },
+    })
+    this.children.button = new Button({
+      text: 'Регистрация',
+      id: 'register-btn',
+      type: 'submit',
+      class: 'btn',
+    })
   }
 }
 
-const Registr = new PageRegistr()
+const Registr = new PageRegistr({ events: { submit: FormData } })
 export default Registr

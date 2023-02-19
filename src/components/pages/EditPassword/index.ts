@@ -1,45 +1,59 @@
-import Handlebars from 'handlebars'
-import tpl from 'bundle-text:./tpl.hbs'
+import tpl from './tpl.hbs'
 import Button from '../../UI/Button'
-import './ProfileModule.scss'
+import Input from '../../UI/Input'
 import Block from '../../../utils/Block/block'
+import FormData from '../../../utils/FormData'
+import Validation from '../../../utils/Validation'
+import './ProfileModule.scss'
 
-const button = new Button({
-  text: 'Сохранить',
-  id: 'edit-btn',
-  type: 'submit',
-  class: 'btn',
-})
 class PageEditPassword extends Block {
-  constructor(props) {
+  constructor(props: any) {
     super('div', props)
   }
 
   render() {
-    const compile = Handlebars.compile(tpl)
-    const res = compile({
-      button: button.render(),
-    })
-
-    return res
+    return this.compile(tpl, this.props)
   }
 
-  //form data
-  formData() {
-    const form: HTMLFormElement = document.querySelector('.pass__edit')
-    form.addEventListener('submit', getFormValue)
-    function getFormValue(event: SubmitEvent): void {
-      event.preventDefault()
-      const oldPass: HTMLElement = form.querySelector('[name="oldPassword"]')
-      const newPass: HTMLElement = form.querySelector('[name="newPassword"]')
-      const data: Record<string, string> = {
-        oldPass: oldPass.value,
-        newPass: newPass.value,
-      }
-      console.log('Password edit data :', data)
-    }
+  init() {
+    this.children.inputOldPass = new Input({
+      type: 'password',
+      name: 'oldPassword',
+      placeholder: 'Старый пароль',
+      value: 'OldPass',
+      class: 'input',
+      events: {
+        blur: Validation,
+      },
+    })
+    this.children.inputNewPass = new Input({
+      type: 'password',
+      name: 'newPassword',
+      placeholder: 'Новый пароль',
+      value: 'NewPassword',
+      class: 'input',
+      events: {
+        blur: Validation,
+      },
+    })
+    this.children.inputPassRep = new Input({
+      type: 'password',
+      name: 'newPasswordRep',
+      placeholder: 'Повторите пароль',
+      value: 'NewPassword',
+      class: 'input',
+      events: {
+        blur: Validation,
+      },
+    })
+    this.children.button = new Button({
+      text: 'Сохранить',
+      id: 'edit-btn',
+      type: 'submit',
+      class: 'btn',
+    })
   }
 }
 
-const EditPassword = new PageEditPassword()
+const EditPassword = new PageEditPassword({ events: { submit: FormData } })
 export default EditPassword

@@ -1,9 +1,12 @@
 import tpl from './tpl.hbs'
-import './ProfileModule.scss'
 import Block from '../../../utils/Block/block'
 
-class PageProfile extends Block {
-  constructor(props) {
+interface PageErrProps {
+  code: string
+  text: string
+}
+export class PageErr extends Block {
+  constructor(props: PageErrProps) {
     super('div', props)
   }
 
@@ -11,6 +14,3 @@ class PageProfile extends Block {
     return this.compile(tpl, this.props)
   }
 }
-
-const Profile = new PageProfile()
-export default Profile

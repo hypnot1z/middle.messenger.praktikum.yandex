@@ -1,48 +1,48 @@
-import Handlebars from 'handlebars'
-import tpl from 'bundle-text:./tpl.hbs'
+import tpl from './tpl.hbs'
 import Button from '../../UI/Button'
+import Input from '../../UI/Input'
 import './LoginModule.scss'
 import Block from '../../../utils/Block/block'
-import EventBus from '../../../utils/Block/event-bus'
+import FormData from '../../../utils/FormData'
+import Validation from '../../../utils/Validation'
 
-const button = new Button({
-  text: 'Войти',
-  id: 'login-btn',
-  type: 'submit',
-  class: 'btn',
-})
-
+interface PageProps {}
 class PageLogin extends Block {
-  constructor(props) {
+  constructor(props: any) {
     super('div', props)
   }
 
   render() {
-    const compile = Handlebars.compile(tpl)
-    const res = compile({
-      button: button.render(),
-    })
-
-    return res
+    return this.compile(tpl, this.props)
   }
 
-  //form data
-  formData() {
-    const form: HTMLFormElement = document.querySelector('.auth')
-    form.addEventListener('submit', getFormValue)
-    form.addEventListener('submit', this.validation)
-    function getFormValue(event: SubmitEvent): void {
-      event.preventDefault()
-      const log: HTMLElement = form.querySelector('[name="login"]')
-      const pass: HTMLElement = form.querySelector('[name="password"]')
-      const data: Record<string, string> = {
-        login: log.value,
-        password: pass.value,
-      }
-      console.log('Login data :', data)
-    }
+  init() {
+    this.children.inputLogin = new Input({
+      type: 'text',
+      name: 'login',
+      placeholder: 'Логин',
+      class: 'auth-input',
+      events: {
+        blur: Validation,
+      },
+    })
+    this.children.inputPass = new Input({
+      type: 'password',
+      name: 'password',
+      placeholder: 'Пароль',
+      class: 'auth-input',
+      events: {
+        blur: Validation,
+      },
+    })
+    this.children.button = new Button({
+      text: 'Войти',
+      id: 'login-btn',
+      type: 'submit',
+      class: 'btn',
+    })
   }
 }
 
-const Login = new PageLogin()
+const Login = new PageLogin({ events: { submit: FormData } })
 export default Login

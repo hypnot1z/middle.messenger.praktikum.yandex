@@ -1,9 +1,8 @@
-import Handlebars from 'handlebars'
-import tpl from 'bundle-text:./tpl.hbs'
+import tpl from './tpl.hbs'
 import './ButtonModule.scss'
 import Block from '../../../utils/Block/block'
 
-type buttonProps = {
+interface ButtonProps {
   text?: string
   id?: string
   type?: string
@@ -11,18 +10,17 @@ type buttonProps = {
 }
 
 export default class Button extends Block {
-  constructor(props: buttonProps) {
+  constructor(props: ButtonProps) {
     super('button', props)
   }
 
+  init() {
+    this.element?.classList.add(this.props.class)
+    this.element!.id = this.props.id
+    this.element!.type = this.props.type
+  }
+
   render() {
-    const compile = Handlebars.compile(tpl)
-    const res = compile({
-      text: this.props.text,
-      id: this.props.id,
-      type: this.props.type,
-      class: this.props.class,
-    })
-    return res
+    return this.compile(tpl, this.props)
   }
 }
