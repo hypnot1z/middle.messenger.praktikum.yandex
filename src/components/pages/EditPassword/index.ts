@@ -20,32 +20,36 @@ class PageEditPassword extends Block {
       type: 'password',
       name: 'oldPassword',
       placeholder: 'Старый пароль',
-      value: 'OldPass',
       class: 'input',
       events: {
         blur: Validation,
       },
     })
+
+    this.children.inputOldPass.value = 'OldPass'
+
     this.children.inputNewPass = new Input({
       type: 'password',
       name: 'newPassword',
       placeholder: 'Новый пароль',
-      value: 'NewPassword',
       class: 'input',
       events: {
         blur: Validation,
       },
     })
+    this.children.inputNewPass.value = 'NewPassword'
+
     this.children.inputPassRep = new Input({
       type: 'password',
       name: 'newPasswordRep',
       placeholder: 'Повторите пароль',
-      value: 'NewPassword',
       class: 'input',
       events: {
         blur: Validation,
       },
     })
+    this.children.inputPassRep.value = 'NewPassword'
+
     this.children.button = new Button({
       text: 'Сохранить',
       id: 'edit-btn',

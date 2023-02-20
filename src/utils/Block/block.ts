@@ -1,5 +1,6 @@
 import EventBus from './event-bus'
 import Pattern from '../pattern'
+import { nanoid } from 'nanoid'
 
 export default class Block {
   static EVENTS = {
@@ -9,6 +10,7 @@ export default class Block {
     FLOW_RENDER: 'flow:render',
   }
 
+  public id = nanoid(5)
   private _meta: {
     tagName: string
     props: any
@@ -144,7 +146,7 @@ export default class Block {
     const contextAndStubs = { ...context }
 
     Object.entries(this.children).forEach(([name, component]) => {
-      contextAndStubs[name] = `<div data-id="{component.id}"></div>`
+      contextAndStubs[name] = `<div data-id="${component.id}"></div>`
     })
 
     const html = template(contextAndStubs)
@@ -154,7 +156,7 @@ export default class Block {
     temp.innerHTML = html
 
     Object.entries(this.children).forEach(([_, component]) => {
-      const stub = temp.content.querySelector(`[data-id="{component.id}"]`)
+      const stub = temp.content.querySelector(`[data-id="${component.id}"]`)
 
       if (!stub) {
         return
