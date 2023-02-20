@@ -5,7 +5,6 @@ import Block from '../../../utils/Block/block'
 interface InputProps {
   type: string
   name: string
-  // value?: string
   placeholder?: string
   class?: string
   events?: any
