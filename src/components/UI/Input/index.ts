@@ -11,6 +11,7 @@ interface InputProps {
 }
 
 export default class Input extends Block {
+
   constructor(props: InputProps) {
     super('input', props)
   }
@@ -26,8 +27,9 @@ export default class Input extends Block {
     return (this.element as HTMLInputElement).value
   }
   set value(val) {
-    ;(this.element as HTMLInputElement).value = val
+    (this.element as HTMLInputElement).value = val
   }
+
 
   render() {
     return this.compile(tpl, this.props)
