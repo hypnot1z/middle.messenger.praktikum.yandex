@@ -3,8 +3,9 @@ import './ChatModule.scss'
 import Block from '../../../utils/Block/block'
 import Button from '../../UI/Button'
 
-class PageChat extends Block {
-  constructor(props) {
+interface ChatProps {}
+class PageChat extends Block<ChatProps> {
+  constructor(props: ChatProps) {
     super('div', props)
   }
 

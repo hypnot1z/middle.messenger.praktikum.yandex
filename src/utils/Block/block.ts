@@ -1,8 +1,12 @@
 import EventBus from './event-bus'
 import Pattern from '../pattern'
 import { nanoid } from 'nanoid'
+import { TemplateDelegate } from 'handlebars'
 
-export default class Block {
+export default class Block<
+  P extends Record<string, any> = any,
+  E extends HTMLElement = HTMLElement
+> {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -13,11 +17,11 @@ export default class Block {
   public id = nanoid(5)
   private _meta: {
     tagName: string
-    props: any
+    props: P
   }
   private eventBus: () => EventBus
-  private _element: HTMLElement | null = null
-  protected props: any
+  private _element: E | null = null
+  protected props: P
   public children: Record<string, Block>
 
   constructor(tagName = 'div', propsWithChildren: any = {}) {
@@ -38,15 +42,15 @@ export default class Block {
     eventBus.emit(Block.EVENTS.INIT)
   }
 
-  private _getChildrenAndProps(ChildrenAndProps: any) {
-    const props: Record<string, any> = {}
+  private _getChildrenAndProps(ChildrenAndProps: P) {
+    const props: P = {} as P
     const children: Record<string, Block> = {}
 
     Object.entries(ChildrenAndProps).forEach(([key, value]) => {
       if (value instanceof Block) {
         children[key] = value
       } else {
-        props[key] = value
+        props[key as keyof P] = value
       }
     })
 
@@ -54,7 +58,9 @@ export default class Block {
   }
 
   private _addEvents() {
-    const { events = {} } = this.props as { events: Record<string, () => void> }
+    const { events = {} } = this.props as unknown as {
+      events: Record<string, () => void>
+    }
 
     Object.keys(events).forEach((eventName) => {
       this._element?.addEventListener(eventName, events[eventName])
@@ -70,7 +76,7 @@ export default class Block {
 
   private _createResources() {
     const { tagName } = this._meta
-    this._element = this._createDocumentElement(tagName)
+    this._element = this._createDocumentElement(tagName) as E
     if (tagName === 'div') {
       this._element.classList.add('wrapper')
     }
@@ -106,7 +112,7 @@ export default class Block {
     )
   }
 
-  private _componentDidUpdate(oldProps: any, newProps: any) {
+  private _componentDidUpdate(oldProps: P, newProps: P) {
     const response = this.componentDidUpdate(oldProps, newProps)
     if (!response) {
       this.eventBus().emit(Block.EVENTS.FLOW_RENDER)
@@ -114,11 +120,11 @@ export default class Block {
   }
 
   // Может переопределять пользователь, необязательно трогать
-  protected componentDidUpdate(oldProps: any, newProps: any) {
+  protected componentDidUpdate(oldProps: P, newProps: P) {
     return true
   }
 
-  protected setProps = (nextProps: any) => {
+  protected setProps = (nextProps: Partial<P>) => {
     if (!nextProps) {
       return
     }
@@ -142,7 +148,7 @@ export default class Block {
     // this._element!.innerHTML = block
   }
 
-  protected compile(template: (context: any) => string, context: any) {
+  protected compile(template: TemplateDelegate, context: any) {
     const contextAndStubs = { ...context }
 
     Object.entries(this.children).forEach(([name, component]) => {
@@ -179,13 +185,13 @@ export default class Block {
   }
 
   validation(event: Event) {
-    console.log(typeof event.target)
-    const element: HTMLElement | null = event.target
-    const elementName: string = element.name
-    const etarget = element.nextElementSibling
-    event.target.addEventListener('blur', () => {
+    // const element: EventTarget | null = event.target
+    const element = event.target as HTMLInputElement
+    const elementName: string = element!.name
+    const etarget = element!.nextElementSibling as HTMLSpanElement
+    event.target!.addEventListener('blur', () => {
       const targetPattern: RegExp = new RegExp(Pattern[elementName])
-      const stringValue: string = event.target.value
+      const stringValue: string = element!.value
       if (!targetPattern.test(stringValue)) {
         etarget.style.display = 'block'
       } else {
@@ -194,18 +200,18 @@ export default class Block {
     })
   }
 
-  private _makePropsProxy(props: any) {
+  private _makePropsProxy(props: P) {
     // Можно и так передать this
     // Такой способ больше не применяется с приходом ES6+
     const self = this
     return new Proxy(props, {
-      get(target, prop: string) {
-        const value = target[prop]
+      get(target, prop: string | Symbol) {
+        const value = target[prop as keyof P]
         return typeof value === 'function' ? value.bind(target) : value
       },
-      set(target, prop: string, value) {
+      set(target, prop: string | Symbol, value) {
         const oldTarget = { ...target }
-        target[prop] = value
+        target[prop as keyof P] = value
 
         // Запускаем обновление компоненты
         // Плохой cloneDeep, в следующей итерации нужно заставлять добавлять cloneDeep им самим
