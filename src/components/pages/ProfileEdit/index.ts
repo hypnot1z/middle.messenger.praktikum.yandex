@@ -6,8 +6,11 @@ import FormData from '../../../utils/FormData'
 import Validation from '../../../utils/Validation'
 import './ProfileModule.scss'
 
+interface EditProfileProps {
+  events: any
+}
 class PageEditProfile extends Block {
-  constructor(props: any) {
+  constructor(props: EditProfileProps) {
     super('div', props)
   }
 

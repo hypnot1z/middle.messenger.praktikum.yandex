@@ -2,8 +2,9 @@ import tpl from './tpl.hbs'
 import './ProfileModule.scss'
 import Block from '../../../utils/Block/block'
 
+interface PageProfileProps {}
 class PageProfile extends Block {
-  constructor(props) {
+  constructor(props: PageProfileProps) {
     super('div', props)
   }
 
@@ -12,5 +13,5 @@ class PageProfile extends Block {
   }
 }
 
-const Profile = new PageProfile()
+const Profile = new PageProfile({})
 export default Profile

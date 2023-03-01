@@ -6,8 +6,11 @@ import Block from '../../../utils/Block/block'
 import FormData from '../../../utils/FormData'
 import Validation from '../../../utils/Validation'
 
+interface PageRegistrProps {
+  events: any
+}
 class PageRegistr extends Block {
-  constructor(props: any) {
+  constructor(props: PageRegistrProps) {
     super('div', props)
   }
 

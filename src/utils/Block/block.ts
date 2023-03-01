@@ -24,15 +24,15 @@ export default class Block<
   protected props: P
   public children: Record<string, Block>
 
-  constructor(tagName = 'div', propsWithChildren: any = {}) {
+  constructor(tagName = 'div', propsWithChildren: P) {
     const eventBus = new EventBus()
     const { props, children } = this._getChildrenAndProps(propsWithChildren)
     this._meta = {
       tagName,
       props,
     }
-    // const pattern: Record<string, string> = pattern
     this.children = children
+
     this.props = this._makePropsProxy(props)
 
     this.eventBus = () => eventBus
@@ -65,6 +65,16 @@ export default class Block<
     Object.keys(events).forEach((eventName) => {
       this._element?.addEventListener(eventName, events[eventName])
     })
+  }
+
+  private _removeEvents() {
+    const { events = {} } = this.props as Record<string, () => void>
+
+    if (events) {
+      Object.entries(events).forEach(([event, listener]) => {
+        this._element!.removeEventListener(event, listener)
+      })
+    }
   }
 
   private _registerEvents(eventBus: EventBus) {

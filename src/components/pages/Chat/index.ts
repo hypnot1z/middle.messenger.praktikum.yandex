@@ -27,5 +27,5 @@ class PageChat extends Block<ChatProps> {
   }
 }
 
-const Chat = new PageChat()
+const Chat = new PageChat({})
 export default Chat
