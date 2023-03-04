@@ -1,3 +1,60 @@
+$textColor: rgb(109, 109, 109);
+$bgColor: rgba(194, 191, 191, 0.452);
+
 .links a {
   margin: 10px;
+}
+
+.links {
+  grid-area: A;
+}
+
+.chat-page {
+  height: 100vh;
+  width: 100%;
+  display: grid;
+  grid-template-areas:
+    'A A'
+    'B C';
+  grid-template-columns: 310px auto;
+  grid-template-rows: 80px auto;
+  justify-items: stretch;
+}
+.chat-list {
+  grid-area: B;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border-right: 1px solid $bgColor;
+}
+
+.chat-block {
+  padding: 10px;
+  grid-area: C;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-block .header {
+  display: flex;
+  justify-content: space-between;
+  height: 30px;
+}
+
+.chat-tape {
+  height: 100%;
+}
+
+.chat-msg {
+  height: 30px;
+  display: flex;
+  // justify-content: space-between;
+  // align-items: stretch;
+}
+
+.chat-msg input {
+  width: 100%;
 }

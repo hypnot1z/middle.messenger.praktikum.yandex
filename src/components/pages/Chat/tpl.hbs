@@ -1,8 +1,26 @@
-<h2>Страница в разработке</h2>
-<nav class='links'>
-  <a href='#/login'>Login</a>
-  <a href='#/registration'>Registration</a>
-  <a href='#/profile'>Profile</a>
-  <a href='#/404'>Page not found</a>
-  <a href='#/500'>Server error</a>
-</nav>
+<div class='chat-page'>
+  <nav class='links'>
+    <a href='#/login'>Login</a>
+    <a href='#/registration'>Registration</a>
+    <a href='#/profile'>Profile</a>
+    <a href='#/404'>Page not found</a>
+    <a href='#/500'>Server error</a>
+    <a href='#/chat'>Chat</a>
+  </nav>
+
+  <div class='chat-list'>
+    <a href='#'>Профиль ></a>
+    <input type='text' placeholder='Поиск' />
+  </div>
+  <div class='chat-block'>
+    <div class='header'>
+      "Chat name"
+      {{{buttonDots}}}
+    </div>
+    <div class='chat-tape'></div>
+    <form action='#' class='chat-msg'>
+      <input type='text' name='message' placeholder='Сообщение' />
+      {{{buttonSend}}}
+    </form>
+  </div>
+</div>
