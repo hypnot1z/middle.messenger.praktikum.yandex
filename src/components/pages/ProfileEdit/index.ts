@@ -5,13 +5,19 @@ import Block from '../../../utils/Block/block'
 import FormData from '../../../utils/FormData'
 import Validation from '../../../utils/Validation'
 import './ProfileModule.scss'
+import AuthController from '../../../controllers/AuthController'
+import SettingController from '../../../controllers/SettingController'
+import { ProfileData } from '../../../api/SetAPI'
+import { withStore } from '../../../utils/Store'
 
 interface EditProfileProps {
-  events: any
+  events?: any
 }
 class PageEditProfile extends Block {
   constructor(props: EditProfileProps) {
     super('div', props)
+    const usr = SettingController.fetchUser()
+    console.log('USR ', usr)
   }
 
   render() {
@@ -72,9 +78,25 @@ class PageEditProfile extends Block {
       id: 'edit-btn',
       type: 'submit',
       class: 'btn',
+      events: { click: (e: Event) => this.onSubmit(e) },
     })
+  }
+
+  onSubmit(e: Event) {
+    e.preventDefault()
+    const values = Object.values(this.children)
+      .filter((child) => child instanceof Input)
+      .map((child) => [(child as Input).name, (child as Input).value])
+
+    const data = Object.fromEntries(values)
+    console.log(data)
+
+    SettingController.updateProfile(data as ProfileData)
   }
 }
 
-const ProfileEdit = new PageEditProfile({ events: { submit: FormData } })
-export default ProfileEdit
+const EditProfile = new PageEditProfile({})
+export default EditProfile
+
+// const withUser = withStore((state) => ({ ...state.user }))
+// export const EditProfile = withUser(PageEditProfile)

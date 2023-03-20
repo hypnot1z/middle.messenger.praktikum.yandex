@@ -3,13 +3,12 @@ import Button from '../../UI/Button'
 import Input from '../../UI/Input'
 import './LoginModule.scss'
 import Block from '../../../utils/Block/block'
-import FormData from '../../../utils/FormData'
 import Validation from '../../../utils/Validation'
+import { SignupData } from '../../../api/AuthAPI'
+import AuthController from '../../../controllers/AuthController'
+import { Link } from '../../UI/Link'
 
-interface PageProps {
-  events: any
-}
-class PageLogin extends Block<PageProps> {
+export class PageLogin extends Block {
   constructor(props: any) {
     super('div', props)
   }
@@ -42,9 +41,37 @@ class PageLogin extends Block<PageProps> {
       id: 'login-btn',
       type: 'submit',
       class: 'btn',
+      events: { click: (e: Event) => this.onSubmit(e) },
     })
+    this.children.logout = new Button({
+      text: 'Выйти',
+      id: 'logout-btn',
+      type: 'submit',
+      class: 'btn',
+      events: { click: this.logout },
+    })
+    this.children.registr = new Link({
+      to: '/sign-up',
+      label: 'Нет аккаунта?',
+    })
+  }
+
+  onSubmit(e: Event) {
+    e.preventDefault()
+    const values = Object.values(this.children)
+      .filter((child) => child instanceof Input)
+      .map((child) => [(child as Input).name, (child as Input).value])
+
+    const data = Object.fromEntries(values)
+    console.log(data)
+
+    AuthController.signin(data as SignupData)
+  }
+
+  logout() {
+    AuthController.logout()
   }
 }
 
-const Login = new PageLogin({ events: { submit: FormData } })
+const Login = new PageLogin({})
 export default Login

@@ -21,7 +21,9 @@ export default class Input extends Block<InputProps, HTMLInputElement> {
     this.element!.name = this.props.name
     this.element!.type = this.props.type
   }
-
+  get name() {
+    return this.element!.name
+  }
   get value() {
     return this.element!.value
   }

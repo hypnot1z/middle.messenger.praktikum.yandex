@@ -1,9 +1,8 @@
 import EventBus from './event-bus'
-import Pattern from '../pattern'
 import { nanoid } from 'nanoid'
 import { TemplateDelegate } from 'handlebars'
 
-export default class Block<
+export class Block<
   P extends Record<string, any> = any,
   E extends HTMLElement = HTMLElement
 > {
@@ -24,8 +23,9 @@ export default class Block<
   protected props: P
   public children: Record<string, Block>
 
-  constructor(tagName = 'div', propsWithChildren: P) {
+  constructor(tagName: string = 'div', propsWithChildren: P) {
     const eventBus = new EventBus()
+
     const { props, children } = this._getChildrenAndProps(propsWithChildren)
     this._meta = {
       tagName,
@@ -151,11 +151,6 @@ export default class Block<
     this._element!.innerHTML = ''
     this._element!.append(fragment)
     this._addEvents()
-    // Этот небезопасный метод для упрощения логики
-    // Используйте шаблонизатор из npm или напишите свой безопасный
-    // Нужно не в строку компилировать (или делать это правильно),
-    // либо сразу в DOM-элементы возвращать из compile DOM-ноду
-    // this._element!.innerHTML = block
   }
 
   protected compile(template: TemplateDelegate, context: any) {
@@ -194,22 +189,6 @@ export default class Block<
     return this.element
   }
 
-  validation(event: Event) {
-    // const element: EventTarget | null = event.target
-    const element = event.target as HTMLInputElement
-    const elementName: string = element!.name
-    const etarget = element!.nextElementSibling as HTMLSpanElement
-    event.target!.addEventListener('blur', () => {
-      const targetPattern: RegExp = new RegExp(Pattern[elementName])
-      const stringValue: string = element!.value
-      if (!targetPattern.test(stringValue)) {
-        etarget.style.display = 'block'
-      } else {
-        etarget.style.display = 'none'
-      }
-    })
-  }
-
   private _makePropsProxy(props: P) {
     // Можно и так передать this
     // Такой способ больше не применяется с приходом ES6+
@@ -242,3 +221,5 @@ export default class Block<
     this.getContent()!.style.display = 'none'
   }
 }
+
+export default Block

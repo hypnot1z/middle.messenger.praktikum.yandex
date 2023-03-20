@@ -7,6 +7,7 @@ interface ButtonProps {
   id: string
   type: string
   class?: string
+  events?: any
 }
 
 export default class Button extends Block<ButtonProps, HTMLButtonElement> {
