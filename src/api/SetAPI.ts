@@ -49,11 +49,11 @@ export class SetAPI extends BaseAPI {
 
   read(): Promise<User> {
     console.log('Get user by ID')
-    return this.http.get(`/user`)
+    return this.http.get(``)
   }
 
   getUser(id: number): Promise<User> {
-    return this.http.get(`/user/${id}`)
+    return this.http.get(`/${id}`)
   }
 
   create = undefined

@@ -22,15 +22,19 @@ export class Store extends EventBus {
 
 const store = new Store()
 
+export interface BlockConstructable<P extends Record<string, any>> {
+  new (props: P): Block<P>
+}
+
 export function withStore(mapStateToProps: (state: any) => any) {
-  return function wrap(Component: typeof Block) {
+  return function wrap(Component: BlockConstructable<Record<string, any>>) {
     let previousState: any
 
     return class WithStore extends Component {
-      constructor(tagName: string, props: any) {
+      constructor(props: any) {
         previousState = mapStateToProps(store.getState())
 
-        super(tagName, { ...props, ...previousState })
+        super({ ...props, ...previousState })
 
         store.on(StoreEvents.Updated, () => {
           const stateProps = mapStateToProps(store.getState())
