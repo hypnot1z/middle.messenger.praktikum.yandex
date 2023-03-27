@@ -15,7 +15,7 @@ class PageProfile extends Block {
     props.tagName = 'div'
     super(props)
     console.log('Profile PROPS-----------', this.props)
-    console.log('Profile User?', this.props['id'])
+    console.log('Profile User?', this.props)
   }
 
   render() {

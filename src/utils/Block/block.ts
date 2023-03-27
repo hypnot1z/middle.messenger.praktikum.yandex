@@ -15,24 +15,20 @@ export class Block<
   } as const
 
   public id = nanoid(5)
-  private _meta: {
-    tagName: string
-    props: P
-  }
+  private tagName: string
+
   private eventBus: () => EventBus
   private _element: E | null = null
   protected props: P
-  public children: Record<string, Block>
+  public children: Record<string, Block | Block[]>
 
   constructor(propsWithChildren: P) {
     const eventBus = new EventBus()
 
     const { props, children } = this._getChildrenAndProps(propsWithChildren)
     const { tagName } = props
-    this._meta = {
-      tagName,
-      props,
-    }
+    this.tagName = tagName
+
     this.children = children
 
     this.props = this._makePropsProxy(props)
@@ -44,19 +40,24 @@ export class Block<
     eventBus.emit(Block.EVENTS.INIT)
   }
 
-  private _getChildrenAndProps(ChildrenAndProps: P) {
-    const props: P = {} as P
+  private _getChildrenAndProps(ChildrenAndProps: P): {
+    props: P
+    children: Record<string, Block | Block[]>
+  } {
+    const props: Record<string, any> = {}
     const children: Record<string, Block> = {}
 
     Object.entries(ChildrenAndProps).forEach(([key, value]) => {
-      if (value instanceof Block) {
-        children[key] = value
+      if (Array.isArray(value) && value.every((v) => v instanceof Block)) {
+        children[key as string] = value
+      } else if (value instanceof Block) {
+        children[key as string] = value
       } else {
-        props[key as keyof P] = value
+        props[key] = value
       }
     })
 
-    return { props, children }
+    return { props: props as P, children }
   }
 
   private _addEvents() {
@@ -87,9 +88,9 @@ export class Block<
   }
 
   private _createResources() {
-    const { tagName } = this._meta
+    const tagName = this.tagName
     this._element = this._createDocumentElement(tagName) as E
-    if (tagName === 'div') {
+    if (this.tagName === 'div') {
       this._element.classList.add('wrapper')
     }
   }
@@ -119,9 +120,13 @@ export class Block<
   protected dispatchComponentDidMount() {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM)
 
-    Object.values(this.children).forEach((child) =>
-      child.dispatchComponentDidMount()
-    )
+    Object.values(this.children).forEach((child) => {
+      if (Array.isArray(child)) {
+        child.forEach((ch) => ch.dispatchComponentDidMount())
+      } else {
+        child.dispatchComponentDidMount()
+      }
+    })
   }
 
   private _componentDidUpdate(oldProps: P, newProps: P) {
