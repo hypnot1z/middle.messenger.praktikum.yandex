@@ -1,9 +1,10 @@
 import Block from '../../../utils/Block/block'
 import tpl from './tpl.hbs'
-import styles from './LinkModule.scss'
+import './LinkModule.scss'
 import { PropsWithRouter, withRouter } from '../../../hocs/withRouter'
 
 interface LinkProps extends PropsWithRouter {
+  tagName?: string
   to: string
   label: string
   events?: {
@@ -13,8 +14,9 @@ interface LinkProps extends PropsWithRouter {
 
 class BaseLink extends Block<LinkProps> {
   constructor(props: LinkProps) {
-    super('a', {
+    super({
       ...props,
+      tagName: 'a',
       events: {
         click: () => this.navigate(),
       },

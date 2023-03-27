@@ -11,10 +11,12 @@ import { Link } from '../../UI/Link'
 
 interface PageRegistrProps {
   events?: any
+  tagName?: string
 }
 export class PageRegistr extends Block {
   constructor(props: PageRegistrProps) {
-    super('div', props)
+    props.tagName = 'div'
+    super(props)
   }
 
   render() {

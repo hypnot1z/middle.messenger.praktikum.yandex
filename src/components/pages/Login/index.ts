@@ -8,9 +8,13 @@ import { SignupData } from '../../../api/AuthAPI'
 import AuthController from '../../../controllers/AuthController'
 import { Link } from '../../UI/Link'
 
+interface PageLoginProps {
+  tagName?: string
+}
 export class PageLogin extends Block {
-  constructor(props: any) {
-    super('div', props)
+  constructor(props: PageLoginProps) {
+    props.tagName = 'div'
+    super(props)
   }
 
   render() {
@@ -73,5 +77,5 @@ export class PageLogin extends Block {
   }
 }
 
-const Login = new PageLogin({})
+const Login = new PageLogin({ tagName: 'div' })
 export default Login

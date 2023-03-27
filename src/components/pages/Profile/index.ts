@@ -3,15 +3,23 @@ import './ProfileModule.scss'
 import Block from '../../../utils/Block/block'
 import { Link } from '../../UI/Link'
 import AuthController from '../../../controllers/AuthController'
-import { withStore, Store } from '../../../utils/Store'
+import { withStore } from '../../../utils/Store'
+import { User } from '../../../api/AuthAPI'
 
-interface PageProfileProps {}
+interface PageProfileProps {
+  tagName?: string
+  user: User
+}
 class PageProfile extends Block {
   constructor(props: PageProfileProps) {
-    super('div', props)
+    props.tagName = 'div'
+    super(props)
+    console.log('Profile PROPS-----------', this.props)
+    console.log('Profile User?', this.props['id'])
   }
 
   render() {
+    // console.log('TARGET', store.getState())
     return this.compile(tpl, this.props)
   }
 
@@ -31,15 +39,15 @@ class PageProfile extends Block {
         click: AuthController.logout,
       },
     })
+    // this.children.user = this.props
+    // console.log('THS CHILDR', this.children.user)
   }
 }
 
 // const Profile = new PageProfile({})
 
 const withUser = withStore((state) => ({ ...state.user }))
-console.log('withUser', withUser)
-console.log('PAge prof', PageProfile)
-const ProfileWU = withUser(PageProfile)
-const Profile = new ProfileWU({})
-console.log(Profile)
-export default Profile
+// const ProfileWU = withUser(PageProfile)
+// const Profile = new ProfileWU({})
+// export default Profile
+export const Profile = withUser(PageProfile)

@@ -3,10 +3,13 @@ import './ChatModule.scss'
 import Block from '../../../utils/Block/block'
 import Button from '../../UI/Button'
 
-interface ChatProps {}
+interface ChatProps {
+  tagName?: string
+}
 class PageChat extends Block<ChatProps> {
   constructor(props: ChatProps) {
-    super('div', props)
+    props.tagName = 'div'
+    super(props)
   }
 
   render() {

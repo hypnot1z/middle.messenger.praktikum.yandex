@@ -8,10 +8,12 @@ import './ProfileModule.scss'
 
 interface EditPasswordProps {
   events: any
+  tagName?: string
 }
 class PageEditPassword extends Block<EditPasswordProps, HTMLDivElement> {
   constructor(props: EditPasswordProps) {
-    super('div', props)
+    props.tagName = 'div'
+    super(props)
   }
 
   render() {

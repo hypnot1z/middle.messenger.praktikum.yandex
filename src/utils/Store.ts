@@ -1,9 +1,14 @@
 import { set } from './helpers/Set'
 import EventBus from './Block/event-bus'
 import Block from './Block/block'
+import { User } from '../api/AuthAPI'
 
 export enum StoreEvents {
   Updated = 'updated',
+}
+
+interface State {
+  user: User
 }
 
 export class Store extends EventBus {
@@ -22,17 +27,17 @@ export class Store extends EventBus {
 
 const store = new Store()
 
-export interface BlockConstructable<P extends Record<string, any>> {
-  new (props: P): Block<P>
-}
+// export interface BlockConstructable<P extends Record<string, any>> {
+//   new (props: P): Block<P>
+// }
 
-export function withStore(mapStateToProps: (state: any) => any) {
-  return function wrap(Component: BlockConstructable<Record<string, any>>) {
-    let previousState: any
+export function withStore<SP>(mapStateToProps: (state: State) => SP) {
+  return function wrap<P>(Component: typeof Block<SP & P>) {
+    // let previousState: any
 
     return class WithStore extends Component {
-      constructor(props: any) {
-        previousState = mapStateToProps(store.getState())
+      constructor(props: P) {
+        let previousState = mapStateToProps(store.getState())
 
         super({ ...props, ...previousState })
 

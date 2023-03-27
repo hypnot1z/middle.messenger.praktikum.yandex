@@ -3,6 +3,7 @@ import tpl from './tpl.hbs'
 import Block from '../../../utils/Block/block'
 
 interface InputProps {
+  tagName?: string
   type: string
   name: string
   placeholder?: string
@@ -12,7 +13,8 @@ interface InputProps {
 
 export default class Input extends Block<InputProps, HTMLInputElement> {
   constructor(props: InputProps) {
-    super('input', props)
+    props.tagName = 'input'
+    super(props)
   }
 
   protected init(): void {

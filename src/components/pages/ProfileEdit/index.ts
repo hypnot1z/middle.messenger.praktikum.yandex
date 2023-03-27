@@ -12,12 +12,13 @@ import { withStore } from '../../../utils/Store'
 
 interface EditProfileProps {
   events?: any
+  tagName?: string
 }
 class PageEditProfile extends Block {
   constructor(props: EditProfileProps) {
-    super('div', props)
-    const usr = SettingController.fetchUser()
-    console.log('USR ', usr)
+    props.tagName = 'div'
+    super(props)
+    // const usr = SettingController.fetchUser()
   }
 
   render() {

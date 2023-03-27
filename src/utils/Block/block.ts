@@ -3,6 +3,7 @@ import { nanoid } from 'nanoid'
 import { TemplateDelegate } from 'handlebars'
 
 export class Block<
+  // P = any,
   P extends Record<string, any> = any,
   E extends HTMLElement = HTMLElement
 > {
@@ -23,10 +24,11 @@ export class Block<
   protected props: P
   public children: Record<string, Block>
 
-  constructor(tagName: string = 'div', propsWithChildren: P) {
+  constructor(propsWithChildren: P) {
     const eventBus = new EventBus()
 
     const { props, children } = this._getChildrenAndProps(propsWithChildren)
+    const { tagName } = props
     this._meta = {
       tagName,
       props,
