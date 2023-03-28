@@ -6,6 +6,7 @@ import AuthController from '../../../controllers/AuthController'
 import store, { withStore } from '../../../utils/Store'
 import { User } from '../../../api/AuthAPI'
 
+const data = store.getState()
 export interface PageProfileProps {
   tagName?: string
   user: User
@@ -14,8 +15,10 @@ export class PageProfile extends Block {
   constructor(props: PageProfileProps) {
     props.tagName = 'div'
     super(props)
-    // console.log('Profile PROPS-----------', this.props)
-    // console.log('Profile User?', this.props)
+    // console.log('Profile PROPS-----------', data)
+    // const { user } = data
+    // console.log('Profile PROPS-----------', user)
+    console.log('Profile this.props[login]', this.props['login'])
   }
 
   render() {
@@ -23,12 +26,11 @@ export class PageProfile extends Block {
     return this.compile(tpl, this.props)
   }
 
- 
-
   init() {
     this.children.settings = new Link({
       to: '/settings',
       label: 'Изменить данные',
+      // label: data.user['first_name'],
     })
     this.children.password = new Link({
       to: '/password',
@@ -41,13 +43,7 @@ export class PageProfile extends Block {
         click: AuthController.logout,
       },
     })
-    this.children.getstate = new Link({
-      to: '/profile',
-      label: 'GETSTATE',
-      events: {
-        // click: ()=>console.log(this.props),
-      },
-    })
+
     // this.children.user = this.props
     // console.log('THS CHILDR', this.props)
   }

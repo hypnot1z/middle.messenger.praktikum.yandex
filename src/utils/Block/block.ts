@@ -138,8 +138,7 @@ export class Block<
 
   // Может переопределять пользователь, необязательно трогать
   protected componentDidUpdate(oldProps: P, newProps: P) {
-    console.log(`CDU OLD PROP ${oldProps}, NEW PROP ${newProps}`)
-    console.log(`CDU OLD PROP ${JSON.stringify(oldProps)}, NEW PROP ${JSON.stringify(newProps)}`)
+    console.log(newProps['login'])
     return true
   }
 
@@ -148,7 +147,7 @@ export class Block<
       return
     }
 
-    const oldValue = this.props;
+    const oldValue = this.props
     Object.assign(this.props, nextProps)
     this._componentDidUpdate(oldValue, this.props)
 
