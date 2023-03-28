@@ -138,15 +138,31 @@ export class Block<
 
   // Может переопределять пользователь, необязательно трогать
   protected componentDidUpdate(oldProps: P, newProps: P) {
+    console.log(`CDU OLD PROP ${oldProps}, NEW PROP ${newProps}`)
+    console.log(`CDU OLD PROP ${JSON.stringify(oldProps)}, NEW PROP ${JSON.stringify(newProps)}`)
     return true
   }
 
-  protected setProps = (nextProps: Partial<P>) => {
+  protected setProps = (nextProps: P) => {
     if (!nextProps) {
       return
     }
 
+    const oldValue = this.props;
     Object.assign(this.props, nextProps)
+    this._componentDidUpdate(oldValue, this.props)
+
+    // const {children, props} = this._getChildrenAndProps(nextProps);
+
+    // if (Object.values(children).length) {
+    //   Object.assign(this.children, children);
+    // }
+
+    // if (Object.values(props).length) {
+    //   Object.assign(this.props, props);
+    // }
+
+    // this.eventBus().emit(Block.EVENTS.FLOW_CDU, oldValue, this.props);
   }
 
   get element() {
