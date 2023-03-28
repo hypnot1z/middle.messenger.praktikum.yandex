@@ -31,7 +31,7 @@ const store = new Store()
 //   new (props: P): Block<P>
 // }
 
-export function withStore<SP>(mapStateToProps: (state: State) => SP) {
+export function withStore<SP extends Record<string, any>>(mapStateToProps: (state: State) => SP) {
   return function wrap<P>(Component: typeof Block<SP & P>) {
     // let previousState: any
 

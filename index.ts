@@ -2,7 +2,7 @@ import './main.scss'
 import Login from './src/components/pages/Login'
 import Registr from './src/components/pages/Registration'
 import Chat from './src/components/pages/Chat'
-import { Profile } from './src/components/pages/Profile'
+import Profile from './src/components/pages/Profile'
 // import ProfileEdit from './src/components/pages/ProfileEdit'
 import EditProfile from './src/components/pages/ProfileEdit'
 import EditPassword from './src/components/pages/EditPassword'
@@ -11,7 +11,6 @@ import Router from './src/utils/Router'
 import AuthController from './src/controllers/AuthController'
 import store from './src/utils/Store'
 
-const pProfile = new Profile({})
 const NotFound = new PageErr({ code: '404', text: 'Не туда попали' })
 const ServerError = new PageErr({ code: '500', text: 'Мы уже фиксим' })
 
@@ -73,7 +72,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   Router.use(Routes.Index, Login)
     .use(Routes.Login, Login)
     .use(Routes.Registr, Registr)
-    .use(Routes.Profile, pProfile)
+    .use(Routes.Profile, Profile)
     .use(Routes.Chat, Chat)
     .use(Routes.EditProfile, EditProfile)
     .use(Routes.EditPassword, EditPassword)

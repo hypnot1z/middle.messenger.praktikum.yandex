@@ -6,11 +6,11 @@ import AuthController from '../../../controllers/AuthController'
 import { withStore } from '../../../utils/Store'
 import { User } from '../../../api/AuthAPI'
 
-interface PageProfileProps {
+export interface PageProfileProps {
   tagName?: string
   user: User
 }
-class PageProfile extends Block {
+export class PageProfile extends Block {
   constructor(props: PageProfileProps) {
     props.tagName = 'div'
     super(props)
@@ -47,7 +47,7 @@ class PageProfile extends Block {
 // const Profile = new PageProfile({})
 
 const withUser = withStore((state) => ({ ...state.user }))
-// const ProfileWU = withUser(PageProfile)
-// const Profile = new ProfileWU({})
-// export default Profile
-export const Profile = withUser(PageProfile)
+const ProfileWU = withUser(PageProfile)
+const Profile = new ProfileWU({})
+export default Profile
+// export const Profile = withUser(PageProfile)
