@@ -2,6 +2,7 @@ import tpl from './tpl.hbs'
 import './ProfileModule.scss'
 import Block from '../../../utils/Block/block'
 import { Link } from '../../UI/Link'
+import Button from '../../UI/Button'
 import AuthController from '../../../controllers/AuthController'
 import { withStore } from '../../../utils/Store'
 import { User } from '../../../api/AuthAPI'
@@ -14,14 +15,9 @@ export class PageProfile extends Block {
   constructor(props: PageProfileProps) {
     props.tagName = 'div'
     super(props)
-    // console.log('Profile PROPS-----------', data)
-    // const { user } = data
-    // console.log('Profile PROPS-----------', user)
-    console.log('Profile this.props[login]', this.props['login'])
   }
 
   render() {
-    // console.log('TARGET', store.getState())
     return this.compile(tpl, this.props)
   }
 
@@ -29,7 +25,6 @@ export class PageProfile extends Block {
     this.children.settings = new Link({
       to: '/settings',
       label: 'Изменить данные',
-      // label: data.user['first_name'],
     })
     this.children.password = new Link({
       to: '/password',
@@ -39,16 +34,15 @@ export class PageProfile extends Block {
       to: '/messenger',
       label: 'В чат',
     })
-    this.children.logout = new Link({
-      to: '/',
-      label: 'Выйти',
+    this.children.logout = new Button({
+      text: 'Выйти',
+      id: 'logout-btn',
+      type: 'button',
       events: {
-        click: ()=>AuthController.logout,
-      },
+        click: ()=>AuthController.logout()
+      }
     })
 
-    // this.children.user = this.props
-    // console.log('THS CHILDR', this.props)
   }
 }
 

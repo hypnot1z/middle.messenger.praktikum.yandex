@@ -4,14 +4,18 @@ import Block from '../../../utils/Block/block'
 import Button from '../../UI/Button'
 import { Link } from '../../UI/Link'
 import ChatController from '../../../controllers/ChatController'
+import store, { withStore } from '../../../utils/Store'
 
 interface ChatProps {
   tagName?: string
 }
-class PageChat extends Block<ChatProps> {
+export class PageChat extends Block {
   constructor(props: ChatProps) {
     props.tagName = 'div'
     super(props)
+    // const chats = store.getState()
+    // console.log('CreateList' , chats)
+    // console.log('Chats', props)
   }
 
   render() {
@@ -34,7 +38,7 @@ class PageChat extends Block<ChatProps> {
     this.children.getChats = new Button({
       text: 'Получить чаты',
       id: 'getChats-btn',
-      type: '',
+      type: 'button',
       events: {
         click: ()=>ChatController.getChats()
       }
@@ -42,15 +46,34 @@ class PageChat extends Block<ChatProps> {
     this.children.buttonSend = new Button({
       text: 'Отправить',
       id: 'send-btn',
-      type: 'submit',
+      type: 'button',
     })
     this.children.buttonDots = new Button({
       text: '3 Dots',
       id: 'dots-btn',
-      type: '',
+      type: 'button',
     })
+  }
+
+  createList() {
+    const {chats} = store.getState()
+    console.log('CreateList' , chats)
+    mapChats(chats)
+  }
+
+  protected componentDidUpdate(oldProps: any, newProps: any): boolean {
+    this.createList
+    return true
   }
 }
 
-const Chat = new PageChat({})
+function mapChats(chats: Record<string, any>[]) {
+  const arr = chats.map((chat: Record<string, any>) => chat.title)
+  console.log(arr)
+}
+
+// const chats: any[] = ChatController.getChats() as any
+const withData = withStore((state) => ({ ...state.chats }))
+const chatWithData = withData(PageChat)
+const Chat = new chatWithData({})
 export default Chat

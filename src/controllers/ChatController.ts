@@ -23,7 +23,7 @@ export class ChatController {
       console.log('getChats')
       try {
         const chats = await this.api.read()
-        console.log(chats)
+        console.log('get Chats', chats)
   
         store.set('chats', chats)
       } catch (e: any) {

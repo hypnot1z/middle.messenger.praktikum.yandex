@@ -138,7 +138,6 @@ export class Block<
 
   // Может переопределять пользователь, необязательно трогать
   protected componentDidUpdate(oldProps: P, newProps: P) {
-    console.log(newProps['login'])
     return true
   }
 

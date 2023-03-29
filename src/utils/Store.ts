@@ -2,6 +2,7 @@ import { set } from './helpers/Set'
 import EventBus from './Block/event-bus'
 import Block from './Block/block'
 import { User } from '../api/AuthAPI'
+import { Chats } from '../api/ChatAPI'
 
 export enum StoreEvents {
   Updated = 'updated',
@@ -9,7 +10,10 @@ export enum StoreEvents {
 
 interface State {
   user: User
+  chats: Chats
 }
+
+
 
 export class Store extends EventBus {
   private state: any = {}
@@ -42,9 +46,7 @@ export function withStore<SP extends Record<string, any>>(
 
     return class WithStore extends Component {
       constructor(props: P) {
-        console.log(store.getState())
         let previousState = mapStateToProps(store.getState())
-        console.log('Prev state', previousState)
         super({ ...props, ...previousState })
 
         store.on(StoreEvents.Updated, () => {

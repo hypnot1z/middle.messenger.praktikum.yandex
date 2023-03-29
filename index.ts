@@ -10,6 +10,7 @@ import EditPassword from './src/components/pages/EditPassword'
 import Router from './src/utils/Router'
 import AuthController from './src/controllers/AuthController'
 import store from './src/utils/Store'
+import ChatController from './src/controllers/ChatController'
 
 // const NotFound = new PageErr({ code: '404', text: 'Не туда попали' })
 // const ServerError = new PageErr({ code: '500', text: 'Мы уже фиксим' })
@@ -44,6 +45,8 @@ window.addEventListener('DOMContentLoaded', async () => {
   try {
     await AuthController.fetchUser()
     const { user } = store.getState()
+
+    await ChatController.getChats()
 
     Router.start()
 

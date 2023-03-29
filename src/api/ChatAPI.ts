@@ -1,7 +1,16 @@
 import BaseAPI from './BaseAPI'
 
-export interface ChatData {
+export interface CreateChatData {
     title: string
+}
+
+export interface Chats {
+    id: number
+    title: string
+    avatar: any
+    created_by: number
+    last_message: any
+    unread_count: number
 }
 
 export class ChatAPI extends BaseAPI {
@@ -9,11 +18,11 @@ export class ChatAPI extends BaseAPI {
         super('/chats')
     }
 
-    public create(data: ChatData): Promise<unknown> {
+    public create(data: CreateChatData): Promise<unknown> {
         return this.http.post('', data)
     }
 
-    public read(): Promise<unknown> {
+    public read(): Promise<Chats> {
         return this.http.get('')
     }
 
