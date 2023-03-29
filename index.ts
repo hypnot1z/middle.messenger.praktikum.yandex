@@ -93,7 +93,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     Router.start()
 
     if (user) {
-      Router.go(Routes.Profile)
+      Router.go(Routes.Chat)
     }
   } catch (e) {
     Router.start()

@@ -18,6 +18,7 @@ class BaseLink extends Block<LinkProps> {
       ...props,
       tagName: 'a',
       events: {
+        ...props.events,
         click: () => this.navigate(),
       },
     })

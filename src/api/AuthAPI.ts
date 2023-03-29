@@ -30,7 +30,7 @@ export class AuthAPI extends BaseAPI {
     super('/auth')
   }
 
-  signin(data: SigninData) {
+  signin(data: SigninData): Promise<unknown> {
     return this.http.post('/signin', data)
   }
 

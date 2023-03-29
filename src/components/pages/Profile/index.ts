@@ -3,10 +3,9 @@ import './ProfileModule.scss'
 import Block from '../../../utils/Block/block'
 import { Link } from '../../UI/Link'
 import AuthController from '../../../controllers/AuthController'
-import store, { withStore } from '../../../utils/Store'
+import { withStore } from '../../../utils/Store'
 import { User } from '../../../api/AuthAPI'
 
-const data = store.getState()
 export interface PageProfileProps {
   tagName?: string
   user: User
@@ -36,11 +35,15 @@ export class PageProfile extends Block {
       to: '/password',
       label: 'Изменить пароль',
     })
+    this.children.chat = new Link({
+      to: '/messenger',
+      label: 'В чат',
+    })
     this.children.logout = new Link({
       to: '/',
       label: 'Выйти',
       events: {
-        click: AuthController.logout,
+        click: ()=>AuthController.logout,
       },
     })
 
