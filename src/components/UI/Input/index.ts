@@ -3,6 +3,7 @@ import tpl from './tpl.hbs'
 import Block from '../../../utils/Block/block'
 
 interface InputProps {
+  tagName?: string
   type: string
   name: string
   placeholder?: string
@@ -10,23 +11,26 @@ interface InputProps {
   events?: any
 }
 
-export default class Input extends Block {
+export default class Input extends Block<InputProps, HTMLInputElement> {
   constructor(props: InputProps) {
-    super('input', props)
+    props.tagName = 'input'
+    super(props)
   }
 
   protected init(): void {
-    this.element?.classList.add(this.props.class)
-    this.element!.placeholder = this.props.placeholder
+    this.element!.classList.add(this.props.class!)
+    this.element!.placeholder = this.props.placeholder!
     this.element!.name = this.props.name
     this.element!.type = this.props.type
   }
-
+  get name() {
+    return this.element!.name
+  }
   get value() {
-    return (this.element as HTMLInputElement).value
+    return this.element!.value
   }
   set value(val) {
-    ;(this.element as HTMLInputElement).value = val
+    this.element!.value = val
   }
 
   render() {

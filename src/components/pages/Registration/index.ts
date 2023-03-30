@@ -3,12 +3,20 @@ import './RegistrModule.scss'
 import Button from '../../UI/Button'
 import Input from '../../UI/Input'
 import Block from '../../../utils/Block/block'
-import FormData from '../../../utils/FormData'
+// import FormData from '../../../utils/FormData'
 import Validation from '../../../utils/Validation'
+import AuthController from '../../../controllers/AuthController'
+import { SignupData } from '../../../api/AuthAPI'
+import { Link } from '../../UI/Link'
 
-class PageRegistr extends Block {
-  constructor(props: any) {
-    super('div', props)
+interface PageRegistrProps {
+  events?: any
+  tagName?: string
+}
+export class PageRegistr extends Block {
+  constructor(props: PageRegistrProps) {
+    props.tagName = 'div'
+    super(props)
   }
 
   render() {
@@ -84,9 +92,25 @@ class PageRegistr extends Block {
       id: 'register-btn',
       type: 'submit',
       class: 'btn',
+      events: { click: (e: Event) => this.onSubmit(e) },
     })
+    this.children.login = new Link({
+      to: '/login',
+      label: 'Войти',
+    })
+  }
+
+  onSubmit(e: Event) {
+    e.preventDefault()
+    const values = Object.values(this.children)
+      .filter((child) => child instanceof Input)
+      .map((child) => [(child as Input).name, (child as Input).value])
+
+    const data = Object.fromEntries(values)
+
+    AuthController.signup(data as SignupData)
   }
 }
 
-const Registr = new PageRegistr({ events: { submit: FormData } })
+const Registr = new PageRegistr({})
 export default Registr

@@ -2,10 +2,21 @@ import tpl from './tpl.hbs'
 import './ChatModule.scss'
 import Block from '../../../utils/Block/block'
 import Button from '../../UI/Button'
+import { Link } from '../../UI/Link'
+import ChatController from '../../../controllers/ChatController'
+import store, { withStore } from '../../../utils/Store'
+import Input from '../../UI/Input'
 
-class PageChat extends Block {
-  constructor(props) {
-    super('div', props)
+interface ChatProps {
+  tagName?: string
+}
+export class PageChat extends Block {
+  constructor(props: ChatProps) {
+    props.tagName = 'div'
+    super(props)
+    // const chats = store.getState()
+    // console.log('CreateList' , chats)
+    // console.log('Chats', props)
   }
 
   render() {
@@ -13,18 +24,88 @@ class PageChat extends Block {
   }
 
   init() {
+    this.children.profile = new Link({
+      to: '/profile',
+      label: 'Профиль'
+    })
+    this.children.createChat = new Button({
+      text: '+',
+      id: 'createChat-btn',
+      class: 'createChat-btn',
+      type: 'button',
+      events: {
+        click: () => this.createChat()
+      }
+    })
+    this.children.chatNameInput = new Input({
+      type: 'text',
+      name: 'createChat',
+      placeholder: 'Создать чат...',
+      class: 'chat-input',
+    })
+    this.children.getChats = new Button({
+      text: 'Получить чаты',
+      id: 'getChats-btn',
+      type: 'button',
+      events: {
+        click: ()=>ChatController.getChats()
+      }
+    })
     this.children.buttonSend = new Button({
       text: 'Отправить',
       id: 'send-btn',
-      type: 'submit',
+      type: 'button',
+      events: {
+        click: () => this.sendMessage()
+      }
+    })
+    this.children.messageInput = new Input({
+      type: 'text',
+      name: 'message',
+      placeholder: '...',
+      class: 'msg-input',
+      
     })
     this.children.buttonDots = new Button({
       text: '3 Dots',
       id: 'dots-btn',
-      type: '',
+      type: 'button',
     })
+  }
+
+  sendMessage() {
+    console.log('sendMessage',this.children.messageInput.value)
+    const msg = this.children.messageInput.value
+    this.children.messageInput.value = ''
+  }
+  createChat() {
+    const chatName = this.children.chatNameInput.value
+    console.log('createChat', chatName)
+    ChatController.createChat(chatName)
+    this.children.chatNameInput.value = ''
+  }
+
+  createList() {
+    const {chats} = store.getState()
+    console.log('CreateList' , chats)
+    mapChats(chats)
+  }
+
+  protected componentDidUpdate(oldProps: any, newProps: any): boolean {
+    this.createList
+    return true
   }
 }
 
-const Chat = new PageChat()
+function mapChats(chats: Record<string, any>[]) {
+  const arr = chats.map((chat: Record<string, any>) => chat.title)
+  // console.log(arr)
+}
+
+
+
+// const chats: any[] = ChatController.getChats() as any
+const withData = withStore((state) => ({ ...state.chats }))
+const chatWithData = withData(PageChat)
+const Chat = new chatWithData({})
 export default Chat

@@ -1,8 +1,12 @@
 import EventBus from './event-bus'
-import Pattern from '../pattern'
 import { nanoid } from 'nanoid'
+import { TemplateDelegate } from 'handlebars'
 
-export default class Block {
+export class Block<
+  // P = any,
+  P extends Record<string, any> = any,
+  E extends HTMLElement = HTMLElement
+> {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -11,24 +15,22 @@ export default class Block {
   } as const
 
   public id = nanoid(5)
-  private _meta: {
-    tagName: string
-    props: any
-  }
-  private eventBus: () => EventBus
-  private _element: HTMLElement | null = null
-  protected props: any
-  public children: Record<string, Block>
+  private tagName: string
 
-  constructor(tagName = 'div', propsWithChildren: any = {}) {
+  private eventBus: () => EventBus
+  private _element: E | null = null
+  protected props: P
+  public children: Record<string, Block | Block[]>
+
+  constructor(propsWithChildren: P) {
     const eventBus = new EventBus()
+
     const { props, children } = this._getChildrenAndProps(propsWithChildren)
-    this._meta = {
-      tagName,
-      props,
-    }
-    // const pattern: Record<string, string> = pattern
+    const { tagName } = props
+    this.tagName = tagName
+
     this.children = children
+
     this.props = this._makePropsProxy(props)
 
     this.eventBus = () => eventBus
@@ -38,27 +40,44 @@ export default class Block {
     eventBus.emit(Block.EVENTS.INIT)
   }
 
-  private _getChildrenAndProps(ChildrenAndProps: any) {
+  private _getChildrenAndProps(ChildrenAndProps: P): {
+    props: P
+    children: Record<string, Block | Block[]>
+  } {
     const props: Record<string, any> = {}
     const children: Record<string, Block> = {}
 
     Object.entries(ChildrenAndProps).forEach(([key, value]) => {
-      if (value instanceof Block) {
-        children[key] = value
+      if (Array.isArray(value) && value.every((v) => v instanceof Block)) {
+        children[key as string] = value
+      } else if (value instanceof Block) {
+        children[key as string] = value
       } else {
         props[key] = value
       }
     })
 
-    return { props, children }
+    return { props: props as P, children }
   }
 
   private _addEvents() {
-    const { events = {} } = this.props as { events: Record<string, () => void> }
+    const { events = {} } = this.props as unknown as {
+      events: Record<string, () => void>
+    }
 
     Object.keys(events).forEach((eventName) => {
       this._element?.addEventListener(eventName, events[eventName])
     })
+  }
+
+  private _removeEvents() {
+    const { events = {} } = this.props as Record<string, () => void>
+
+    if (events) {
+      Object.entries(events).forEach(([event, listener]) => {
+        this._element!.removeEventListener(event, listener)
+      })
+    }
   }
 
   private _registerEvents(eventBus: EventBus) {
@@ -69,9 +88,9 @@ export default class Block {
   }
 
   private _createResources() {
-    const { tagName } = this._meta
-    this._element = this._createDocumentElement(tagName)
-    if (tagName === 'div') {
+    const tagName = this.tagName
+    this._element = this._createDocumentElement(tagName) as E
+    if (this.tagName === 'div') {
       this._element.classList.add('wrapper')
     }
   }
@@ -101,12 +120,16 @@ export default class Block {
   protected dispatchComponentDidMount() {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM)
 
-    Object.values(this.children).forEach((child) =>
-      child.dispatchComponentDidMount()
-    )
+    Object.values(this.children).forEach((child) => {
+      if (Array.isArray(child)) {
+        child.forEach((ch) => ch.dispatchComponentDidMount())
+      } else {
+        child.dispatchComponentDidMount()
+      }
+    })
   }
 
-  private _componentDidUpdate(oldProps: any, newProps: any) {
+  private _componentDidUpdate(oldProps: P, newProps: P) {
     const response = this.componentDidUpdate(oldProps, newProps)
     if (!response) {
       this.eventBus().emit(Block.EVENTS.FLOW_RENDER)
@@ -114,16 +137,30 @@ export default class Block {
   }
 
   // Может переопределять пользователь, необязательно трогать
-  protected componentDidUpdate(oldProps: any, newProps: any) {
+  protected componentDidUpdate(oldProps: P, newProps: P) {
     return true
   }
 
-  protected setProps = (nextProps: any) => {
+  protected setProps = (nextProps: P) => {
     if (!nextProps) {
       return
     }
 
+    const oldValue = this.props
     Object.assign(this.props, nextProps)
+    this._componentDidUpdate(oldValue, this.props)
+
+    // const {children, props} = this._getChildrenAndProps(nextProps);
+
+    // if (Object.values(children).length) {
+    //   Object.assign(this.children, children);
+    // }
+
+    // if (Object.values(props).length) {
+    //   Object.assign(this.props, props);
+    // }
+
+    // this.eventBus().emit(Block.EVENTS.FLOW_CDU, oldValue, this.props);
   }
 
   get element() {
@@ -135,14 +172,9 @@ export default class Block {
     this._element!.innerHTML = ''
     this._element!.append(fragment)
     this._addEvents()
-    // Этот небезопасный метод для упрощения логики
-    // Используйте шаблонизатор из npm или напишите свой безопасный
-    // Нужно не в строку компилировать (или делать это правильно),
-    // либо сразу в DOM-элементы возвращать из compile DOM-ноду
-    // this._element!.innerHTML = block
   }
 
-  protected compile(template: (context: any) => string, context: any) {
+  protected compile(template: TemplateDelegate, context: any) {
     const contextAndStubs = { ...context }
 
     Object.entries(this.children).forEach(([name, component]) => {
@@ -178,34 +210,18 @@ export default class Block {
     return this.element
   }
 
-  validation(event: Event) {
-    console.log(typeof event.target)
-    const element: HTMLElement | null = event.target
-    const elementName: string = element.name
-    const etarget = element.nextElementSibling
-    event.target.addEventListener('blur', () => {
-      const targetPattern: RegExp = new RegExp(Pattern[elementName])
-      const stringValue: string = event.target.value
-      if (!targetPattern.test(stringValue)) {
-        etarget.style.display = 'block'
-      } else {
-        etarget.style.display = 'none'
-      }
-    })
-  }
-
-  private _makePropsProxy(props: any) {
+  private _makePropsProxy(props: P) {
     // Можно и так передать this
     // Такой способ больше не применяется с приходом ES6+
     const self = this
     return new Proxy(props, {
-      get(target, prop: string) {
-        const value = target[prop]
+      get(target, prop: string | Symbol) {
+        const value = target[prop as keyof P]
         return typeof value === 'function' ? value.bind(target) : value
       },
-      set(target, prop: string, value) {
+      set(target, prop: string | Symbol, value) {
         const oldTarget = { ...target }
-        target[prop] = value
+        target[prop as keyof P] = value
 
         // Запускаем обновление компоненты
         // Плохой cloneDeep, в следующей итерации нужно заставлять добавлять cloneDeep им самим
@@ -226,3 +242,5 @@ export default class Block {
     this.getContent()!.style.display = 'none'
   }
 }
+
+export default Block

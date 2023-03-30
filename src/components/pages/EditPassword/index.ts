@@ -6,9 +6,14 @@ import FormData from '../../../utils/FormData'
 import Validation from '../../../utils/Validation'
 import './ProfileModule.scss'
 
-class PageEditPassword extends Block {
-  constructor(props: any) {
-    super('div', props)
+interface EditPasswordProps {
+  events: any
+  tagName?: string
+}
+class PageEditPassword extends Block<EditPasswordProps, HTMLDivElement> {
+  constructor(props: EditPasswordProps) {
+    props.tagName = 'div'
+    super(props)
   }
 
   render() {
@@ -25,8 +30,8 @@ class PageEditPassword extends Block {
         blur: Validation,
       },
     })
-
-    this.children.inputOldPass.value = 'OldPass'
+    const inputOld: Input = <Input>this.children.inputOldPass
+    inputOld.value = 'OldPass'
 
     this.children.inputNewPass = new Input({
       type: 'password',
@@ -37,7 +42,8 @@ class PageEditPassword extends Block {
         blur: Validation,
       },
     })
-    this.children.inputNewPass.value = 'NewPassword'
+    const inputNew: Input = <Input>this.children.inputNewPass
+    inputNew.value = 'NewPassword'
 
     this.children.inputPassRep = new Input({
       type: 'password',
@@ -48,7 +54,8 @@ class PageEditPassword extends Block {
         blur: Validation,
       },
     })
-    this.children.inputPassRep.value = 'NewPassword'
+    const inputRepeat: Input = <Input>this.children.inputPassRep
+    inputRepeat.value = 'NewPassword'
 
     this.children.button = new Button({
       text: 'Сохранить',
