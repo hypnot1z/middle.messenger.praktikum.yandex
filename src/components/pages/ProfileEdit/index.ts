@@ -83,17 +83,7 @@ class PageEditProfile extends Block {
     })
   }
 
-  onSubmit(e: Event) {
-    e.preventDefault()
-    const values = Object.values(this.children)
-      .filter((child) => child instanceof Input)
-      .map((child) => [(child as Input).name, (child as Input).value])
-
-    const data = Object.fromEntries(values)
-    console.log(data)
-
-    SettingController.updateProfile(data as ProfileData)
-  }
+  
 }
 
 const EditProfile = new PageEditProfile({})

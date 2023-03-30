@@ -12,7 +12,7 @@ export class ChatController {
     async createChat(data: ChatData) {
       console.log('Create Chat')
       try {
-        await this.api.create(data)
+        await this.api.create({title: data})
   
       } catch (e: any) {
         console.error(e)
@@ -28,6 +28,15 @@ export class ChatController {
         store.set('chats', chats)
       } catch (e: any) {
         console.error(e.message)
+      }
+    }
+
+    async sendMsg(msg: string) {
+      console.log('Sending message...')
+      try {
+        
+      } catch (error) {
+        
       }
     }
   

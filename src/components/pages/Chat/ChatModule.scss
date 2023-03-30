@@ -58,3 +58,32 @@ $bgColor: rgba(194, 191, 191, 0.452);
 .chat-msg input {
   width: 100%;
 }
+
+.chat-create {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid grey;
+  padding: 1px;
+  margin-top: 5px;
+  border-radius: 0.2em;
+}
+
+.chat-create input {
+  flex-grow: 2;
+  border: none;
+}
+
+.chat-create input:focus {
+  outline: none;
+}
+
+.chat-create input:focus-within {
+  outline: 1px solid blue;
+}
+
+.createChat-btn {
+  border: 1px solid blue;
+  background: blue;
+  color: aliceblue;
+  border-radius: 0.5em;
+}

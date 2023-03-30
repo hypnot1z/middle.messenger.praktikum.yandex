@@ -107,7 +107,6 @@ export class PageRegistr extends Block {
       .map((child) => [(child as Input).name, (child as Input).value])
 
     const data = Object.fromEntries(values)
-    console.log(data)
 
     AuthController.signup(data as SignupData)
   }

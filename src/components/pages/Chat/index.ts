@@ -5,6 +5,7 @@ import Button from '../../UI/Button'
 import { Link } from '../../UI/Link'
 import ChatController from '../../../controllers/ChatController'
 import store, { withStore } from '../../../utils/Store'
+import Input from '../../UI/Input'
 
 interface ChatProps {
   tagName?: string
@@ -28,12 +29,19 @@ export class PageChat extends Block {
       label: 'Профиль'
     })
     this.children.createChat = new Button({
-      text: 'Создать чат',
+      text: '+',
       id: 'createChat-btn',
+      class: 'createChat-btn',
       type: 'button',
       events: {
-        click: ()=>ChatController.createChat({title: 'chatchat'})
+        click: () => this.createChat()
       }
+    })
+    this.children.chatNameInput = new Input({
+      type: 'text',
+      name: 'createChat',
+      placeholder: 'Создать чат...',
+      class: 'chat-input',
     })
     this.children.getChats = new Button({
       text: 'Получить чаты',
@@ -47,12 +55,34 @@ export class PageChat extends Block {
       text: 'Отправить',
       id: 'send-btn',
       type: 'button',
+      events: {
+        click: () => this.sendMessage()
+      }
+    })
+    this.children.messageInput = new Input({
+      type: 'text',
+      name: 'message',
+      placeholder: '...',
+      class: 'msg-input',
+      
     })
     this.children.buttonDots = new Button({
       text: '3 Dots',
       id: 'dots-btn',
       type: 'button',
     })
+  }
+
+  sendMessage() {
+    console.log('sendMessage',this.children.messageInput.value)
+    const msg = this.children.messageInput.value
+    this.children.messageInput.value = ''
+  }
+  createChat() {
+    const chatName = this.children.chatNameInput.value
+    console.log('createChat', chatName)
+    ChatController.createChat(chatName)
+    this.children.chatNameInput.value = ''
   }
 
   createList() {
@@ -69,8 +99,10 @@ export class PageChat extends Block {
 
 function mapChats(chats: Record<string, any>[]) {
   const arr = chats.map((chat: Record<string, any>) => chat.title)
-  console.log(arr)
+  // console.log(arr)
 }
+
+
 
 // const chats: any[] = ChatController.getChats() as any
 const withData = withStore((state) => ({ ...state.chats }))

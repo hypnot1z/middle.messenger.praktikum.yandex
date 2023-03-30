@@ -1,5 +1,5 @@
 export default function FormData(event: Event) {
-  console.log(arguments)
+  // console.log(arguments)
   event.preventDefault()
   const data: Record<string, string> = {}
   const form: HTMLFormElement | null = document.forms[0]
@@ -11,7 +11,7 @@ export default function FormData(event: Event) {
         data[name] = field.value
       }
     }
-    console.log(data)
+    // console.log(data)
     return data
   }
 }

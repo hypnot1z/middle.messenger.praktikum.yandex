@@ -1,17 +1,13 @@
 <div class='chat-page'>
-  <nav class='links'>
-    <a href='#/login'>Login</a>
-    <a href='#/registration'>Registration</a>
-    <a href='#/profile'>Profile</a>
-    <a href='#/404'>Page not found</a>
-    <a href='#/500'>Server error</a>
-    <a href='#/chat'>Chat</a>
-  </nav>
-
+  
   <div class='chat-list'>
     {{{profile}}}
     <input type='text' placeholder='Поиск' />
+
+    <form action='#' class='chat-create'>
+    {{{chatNameInput}}}
     {{{createChat}}}
+    </form>
     {{{getChats}}}
   </div>
   <div class='chat-block'>
@@ -21,7 +17,8 @@
     </div>
     <div class='chat-tape'></div>
     <form action='#' class='chat-msg'>
-      <input type='text' name='message' placeholder='Сообщение' />
+      {{!-- <input type='text' name='message' placeholder='Сообщение' /> --}}
+      {{{messageInput}}}
       {{{buttonSend}}}
     </form>
   </div>
