@@ -1,14 +1,15 @@
 <div class='chat-page'>
-  
+
   <div class='chat-list'>
     {{{profile}}}
     <input type='text' placeholder='Поиск' />
 
     <form action='#' class='chat-create'>
-    {{{chatNameInput}}}
-    {{{createChat}}}
+      {{{chatNameInput}}}
+      {{{createChat}}}
     </form>
     {{{getChats}}}
+    <span>Список чатов</span>
     {{{chatList}}}
   </div>
   <div class='chat-block'>
@@ -18,7 +19,7 @@
     </div>
     <div class='chat-tape'></div>
     <form action='#' class='chat-msg'>
-      {{!-- <input type='text' name='message' placeholder='Сообщение' /> --}}
+      {{! <input type='text' name='message' placeholder='Сообщение' /> }}
       {{{messageInput}}}
       {{{buttonSend}}}
     </form>

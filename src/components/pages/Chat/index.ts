@@ -6,19 +6,16 @@ import { Link } from '../../UI/Link'
 import ChatController from '../../../controllers/ChatController'
 import store, { withStore } from '../../../utils/Store'
 import Input from '../../UI/Input'
-// import { ChatsList } from '../../UI/ChatItems/ChatList'
-import {ChatList} from '../../UI/ChatItems/ChatElement'
+import { ChatTitle } from '../../UI/ChatItems/ChatElement'
+import { Chats } from '../../../api/ChatAPI'
 
 interface ChatProps {
   tagName?: string
+  chats: Chats
 }
-export class PageChat extends Block {
+export class PageChat extends Block<ChatProps> {
   constructor(props: ChatProps) {
-    props.tagName = 'div'
-    super(props)
-    // const chats = store.getState()
-    // console.log('CreateList' , chats)
-    // console.log('Chats', props)
+    super({ ...props, tagName: 'div' })
   }
 
   render() {
@@ -28,7 +25,7 @@ export class PageChat extends Block {
   init() {
     this.children.profile = new Link({
       to: '/profile',
-      label: 'Профиль'
+      label: 'Профиль',
     })
     this.children.createChat = new Button({
       text: '+',
@@ -36,8 +33,8 @@ export class PageChat extends Block {
       class: 'createChat-btn',
       type: 'button',
       events: {
-        click: () => this.createChat()
-      }
+        click: () => this.createChat(),
+      },
     })
     this.children.chatNameInput = new Input({
       type: 'text',
@@ -50,34 +47,32 @@ export class PageChat extends Block {
       id: 'getChats-btn',
       type: 'button',
       events: {
-        click: ()=>ChatController.getChats()
-      }
+        click: () => ChatController.getChats(),
+      },
     })
     this.children.buttonSend = new Button({
       text: 'Отправить',
       id: 'send-btn',
       type: 'button',
       events: {
-        click: () => this.sendMessage()
-      }
+        click: () => this.sendMessage(),
+      },
     })
     this.children.messageInput = new Input({
       type: 'text',
       name: 'message',
       placeholder: '...',
       class: 'msg-input',
-      
     })
     this.children.buttonDots = new Button({
       text: '3 Dots',
       id: 'dots-btn',
       type: 'button',
     })
-    this.children.chatList = new ChatList({})
   }
 
   sendMessage() {
-    console.log('sendMessage',this.children.messageInput.value)
+    console.log('sendMessage', this.children.messageInput.value)
     const msg = this.children.messageInput.value
     this.children.messageInput.value = ''
   }
@@ -88,27 +83,24 @@ export class PageChat extends Block {
     this.children.chatNameInput.value = ''
   }
 
-  createList() {
-    const {chats} = store.getState()
-    console.log('CreateList' , chats)
-    mapChats(chats)
-  }
-
-  protected componentDidUpdate(oldProps: any, newProps: any): boolean {
-    this.createList
-    return true
+  protected componentDidUpdate(
+    oldProps: ChatProps,
+    newProps: ChatProps
+  ): boolean {
+    this.children.chatList = new ChatTitle({
+      title: this.props.chats.map((el) => el.title),
+    })
+    return false
   }
 }
 
-function mapChats(chats: Record<string, any>[]) {
-  const arr = chats.map((chat: Record<string, any>) => chat.title)
-  // console.log(arr)
-}
+const withData = withStore((state) =>
+  state.chats
+    ? {
+        chats: [...state.chats],
+      }
+    : { chats: [] }
+)
 
-
-
-// const chats: any[] = ChatController.getChats() as any
-const withData = withStore((state) => ({ ...state.chats }))
-const chatWithData = withData(PageChat)
-const Chat = new chatWithData({})
-export default Chat
+const ChatWithTitles = withData(PageChat)
+export const Chat = new ChatWithTitles({})
