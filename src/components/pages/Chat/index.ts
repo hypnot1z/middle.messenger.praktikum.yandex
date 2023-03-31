@@ -6,6 +6,8 @@ import { Link } from '../../UI/Link'
 import ChatController from '../../../controllers/ChatController'
 import store, { withStore } from '../../../utils/Store'
 import Input from '../../UI/Input'
+// import { ChatsList } from '../../UI/ChatItems/ChatList'
+import {ChatList} from '../../UI/ChatItems/ChatElement'
 
 interface ChatProps {
   tagName?: string
@@ -71,6 +73,7 @@ export class PageChat extends Block {
       id: 'dots-btn',
       type: 'button',
     })
+    this.children.chatList = new ChatList({})
   }
 
   sendMessage() {

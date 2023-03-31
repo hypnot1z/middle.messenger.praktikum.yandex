@@ -10,7 +10,7 @@ export enum StoreEvents {
 
 interface State {
   user: User
-  chats: Chats
+  chats: Chats[]
 }
 
 
@@ -38,16 +38,16 @@ window.store = store
 //   new (props: P): Block<P>
 // }
 
-export function withStore<SP extends Record<string, any>>(
+export function withStore<SP extends Partial<any>>(
   mapStateToProps: (state: State) => SP
 ) {
   return function wrap<P>(Component: typeof Block<SP & P>) {
     // let previousState: any
 
     return class WithStore extends Component {
-      constructor(props: P) {
+      constructor(props: Omit<P, keyof SP>) {
         let previousState = mapStateToProps(store.getState())
-        super({ ...props, ...previousState })
+        super({ ...(props as P), ...previousState })
 
         store.on(StoreEvents.Updated, () => {
           const stateProps = mapStateToProps(store.getState())
