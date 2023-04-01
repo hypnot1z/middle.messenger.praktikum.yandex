@@ -2,10 +2,14 @@ import tpl from './tpl.hbs'
 import './ProfileModule.scss'
 import Block from '../../../utils/Block/block'
 import { Link } from '../../UI/Link'
+import { Avatar } from '../../UI/Avatar'
 import Button from '../../UI/Button'
 import AuthController from '../../../controllers/AuthController'
 import { withStore } from '../../../utils/Store'
 import { User } from '../../../api/AuthAPI'
+import { ProfileField } from '../../UI/ProfileFields'
+
+interface ProfileProps extends User {}
 
 export interface PageProfileProps {
   tagName?: string
@@ -22,6 +26,12 @@ export class PageProfile extends Block {
   }
 
   init() {
+    // this.children.fields = userFields.map((name) => {
+    //   return new ProfileField({ name, value: this.props[name] })
+    // })
+    this.children.avatar = new Avatar({
+      to: '/settings',
+    })
     this.children.settings = new Link({
       to: '/settings',
       label: 'Изменить данные',
@@ -39,10 +49,20 @@ export class PageProfile extends Block {
       id: 'logout-btn',
       type: 'button',
       events: {
-        click: ()=>AuthController.logout()
-      }
+        click: () => AuthController.logout(),
+      },
     })
+  }
 
+  protected componentDidUpdate(
+    oldProps: ProfileProps,
+    newProps: ProfileProps
+  ): boolean {
+    for (let key in newProps) {
+      this.children.key = new ProfileField({ value: newProps[key] })
+    }
+
+    return false
   }
 }
 

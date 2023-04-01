@@ -1,7 +1,7 @@
 import './main.scss'
 import Login from './src/components/pages/Login'
 import Registr from './src/components/pages/Registration'
-import Chat from './src/components/pages/Chat'
+import { Chat } from './src/components/pages/Chat'
 import Profile from './src/components/pages/Profile'
 // import ProfileEdit from './src/components/pages/ProfileEdit'
 import EditProfile from './src/components/pages/ProfileEdit'
@@ -15,8 +15,6 @@ import ChatController from './src/controllers/ChatController'
 // const NotFound = new PageErr({ code: '404', text: 'Не туда попали' })
 // const ServerError = new PageErr({ code: '500', text: 'Мы уже фиксим' })
 
-
-
 enum Routes {
   Index = '/',
   Registr = '/sign-up',
@@ -26,8 +24,6 @@ enum Routes {
   EditProfile = '/settings',
   EditPassword = '/password',
 }
-
-
 
 window.addEventListener('DOMContentLoaded', async () => {
   Router.use(Routes.Index, Login)
@@ -40,24 +36,26 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   let isProtectedRoute = true
 
- 
+  switch (window.location.pathname) {
+    case Routes.Login:
+    case Routes.Registr:
+      isProtectedRoute = false
+      break
+  }
 
   try {
     await AuthController.fetchUser()
-    const { user } = store.getState()
 
     await ChatController.getChats()
 
     Router.start()
-
-    if (user) {
-      Router.go(Routes.Chat)
-    }
+    Router.go(Routes.Chat)
   } catch (e) {
     Router.start()
 
     if (isProtectedRoute) {
       Router.go(Routes.Index)
+      Router.go(Routes.Registr)
     }
   }
 })

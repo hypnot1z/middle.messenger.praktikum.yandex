@@ -4,6 +4,7 @@ import Input from '../../UI/Input'
 import Block from '../../../utils/Block/block'
 import FormData from '../../../utils/FormData'
 import Validation from '../../../utils/Validation'
+import { Avatar } from '../../UI/Avatar'
 import './ProfileModule.scss'
 
 interface EditPasswordProps {
@@ -21,6 +22,9 @@ class PageEditPassword extends Block<EditPasswordProps, HTMLDivElement> {
   }
 
   init() {
+    this.children.avatar = new Avatar({
+      to: '/settings',
+    })
     this.children.inputOldPass = new Input({
       type: 'password',
       name: 'oldPassword',

@@ -1,12 +1,25 @@
 {
-    "extends": "stylelint-config-standard-scss",
-    "rules": {
-      "color-hex-case": "lower"
+  "extends": "stylelint-config-standard-scss",
+  "rules": {
+    "color-hex-case": "lower"
+  },
+  "ignoreFiles": [
+    "dist/*",
+    "node_modules/*",
+    ".parcel-cache/*",
+    ".github/*",
+    "**/*"
+  ],
+  "overrides": [
+    {
+      "files": ["**/*.css"],
+      "extends": ["stylelint-config-standard"],
+      "rules": {}
     },
-    "ignoreFiles": [
-      "dist/*",
-      "node_modules/*",
-      ".parcel-cache/*",
-      ".github/*"
-    ]
-  }
+    {
+      "files": ["**/*.scss"],
+      "extends": ["stylelint-config-standard-scss"],
+      "rules": {}
+    }
+  ]
+}

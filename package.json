@@ -20,7 +20,8 @@
     "stylelint": "stylelint **/*.scss",
     "dev": "parcel index.html --port 3000 --no-source-maps --open",
     "build": "parcel build index.html --no-source-maps --no-cache",
-    "start": "node app.js"
+    "server": "node app.js",
+    "start": "npm run build && npm run server"
   },
   "keywords": [],
   "author": "A_Zagorskiy",
