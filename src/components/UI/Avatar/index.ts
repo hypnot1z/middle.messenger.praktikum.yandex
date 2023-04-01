@@ -2,9 +2,9 @@ import Block from '../../../utils/Block/block'
 import tpl from './tpl.hbs'
 import './AvaModule.scss'
 import { PropsWithRouter, withRouter } from '../../../hocs/withRouter'
-import noAvatar from './noAvatar.png'
+import avatarCap from './avatarCap.svg'
 
-const src = noAvatar
+const src = avatarCap
 
 interface AvaProps extends PropsWithRouter {
   to: string

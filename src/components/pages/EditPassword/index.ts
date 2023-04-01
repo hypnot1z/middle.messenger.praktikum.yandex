@@ -6,6 +6,8 @@ import FormData from '../../../utils/FormData'
 import Validation from '../../../utils/Validation'
 import { Avatar } from '../../UI/Avatar'
 import './ProfileModule.scss'
+import SettingController from '../../../controllers/SettingController'
+import AuthAPI from '../../../api/AuthAPI'
 
 interface EditPasswordProps {
   events: any
@@ -66,7 +68,19 @@ class PageEditPassword extends Block<EditPasswordProps, HTMLDivElement> {
       id: 'edit-btn',
       type: 'submit',
       class: 'btn',
+      events: { click: (event: Event) => this.onSubmit(event) },
     })
+  }
+  onSubmit(event: Event) {
+    event.preventDefault()
+    const values = Object.values(this.children)
+      .filter((child) => child instanceof Input)
+      .map((child) => [(child as Input).name, (child as Input).value])
+
+    const data = Object.fromEntries(values)
+    console.log('EditPass data', data)
+
+    SettingController.updatePassword(data)
   }
 }
 

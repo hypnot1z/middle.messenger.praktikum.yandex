@@ -21,7 +21,6 @@ class PageEditProfile extends Block {
   constructor(props: EditProfileProps) {
     props.tagName = 'div'
     super(props)
-    console.log('PP Props', this.props)
   }
 
   render() {
@@ -37,8 +36,20 @@ class PageEditProfile extends Block {
       id: 'edit-btn',
       type: 'submit',
       class: 'btn',
-      events: { click: (e: Event) => this.onSubmit(e) },
+      events: { click: (event: Event) => this.onSubmit(event) },
     })
+  }
+
+  onSubmit(event: Event) {
+    event.preventDefault()
+    const values = Object.values(this.children)
+      .filter((child) => child instanceof Input)
+      .map((child) => [(child as Input).name, (child as Input).value])
+
+    const data = Object.fromEntries(values)
+    console.log('EditProf data', data)
+
+    SettingController.updateProfile(data)
   }
 
   protected componentDidUpdate(

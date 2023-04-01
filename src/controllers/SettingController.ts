@@ -1,6 +1,7 @@
 import API, { SetAPI, ProfileData, PassData } from '../api/SetAPI'
 import store from '../utils/Store'
 import router from '../utils/Router'
+import AuthController from './AuthController'
 
 export class SettingController {
   private readonly api: SetAPI
@@ -14,6 +15,8 @@ export class SettingController {
     try {
       await this.api.profile(data)
 
+      AuthController.fetchUser()
+
       router.go('/profile')
     } catch (e: any) {
       console.error(e)
@@ -25,17 +28,11 @@ export class SettingController {
     try {
       await this.api.password(data)
 
-      // await this.fetchUser()
-
+      AuthController.logout()
       router.go('/profile')
     } catch (e: any) {
       console.error(e.message)
     }
-  }
-
-  async fetchUser() {
-    const user = await this.api.read()
-    store.set('user', user)
   }
 }
 
