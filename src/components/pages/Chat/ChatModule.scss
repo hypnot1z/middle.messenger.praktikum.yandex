@@ -29,6 +29,21 @@ $bgColor: rgba(194, 191, 191, 0.452);
   border-right: 1px solid $bgColor;
 }
 
+.chat-list button {
+  cursor: pointer;
+}
+
+.chat-list ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.chat-list li {
+  display: flex;
+  justify-content: space-between;
+  outline: 1px solid grey;
+}
+
 .chat-block {
   padding: 10px;
   grid-area: C;

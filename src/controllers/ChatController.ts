@@ -1,4 +1,4 @@
-import API, { ChatAPI, ChatData } from '../api/ChatAPI'
+import API, { ChatAPI } from '../api/ChatAPI'
 import store from '../utils/Store'
 import router from '../utils/Router'
 
@@ -9,7 +9,7 @@ export class ChatController {
     this.api = API
   }
 
-  async createChat(data: ChatData) {
+  async createChat(data: string) {
     console.log('Create Chat')
     try {
       await this.api.create({ title: data })

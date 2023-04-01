@@ -42,14 +42,14 @@ export class PageChat extends Block<ChatProps> {
       placeholder: 'Создать чат...',
       class: 'chat-input',
     })
-    this.children.getChats = new Button({
-      text: 'Получить чаты',
-      id: 'getChats-btn',
-      type: 'button',
-      events: {
-        click: () => ChatController.getChats(),
-      },
-    })
+    // this.children.getChats = new Button({
+    //   text: 'Получить чаты',
+    //   id: 'getChats-btn',
+    //   type: 'button',
+    //   events: {
+    //     click: () => ChatController.getChats(),
+    //   },
+    // })
     this.children.buttonSend = new Button({
       text: 'Отправить',
       id: 'send-btn',
@@ -89,6 +89,7 @@ export class PageChat extends Block<ChatProps> {
   ): boolean {
     this.children.chatList = new ChatTitle({
       title: this.props.chats.map((el) => el.title),
+      id: this.props.chats.map((el) => el.id),
     })
     return false
   }
