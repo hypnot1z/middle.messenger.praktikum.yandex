@@ -1,5 +1,9 @@
 $textColor: rgb(109, 109, 109);
 $bgColor: rgba(194, 191, 191, 0.452);
+$white: #fff;
+$light-blue: #b2ebf2;
+$medium-blue: #3369f3;
+
 
 .links a {
   margin: 10px;
@@ -36,12 +40,29 @@ $bgColor: rgba(194, 191, 191, 0.452);
 .chat-list ul {
   list-style-type: none;
   margin: 0;
-  padding: 0;
+  background-color: $white;
+  padding: 5px;
+  border: 1px solid $medium-blue;
+  border-radius: 5px;
 }
 .chat-list li {
-  display: flex;
-  justify-content: space-between;
-  outline: 1px solid grey;
+  background-color: $white;
+    border: 1px solid $medium-blue;
+    color: $medium-blue;
+    font-size: 16px;
+    padding: 10px;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+        background-color: $medium-blue;
+        color: $white;
+        cursor: pointer;
+    }
+
+    &:last-child {
+        border-bottom: none;
+    }
+  
 }
 
 .chat-block {

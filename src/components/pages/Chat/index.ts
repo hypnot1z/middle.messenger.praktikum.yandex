@@ -8,14 +8,16 @@ import store, { withStore } from '../../../utils/Store'
 import Input from '../../UI/Input'
 import { ChatTitle } from '../../UI/ChatItems/ChatElement'
 import { Chats } from '../../../api/ChatAPI'
+import treeDots from '../../../img/three-dots.svg'
 
 interface ChatProps {
   tagName?: string
   chats: Chats
+  chatName?: string
 }
 export class PageChat extends Block<ChatProps> {
   constructor(props: ChatProps) {
-    super({ ...props, tagName: 'div' })
+    super({ ...props, tagName: 'div', chatName: 'Выберите чат' })
     // console.log('ALL PROPS', this.props)
   }
 
@@ -69,14 +71,19 @@ export class PageChat extends Block<ChatProps> {
       text: '3 Dots',
       id: 'dots-btn',
       type: 'button',
+      img: treeDots
     })
   }
 
   selectChat(e: Event) {
     const chatId = (e.target! as HTMLLIElement).id
-    // console.log('CLICK CHAT EVENT', chatId)
-    store.set('selectedChat', chatId)
-    // this.setProps({ ...this.props, selectedChat: chatId })
+    function selChat(arr: Chats[], id: number) {
+      return arr.filter(obj => obj.id === id)
+    }
+    const activeChat = selChat(this.props.chats, Number(chatId))
+    store.set('selectedChat', activeChat[0])
+    this.props.chatName = activeChat[0].title
+
   }
   sendMessage() {
     console.log('sendMessage', this.children.messageInput.value)
