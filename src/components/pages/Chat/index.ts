@@ -8,6 +8,7 @@ import store, { withStore } from '../../../utils/Store'
 import Input from '../../UI/Input'
 import { ChatTitle } from '../../UI/ChatItems/ChatElement'
 import { Chats } from '../../../api/ChatAPI'
+import { Image } from '../../UI/Img'
 import treeDots from '../../../img/three-dots.svg'
 
 interface ChatProps {
@@ -67,12 +68,18 @@ export class PageChat extends Block<ChatProps> {
       placeholder: '...',
       class: 'msg-input',
     })
-    this.children.buttonDots = new Button({
-      text: '3 Dots',
-      id: 'dots-btn',
-      type: 'button',
-      img: treeDots
+    this.children.buttonDots = new Image({
+      src: treeDots,
+      alt: 'Меню',
+      class: 'dots-btn',
+      size: '20'
     })
+    // this.children.buttonDots = new Button({
+    //   text: '3 Dots',
+    //   id: 'dots-btn',
+    //   type: 'button',
+    //   img: treeDots
+    // })
   }
 
   selectChat(e: Event) {

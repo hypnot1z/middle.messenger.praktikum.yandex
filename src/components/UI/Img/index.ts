@@ -1,22 +1,25 @@
 import Block from '../../../utils/Block/block'
 import tpl from './tpl.hbs'
-import './AvaModule.scss'
+import './ImageModule.scss'
 import { PropsWithRouter, withRouter } from '../../../hocs/withRouter'
-import avatarCap from './avatarCap.svg'
+// import avatarCap from './avatarCap.svg'
 
-const src = avatarCap
+// const src = avatarCap
 
-interface AvaProps extends PropsWithRouter {
-  to: string
+interface ImgProps extends PropsWithRouter {
+  to?: string
   src?: string
+  size?: string
+  alt?: string
+  class?: string
   events?: {
     click: () => void
   }
 }
 
-class BaseAva extends Block<AvaProps> {
-  constructor(props: AvaProps) {
-    props.src = src
+class BaseImg extends Block<ImgProps> {
+  constructor(props: ImgProps) {
+    // props.src = src
     super({
       ...props,
       events: {
@@ -35,4 +38,4 @@ class BaseAva extends Block<AvaProps> {
   }
 }
 
-export const Avatar = withRouter(BaseAva)
+export const Image = withRouter(BaseImg)

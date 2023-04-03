@@ -8,7 +8,6 @@ interface ButtonProps {
   id: string
   type: string
   class?: string
-  img?: any
   events?: any
 }
 
