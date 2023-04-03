@@ -16,6 +16,7 @@ interface ChatProps {
 export class PageChat extends Block<ChatProps> {
   constructor(props: ChatProps) {
     super({ ...props, tagName: 'div' })
+    // console.log('ALL PROPS', this.props)
   }
 
   render() {
@@ -71,6 +72,12 @@ export class PageChat extends Block<ChatProps> {
     })
   }
 
+  selectChat(e: Event) {
+    const chatId = (e.target! as HTMLLIElement).id
+    // console.log('CLICK CHAT EVENT', chatId)
+    store.set('selectedChat', chatId)
+    // this.setProps({ ...this.props, selectedChat: chatId })
+  }
   sendMessage() {
     console.log('sendMessage', this.children.messageInput.value)
     const msg = this.children.messageInput.value
@@ -87,9 +94,20 @@ export class PageChat extends Block<ChatProps> {
     oldProps: ChatProps,
     newProps: ChatProps
   ): boolean {
+    // console.log('CDU STATE', store.getState())
+    const state = store.getState()
+    const selectedChat = Number(state.selectedChat)
+    if (selectedChat) {
+      this.children.delButton = new Button({
+        id: 'del-btn',
+        text: 'Удалить чат',
+        type: 'button',
+        events: { click: () => ChatController.deleteChat(selectedChat) },
+      })
+    }
     this.children.chatList = new ChatTitle({
-      title: this.props.chats.map((el) => el.title),
-      id: this.props.chats.map((el) => el.id),
+      chats: this.props.chats.map((el) => el),
+      events: { click: (e: Event) => this.selectChat(e) },
     })
     return false
   }
