@@ -20,17 +20,18 @@ interface ImgProps extends PropsWithRouter {
 class BaseImg extends Block<ImgProps> {
   constructor(props: ImgProps) {
     // props.src = src
+    if (props.to) {
+      props.events = {
+        click: () => this.navigate(),
+      }
+    }
     super({
       ...props,
-      events: {
-        ...props.events,
-        click: () => this.navigate(),
-      },
     })
   }
 
   navigate() {
-    this.props.router.go(this.props.to)
+    this.props.router.go(this.props.to!)
   }
 
   render() {

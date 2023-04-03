@@ -10,6 +10,7 @@ import { ChatTitle } from '../../UI/ChatItems/ChatElement'
 import { Chats } from '../../../api/ChatAPI'
 import { Image } from '../../UI/Img'
 import treeDots from '../../../img/three-dots.svg'
+import { Dropdown } from '../../UI/Dropdown'
 
 interface ChatProps {
   tagName?: string
@@ -17,9 +18,12 @@ interface ChatProps {
   chatName?: string
 }
 export class PageChat extends Block<ChatProps> {
+  protected selectedChat = {}
   constructor(props: ChatProps) {
     super({ ...props, tagName: 'div', chatName: 'Выберите чат' })
     // console.log('ALL PROPS', this.props)
+    const { selectedChat } = store.getState()
+    this.selectedChat = selectedChat
   }
 
   render() {
@@ -46,14 +50,6 @@ export class PageChat extends Block<ChatProps> {
       placeholder: 'Создать чат...',
       class: 'chat-input',
     })
-    // this.children.getChats = new Button({
-    //   text: 'Получить чаты',
-    //   id: 'getChats-btn',
-    //   type: 'button',
-    //   events: {
-    //     click: () => ChatController.getChats(),
-    //   },
-    // })
     this.children.buttonSend = new Button({
       text: 'Отправить',
       id: 'send-btn',
@@ -68,29 +64,31 @@ export class PageChat extends Block<ChatProps> {
       placeholder: '...',
       class: 'msg-input',
     })
+    this.children.treeDots = new Dropdown({
+      selectedChat: this.selectedChat,
+      // events: {
+      //   click: () => console.log('tree dots but'),
+      // },
+    })
     this.children.buttonDots = new Image({
       src: treeDots,
       alt: 'Меню',
       class: 'dots-btn',
-      size: '20'
+      size: '20',
+      events: {
+        click: () => console.log('wo navigate'),
+      },
     })
-    // this.children.buttonDots = new Button({
-    //   text: '3 Dots',
-    //   id: 'dots-btn',
-    //   type: 'button',
-    //   img: treeDots
-    // })
   }
 
   selectChat(e: Event) {
     const chatId = (e.target! as HTMLLIElement).id
     function selChat(arr: Chats[], id: number) {
-      return arr.filter(obj => obj.id === id)
+      return arr.filter((obj) => obj.id === id)
     }
     const activeChat = selChat(this.props.chats, Number(chatId))
     store.set('selectedChat', activeChat[0])
     this.props.chatName = activeChat[0].title
-
   }
   sendMessage() {
     console.log('sendMessage', this.children.messageInput.value)
