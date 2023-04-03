@@ -1,4 +1,4 @@
-import API, { ChatAPI } from '../api/ChatAPI'
+import API, { ChatAPI, Chats, TitleChat } from '../api/ChatAPI'
 import store from '../utils/Store'
 import router from '../utils/Router'
 
@@ -13,6 +13,16 @@ export class ChatController {
     console.log('Create Chat')
     try {
       await this.api.create({ title: data })
+      await this.getChats()
+    } catch (e: any) {
+      console.error(e)
+    }
+  }
+
+  async deleteChat(id: number) {
+    console.log('Delete Chat')
+    try {
+      await this.api.delete({ chatId: id })
       await this.getChats()
     } catch (e: any) {
       console.error(e)

@@ -9,12 +9,16 @@ export interface Chats {
   unread_count: number
 }
 
+export interface TitleChat {
+  title: string
+}
+
 export class ChatAPI extends BaseAPI {
   constructor() {
     super('/chats')
   }
 
-  public create(data: string): Promise<unknown> {
+  public create(data: TitleChat): Promise<unknown> {
     return this.http.post('', data)
   }
 
@@ -22,8 +26,11 @@ export class ChatAPI extends BaseAPI {
     return this.http.get('')
   }
 
+  public delete(chatId: any) {
+    console.log('CHAT ID', chatId)
+    return this.http.delete(chatId)
+  }
   update = undefined
-  delete = undefined
 }
 
 export default new ChatAPI()
