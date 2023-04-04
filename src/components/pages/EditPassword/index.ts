@@ -4,10 +4,11 @@ import Input from '../../UI/Input'
 import Block from '../../../utils/Block/block'
 import FormData from '../../../utils/FormData'
 import Validation from '../../../utils/Validation'
-import { Avatar } from '../../UI/Avatar'
+import { Image } from '../../UI/Img'
 import './ProfileModule.scss'
 import SettingController from '../../../controllers/SettingController'
 import AuthAPI from '../../../api/AuthAPI'
+import ava from '../../../img/avatarCap.svg'
 
 interface EditPasswordProps {
   events: any
@@ -24,8 +25,12 @@ class PageEditPassword extends Block<EditPasswordProps, HTMLDivElement> {
   }
 
   init() {
-    this.children.avatar = new Avatar({
+    this.children.avatar = new Image({
       to: '/settings',
+      src: ava,
+      alt: 'Аватарка',
+      size: '10',
+      class: 'avatar'
     })
     this.children.inputOldPass = new Input({
       type: 'password',

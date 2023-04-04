@@ -2,12 +2,13 @@ import tpl from './tpl.hbs'
 import './ProfileModule.scss'
 import Block from '../../../utils/Block/block'
 import { Link } from '../../UI/Link'
-import { Avatar } from '../../UI/Avatar'
+import { Image } from '../../UI/Img'
 import Button from '../../UI/Button'
 import AuthController from '../../../controllers/AuthController'
 import { withStore } from '../../../utils/Store'
 import { User } from '../../../api/AuthAPI'
 import { ProfileField } from '../../UI/ProfileFields'
+import ava from '../../../img/avatarCap.svg'
 
 interface ProfileProps extends User {}
 
@@ -29,8 +30,12 @@ export class PageProfile extends Block {
     // this.children.fields = userFields.map((name) => {
     //   return new ProfileField({ name, value: this.props[name] })
     // })
-    this.children.avatar = new Avatar({
+    this.children.avatar = new Image({
       to: '/settings',
+      src: ava,
+      alt: 'Аватарка',
+      size: '10',
+      class: 'avatar'
     })
     this.children.settings = new Link({
       to: '/settings',

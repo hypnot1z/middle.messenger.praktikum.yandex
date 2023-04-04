@@ -2,7 +2,8 @@ import tpl from './tpl.hbs'
 import Button from '../../UI/Button'
 import Input from '../../UI/Input'
 import Block from '../../../utils/Block/block'
-import { Avatar } from '../../UI/Avatar'
+import { Image } from '../../UI/Img'
+import avatar from '../../../img/avatarCap.svg'
 import Validation from '../../../utils/Validation'
 import './ProfileModule.scss'
 import AuthController from '../../../controllers/AuthController'
@@ -28,8 +29,12 @@ class PageEditProfile extends Block {
   }
 
   init() {
-    this.children.avatar = new Avatar({
+    this.children.avatar = new Image({
       to: '/settings',
+      src: avatar,
+      size: '50',
+      class: 'avatar',
+      alt: 'Аватарка',
     })
     this.children.button = new Button({
       text: 'Сохранить',

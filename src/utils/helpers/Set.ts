@@ -1,46 +1,41 @@
 export type Indexed<T = any> = {
-  [key in string]: T
+  [key: string]: T
 }
 
 export function merge(lhs: Indexed, rhs: Indexed): Indexed {
-  for (let p in rhs) {
-    if (!rhs.hasOwnProperty(p)) {
-      continue
-    }
+  const result = Object.assign({}, lhs)
 
-    try {
-      if (rhs[p].constructor === Object) {
-        rhs[p] = merge(lhs[p] as Indexed, rhs[p] as Indexed)
+  for (let p in rhs) {
+    if (p in rhs) {
+      if (typeof rhs[p] === 'object' && rhs[p] !== null) {
+        result[p] = merge(result[p] as Indexed, rhs[p] as Indexed)
       } else {
-        lhs[p] = rhs[p]
+        result[p] = rhs[p]
       }
-    } catch (e) {
-      lhs[p] = rhs[p]
     }
   }
 
-  return lhs
+  return result
 }
 
-export function set(
-  object: Indexed | unknown,
-  path: string,
-  value: unknown
-): Indexed | unknown {
+export function set(object: Indexed, path: string, value: unknown): Indexed {
   if (typeof object !== 'object' || object === null) {
-    return object
+    throw new Error('object must be an object')
   }
-
   if (typeof path !== 'string') {
-    throw new Error('path must be string')
+    throw new Error('path must be a string')
   }
 
-  const result = path.split('.').reduceRight<Indexed>(
-    (acc, key) => ({
-      [key]: acc,
-    }),
-    value as any
-  )
+  const pathParts = path.split('.')
+  const lastKey = pathParts.pop() as string
+  const newObj = Object.assign({}, object)
+  let currObj = newObj
 
-  return merge(object as Indexed, result)
+  for (const key of pathParts) {
+    currObj[key] = Object.assign({}, currObj[key])
+    currObj = currObj[key]
+  }
+
+  currObj[lastKey] = value
+  return newObj
 }

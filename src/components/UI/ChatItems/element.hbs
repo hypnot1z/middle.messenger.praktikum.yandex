@@ -1,7 +1,5 @@
-<ul>
-  {{#each title}}
+{{#each chats}}
 
-    <li>{{this}}<button>X</button></li>
+  <li class='chat-item' id={{this.id}}>{{this.title}}</li>
 
-  {{/each}}
-</ul>
+{{/each}}

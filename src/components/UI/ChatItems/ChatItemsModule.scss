@@ -1,0 +1,62 @@
+$textColor: rgb(109, 109, 109);
+$bgColor: rgba(194, 191, 191, 0.452);
+$white: #fff;
+$light-blue: #b2ebf2;
+$medium-blue: #3369f3;
+$font: 'Comfortaa', cursive;
+$profileLink-border: rgba(0, 0, 0, 0.2);
+$profileLink-bg: rgba(255, 255, 255, 0.5);
+$profileLink-txt: #333;
+$profileLinkHover-bg: rgba(0, 0, 0, 0.1);
+$profileLinkHover-border: rgba(0, 0, 0, 0.4);
+$profileLinkHover-txt: #222;
+$profileLinkActive-bg: rgba(0, 0, 0, 0.2);
+$profileLinkActive-border: rgba(0, 0, 0, 0.6);
+$profileLinkActive-txt: #111;
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  background-color: $white;
+  padding: 5px;
+  border-top: 1px solid $profileLink-border;
+}
+
+li {
+  font-family: $font;
+  margin-bottom: 5px;
+  display: flex;
+  padding: 10px 20px;
+  //   border: 1px solid $profileLink-border;
+  background-color: $profileLink-bg;
+  border-radius: 5px;
+  color: $profileLink-txt;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $profileLinkHover-bg;
+    border-color: $profileLinkHover-border;
+    color: $profileLinkHover-txt;
+  }
+
+  &:active {
+    background-color: $profileLinkActive-bg;
+    border-color: $profileLinkActive-border;
+    color: $profileLinkActive-txt;
+  }
+  //   font-family: $font;
+  //   color: $textColor;
+  //   background-color: $white;
+  //   color: $medium-blue;
+  //   font-size: 16px;
+  //   padding: 10px;
+  //   transition: all 0.2s ease-in-out;
+
+  //   &:hover {
+  //     background-color: $medium-blue;
+  //     color: $white;
+  //     cursor: pointer;
+  //   }
+}

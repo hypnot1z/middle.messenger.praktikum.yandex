@@ -91,7 +91,10 @@ export class Block<
     const tagName = this.tagName
     this._element = this._createDocumentElement(tagName) as E
     if (this.tagName === 'div') {
-      this._element.classList.add('wrapper')
+      if (this._element.classList) {
+        this.props.className ? this._element.classList.add(this.props.className) :
+        this._element.classList.add('wrapper')
+      }
     }
   }
 
@@ -150,17 +153,17 @@ export class Block<
     Object.assign(this.props, nextProps)
     this._componentDidUpdate(oldValue, this.props)
 
-    // const {children, props} = this._getChildrenAndProps(nextProps);
+    const { children, props } = this._getChildrenAndProps(nextProps)
 
-    // if (Object.values(children).length) {
-    //   Object.assign(this.children, children);
-    // }
+    if (Object.values(children).length) {
+      Object.assign(this.children, children)
+    }
 
-    // if (Object.values(props).length) {
-    //   Object.assign(this.props, props);
-    // }
+    if (Object.values(props).length) {
+      Object.assign(this.props, props)
+    }
 
-    // this.eventBus().emit(Block.EVENTS.FLOW_CDU, oldValue, this.props);
+    this.eventBus().emit(Block.EVENTS.FLOW_CDU, oldValue, this.props)
   }
 
   get element() {
