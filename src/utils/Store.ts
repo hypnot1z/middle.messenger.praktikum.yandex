@@ -11,6 +11,8 @@ export enum StoreEvents {
 interface State {
   user: User
   chats: Chats[]
+  selectedChatName: string
+  selectedChat: Chats
 }
 
 

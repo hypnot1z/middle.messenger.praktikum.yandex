@@ -26,9 +26,9 @@ export class ChatAPI extends BaseAPI {
     return this.http.get('')
   }
 
-  public delete(chatId: any) {
-    console.log('CHAT ID', chatId)
-    return this.http.delete(chatId)
+  public delete(id: number) {
+    console.log('CHAT ID', { chatId : id})
+    return this.http.delete('', { chatId : id})
   }
   update = undefined
 }

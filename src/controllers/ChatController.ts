@@ -22,7 +22,7 @@ export class ChatController {
   async deleteChat(id: number) {
     console.log('Delete Chat')
     try {
-      await this.api.delete({ chatId: id })
+      await this.api.delete(id)
       await this.getChats()
     } catch (e: any) {
       console.error(e)

@@ -91,7 +91,10 @@ export class Block<
     const tagName = this.tagName
     this._element = this._createDocumentElement(tagName) as E
     if (this.tagName === 'div') {
-      this._element.classList.add('wrapper')
+      if (this._element.classList) {
+        this.props.className ? this._element.classList.add(this.props.className) :
+        this._element.classList.add('wrapper')
+      }
     }
   }
 
