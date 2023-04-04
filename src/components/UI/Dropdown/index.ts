@@ -39,9 +39,10 @@ export class Dropdown extends Block<DropdownProps> {
       text: 'Delete chat',
       type: 'button',
       id: 'delchat-btn',
+      class: 'dropdown-item',
       events: {
-        click: () => this.deleteChat()
-      }
+        click: () => this.deleteChat(),
+      },
     })
   }
 
@@ -56,15 +57,12 @@ export class Dropdown extends Block<DropdownProps> {
     return this.compile(tpl, this.props)
   }
 
-  
-
   public show(): void {
     const dropdownMenu: HTMLElement | null =
       document.querySelector('.dropdown-menu')
     console.log('SHOW', dropdownMenu)
-    // dropdownMenu!.style.display = 'block'
     dropdownMenu!.classList.add('show')
-    window.addEventListener('click', function(event) {
+    window.addEventListener('click', function (event) {
       if (!event.target.matches('.dots-btn')) {
         if (dropdownMenu?.classList.contains('show')) {
           dropdownMenu.classList.remove('show')

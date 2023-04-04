@@ -1,6 +1,6 @@
 <div class='chat-page'>
 
-  <div class='chat-list'>
+  <div class='chat-box'>
     {{{profile}}}
     <input type='text' placeholder='Поиск' />
 
@@ -9,19 +9,18 @@
       {{{createChat}}}
     </form>
 
-    <span>Список чатов</span>
     {{{chatList}}}
   </div>
   <div class='chat-block'>
     <div class='header'>
-      {{chatName}}
+      <h2 class='chat-name'>
+        {{chatName}}
+
+      </h2>
       {{{treeDots}}}
-      {{!-- {{{buttonDots}}} --}}
-      {{!-- {{{delButton}}} --}}
     </div>
     <div class='chat-tape'></div>
     <form action='#' class='chat-msg'>
-      {{! <input type='text' name='message' placeholder='Сообщение' /> }}
       {{{messageInput}}}
       {{{buttonSend}}}
     </form>

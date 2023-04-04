@@ -9,25 +9,22 @@ export enum StoreEvents {
 }
 
 interface State {
-  user: User
-  chats: Chats[]
-  selectedChatName: string
-  selectedChat: Chats
+  user?: User
+  chats?: Chats[]
+  selectedChatName?: string
+  selectedChat?: Chats
 }
-
-
 
 export class Store extends EventBus {
   private state: any = {}
 
   public set(keypath: string, data: unknown) {
-    set(this.state, keypath, data)
+    this.state = set(this.state, keypath, data)
 
     this.emit(StoreEvents.Updated, this.getState())
   }
 
   public getState() {
-    // console.log(this.state)
     return this.state
   }
 }
@@ -35,10 +32,6 @@ export class Store extends EventBus {
 const store = new Store()
 
 window.store = store
-
-// export interface BlockConstructable<P extends Record<string, any>> {
-//   new (props: P): Block<P>
-// }
 
 export function withStore<SP extends Partial<any>>(
   mapStateToProps: (state: State) => SP

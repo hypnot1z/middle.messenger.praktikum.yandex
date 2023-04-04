@@ -12,39 +12,25 @@ import { Dropdown } from '../../UI/Dropdown'
 
 interface ChatProps {
   tagName?: string
-  chats: Chats[]
+  chats?: Chats[]
   selectedChatName?: string
   selectedChat?: Chats
 }
-interface Meta {
-  chats: Chats[]
-  selectedChatName: string
-  selectedChat: Chats
-}
+
 export class PageChat extends Block<ChatProps> {
-  // protected selectedChat = {}
-  // protected chats = []
-  private meta: Meta
+  protected selectedChatName: string
   constructor(props: ChatProps) {
     super({ ...props, tagName: 'div' })
-    console.log('ALL PROPS', this.props)
-    this.meta = {
-      chats: [],
-      selectedChat: {},
-      selectedChatName: ''
-    }
-    // this.chats = this.props.chats
-    
   }
 
   render() {
-    return this.compile(tpl, this.props)
+    return this.compile(tpl, { ...this.props, chatName: this.selectedChatName })
   }
 
   init() {
     this.children.profile = new Link({
       to: '/profile',
-      label: 'Профиль',
+      label: 'Профиль >',
     })
     this.children.createChat = new Button({
       text: '+',
@@ -77,16 +63,6 @@ export class PageChat extends Block<ChatProps> {
     })
   }
 
-  selectChat(e: Event) {
-    const chatId = (e.target! as HTMLLIElement).id
-    function selChat(arr: Chats[], id: number) {
-      return arr.filter((obj) => obj.id === id)
-    }
-    const activeChat = selChat([...this.meta.chats], Number(chatId))
-    store.set('selectedChat', activeChat[0])
-    // this.setChatName()
-    // this.props.chatName = activeChat[0].title
-  }
   sendMessage() {
     console.log('sendMessage', this.children.messageInput.value)
     const msg = this.children.messageInput.value
@@ -103,52 +79,27 @@ export class PageChat extends Block<ChatProps> {
     oldProps: ChatProps,
     newProps: ChatProps
   ): boolean {
-    if (newProps.chats) {this.meta.chats = Array.from(newProps.chats)}
-    // if (newProps.selectedChat) {this.meta.selectedChat = newProps.selectedChat}
-    // if (newProps.selectedChatName) {this.meta.selectedChatName = newProps.selectedChatName}
-    // const {chats, chatName, selectedChat } = this.props
-    // console.log('CHATS LIST', this.props.chats)
+    const { chats, selectedChat } = store.getState()
+
+    selectedChat
+      ? (this.selectedChatName = selectedChat.title)
+      : (this.selectedChatName = 'Выберите чат')
+
     this.children.chatList = new ChatTitle({
-      chats: this.meta.chats.map((el) => el),
-      events: { click: (e: Event) => this.selectChat(e) },
+      chats,
     })
-    // this.children.treeDots = new Dropdown({
-    //   selectedChat: this.selectedChat,
-    // })
-    
-    // const { selectedChat } = store.getState()
-    // this.selectedChat = selectedChat
+    this.children.treeDots = new Dropdown({
+      selectedChat,
+    })
+
     return false
   }
-  // setChatName() {
-  //   if (JSON.stringify(this.selectedChat) === '{}') {
-  //     console.log('Rename chatName')
-  //     this.props.chatName = 'Выберите чат!'
-  //   } else {
-  //     const { selectedChat } = store.getState()
-  //     this.props.chatName = selectedChat.title
-  //   }
-  // }
 }
 
-const withData = withStore((state) => {
-  let chats: any[]
-  let chatName: string
-  let selectedChat: any
-  state.chats ? chats = [...state.chats] : chats = []
-  state.selectedChatName ? chatName = state.selectedChatName : chatName = 'Выберите чат!'
-  state.selectedChat ? selectedChat = state.selectedChat : selectedChat = {}
-  return {chats: chats, chatName: chatName, selectedChat: selectedChat}
-})
-    
-// const withData = withStore((state) =>
-//   state.chats
-//     ? {
-//         chats: [...state.chats],
-
-//       }
-//     : { chats: [] }
-// )
+const withData = withStore((state) => ({
+  ...state.chats,
+  ...state.selectedChat,
+}))
 
 const ChatWithTitles = withData(PageChat)
 export const Chat = new ChatWithTitles({})
