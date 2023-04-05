@@ -38,24 +38,27 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   switch (window.location.pathname) {
     case Routes.Login:
-    case Routes.Registr:
+      case Routes.Registr:
       isProtectedRoute = false
       break
   }
 
   try {
     await AuthController.fetchUser()
-
+    
     await ChatController.getChats()
 
     Router.start()
-    Router.go(Routes.Chat)
+    if (!isProtectedRoute) {
+      Router.go(Routes.Chat)
+
+    }
   } catch (e) {
     Router.start()
 
     if (isProtectedRoute) {
-      Router.go(Routes.Index)
       Router.go(Routes.Registr)
+      Router.go(Routes.Login)
     }
   }
 })

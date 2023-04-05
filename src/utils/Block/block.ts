@@ -88,8 +88,7 @@ export class Block<
   }
 
   private _createResources() {
-    const tagName = this.tagName
-    this._element = this._createDocumentElement(tagName) as E
+    this._element = this._createDocumentElement(this.tagName) as E
     if (this.tagName === 'div') {
       if (this._element.classList) {
         this.props.className ? this._element.classList.add(this.props.className) :
@@ -98,7 +97,7 @@ export class Block<
     }
   }
 
-  private _createDocumentElement(tagName: string) {
+  private _createDocumentElement(tagName: string = 'div') {
     // Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
     return document.createElement(tagName)
   }

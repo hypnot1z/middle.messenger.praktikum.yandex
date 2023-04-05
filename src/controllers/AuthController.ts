@@ -36,10 +36,13 @@ export class AuthController {
   async fetchUser() {
     console.log('Fetch user')
     const user = await this.api.read()
-    // console.log(user)
+    console.log(user)
 
     store.set('user', user)
     // console.log('STORE STATE',store.getState())
+    if (user) {
+      router.go('/messenger')
+    }
   }
 
   async logout() {
