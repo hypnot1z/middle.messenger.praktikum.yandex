@@ -40,9 +40,9 @@ export class AuthController {
 
     store.set('user', user)
     // console.log('STORE STATE',store.getState())
-    if (user) {
-      router.go('/messenger')
-    }
+    // if (user) {
+    //   router.go('/messenger')
+    // }
   }
 
   async logout() {

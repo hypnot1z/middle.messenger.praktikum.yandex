@@ -7,8 +7,9 @@ import Validation from '../../../utils/Validation'
 import { Image } from '../../UI/Img'
 import './ProfileModule.scss'
 import SettingController from '../../../controllers/SettingController'
-import AuthAPI from '../../../api/AuthAPI'
-import ava from '../../../img/avatarCap.svg'
+// import AuthAPI from '../../../api/AuthAPI'
+// import ava from '../../../img/avatarCap.svg'
+import Avatar from '../../UI/Avatar'
 
 interface EditPasswordProps {
   events: any
@@ -25,13 +26,13 @@ class PageEditPassword extends Block<EditPasswordProps, HTMLDivElement> {
   }
 
   init() {
-    this.children.avatar = new Image({
-      to: '/settings',
-      src: ava,
-      alt: 'Аватарка',
-      size: '10',
-      class: 'avatar'
-    })
+    // this.children.avatar = new Image({
+    //   to: '/settings',
+    //   src: ava,
+    //   alt: 'Аватарка',
+    //   size: '10',
+    //   class: 'avatar',
+    // })
     this.children.inputOldPass = new Input({
       type: 'password',
       name: 'oldPassword',
@@ -86,6 +87,14 @@ class PageEditPassword extends Block<EditPasswordProps, HTMLDivElement> {
     console.log('EditPass data', data)
 
     SettingController.updatePassword(data)
+  }
+
+  protected componentDidUpdate(
+    oldProps: EditPasswordProps,
+    newProps: EditPasswordProps
+  ): boolean {
+    this.children.avatar = new Avatar({})
+    return false
   }
 }
 
