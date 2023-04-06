@@ -9,6 +9,9 @@ import Input from '../../UI/Input'
 import { ChatTitle } from '../../UI/ChatItems/ChatElement'
 import { Chats } from '../../../api/ChatAPI'
 import { Dropdown } from '../../UI/Dropdown'
+import DefaultImg from '../../../img/chat-def.svg'
+
+export const avatarUrl = `https://ya-praktikum.tech/api/v2/resources/`
 
 interface ChatProps {
   tagName?: string
@@ -79,12 +82,23 @@ export class PageChat extends Block<ChatProps> {
     oldProps: ChatProps,
     newProps: ChatProps
   ): boolean {
-    const { chats, selectedChat } = store.getState()
+    let { chats, selectedChat } = store.getState()
 
     selectedChat
       ? (this.selectedChatName = selectedChat.title)
       : (this.selectedChatName = 'Выберите чат')
-
+    console.log('CHATS', chats)
+    if (chats) {
+      const chatsWithSrc = chats.map((chat) => {
+        return {
+          ...chat,
+          src: chat.avatar ? `${avatarUrl}${chat.avatar}` : DefaultImg,
+        }
+      })
+      chats = chatsWithSrc
+      // console.log('CHATS WITH SRC', chatsWithSrc)
+    }
+    console.log('CHATS WITH SRC', chats)
     this.children.chatList = new ChatTitle({
       chats,
     })

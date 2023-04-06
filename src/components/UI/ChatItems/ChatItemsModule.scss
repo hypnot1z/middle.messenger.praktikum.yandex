@@ -26,13 +26,13 @@ li {
   font-family: $font;
   margin-bottom: 5px;
   display: flex;
-  padding: 10px 20px;
-  //   border: 1px solid $profileLink-border;
+  padding: 5px 10px;
   background-color: $profileLink-bg;
   border-radius: 5px;
   color: $profileLink-txt;
   text-decoration: none;
   transition: all 0.3s ease;
+  vertical-align: middle;
   cursor: pointer;
 
   &:hover {
@@ -63,4 +63,14 @@ li {
 
 .chat-element {
   display: flex;
+}
+
+.chat-item img {
+  width: 30px;
+  margin-right: 20px;
+  outline: 1px solid grey;
+  border-radius: 50%;
+}
+.chat-item span {
+  margin: auto;
 }

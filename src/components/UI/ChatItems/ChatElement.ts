@@ -1,6 +1,6 @@
 import Block from '../../../utils/Block/block'
-// import tpl from './element.hbs'
-import tpl from './list.hbs'
+import tpl from './element.hbs'
+// import tpl from './list.hbs'
 import { Chats } from '../../../api/ChatAPI'
 import store from '../../../utils/Store'
 import './ChatItemsModule.scss'
@@ -8,10 +8,12 @@ import { Image } from '../Img'
 import DefaultImg from '../../../img/chat-def.svg'
 import { Element } from './Element'
 
+export const avatarUrl = `https://ya-praktikum.tech/api/v2/resources/`
+
 interface ElementProps {
-  chats: Chats[]
+  chats?: Chats[]
   tagName?: string
-  // src: string
+  src?: string
   selectedChat?: number
   events?: any
 }
@@ -36,7 +38,11 @@ export class ChatTitle extends Block<ElementProps> {
     //   alt: 'Avatar',
     //   tagName: 'img'
     // })
-    this.children.element = new Element({chats: this.props.chats, tagName: 'li'})
+    // this.children.element = new Element({
+    //   chats: this.props.chats,
+    //   tagName: 'li',
+    // })
+    // this.setProps({ src: 'data' })
   }
 
   private selectChat(event: Event) {
@@ -50,13 +56,25 @@ export class ChatTitle extends Block<ElementProps> {
     store.set('selectedChatName', activeChat[0].title)
   }
 
-  // protected componentDidUpdate(oldProps: ElementProps, newProps: ElementProps): boolean {
-  //   const chats = Array.from(this.props.chats)
-  //   console.log('CHAT ELEMNT CDU', chats)
-  //   this.children.element = new Element({chats: this.props.chats, tagName: 'li'})
-  //   // chats.map((e) => (this.children.element = new Element(e)))
-  //   return true
-  // }
+  private updateAvatar(arr: any) {
+    return arr.map((obj: any) => {
+      return {
+        ...obj,
+        src: obj.avatar ? `${avatarUrl}${obj.avatar}` : DefaultImg,
+      }
+    })
+  }
+
+  protected componentDidUpdate(
+    oldProps: ElementProps,
+    newProps: ElementProps
+  ): boolean {
+    const chats = Array.from(this.props.chats)
+    console.log('CHAT ELEMNT CDU', chats)
+    return false
+  }
+
+  protected setProps: (nextProps: ElementProps) => void
 
   // public activeItem(id: string): void {
   //   const chatItem: HTMLElement | null =
@@ -65,6 +83,7 @@ export class ChatTitle extends Block<ElementProps> {
   // }
 
   protected render(): DocumentFragment {
+    console.log('render', this.props)
     return this.compile(tpl, this.props)
   }
 }
