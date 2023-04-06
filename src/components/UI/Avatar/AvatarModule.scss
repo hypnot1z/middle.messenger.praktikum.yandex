@@ -1,16 +1,19 @@
 .avatar-form {
   display: inline-block;
   position: relative;
-  max-width: 150px;
-  max-height: 150px;
-  border: 1px solid rgba(158, 158, 158, 0.719);
-  border-radius: 50%;
+  width: 130px;
+  height: 130px;
+  // border: 1px solid rgba(158, 158, 158, 0.719);
+  // border-radius: 50%;
 }
 
 .avatar-form img {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+
 }
 
 .hidden-input {

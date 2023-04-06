@@ -5,6 +5,7 @@ import tpl from './tpl.hbs'
 import DefaultImg from '../../../img/avatarCap.svg'
 import Input from '../Input'
 import UsersController from '../../../controllers/UserController'
+import { Image } from '../Img'
 import './AvatarModule.scss'
 
 export const avatarUrl = `https://ya-praktikum.tech/api/v2/resources/`
@@ -21,12 +22,19 @@ export class Avatar extends Block<AvatarProps> {
   constructor(props: AvatarProps) {
     super({
       ...props,
-      events: { click: () => this.show() },
-      src: props.avatar ? `${avatarUrl}${props.avatar}` : DefaultImg,
+      // events: { click: () => this.show() },
+      // src: props.avatar ? `${avatarUrl}${props.avatar}` : DefaultImg,
     })
   }
 
   init() {
+    this.children.avatar = new Image({
+      src: this.props.avatar ? `${avatarUrl}${this.props.avatar}` : DefaultImg,
+      class: 'avatar',
+      alt: 'Avatar',
+      tagName: 'img'
+    })
+
     this.children.upload = new Input({
       class: 'hidden-input',
       type: 'file',

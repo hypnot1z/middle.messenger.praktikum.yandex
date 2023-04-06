@@ -1,5 +1,9 @@
 {{#each chats}}
-
-  <li class='chat-item' id={{this.id}}>{{this.title}}</li>
+<div class="chat-element">
+  <li class='chat-item' id={{this.id}}>
+    {{!-- {{{avatar}}} --}}
+  <img src={{this.avatar}} />
+    {{this.title}}</li>
+</div>
 
 {{/each}}

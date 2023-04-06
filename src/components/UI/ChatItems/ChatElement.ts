@@ -1,12 +1,17 @@
 import Block from '../../../utils/Block/block'
-import tpl from './element.hbs'
+// import tpl from './element.hbs'
+import tpl from './list.hbs'
 import { Chats } from '../../../api/ChatAPI'
 import store from '../../../utils/Store'
 import './ChatItemsModule.scss'
+import { Image } from '../Img'
+import DefaultImg from '../../../img/chat-def.svg'
+import { Element } from './Element'
 
 interface ElementProps {
   chats: Chats[]
   tagName?: string
+  // src: string
   selectedChat?: number
   events?: any
 }
@@ -16,10 +21,22 @@ export class ChatTitle extends Block<ElementProps> {
     super({
       ...props,
       tagName: 'ul',
+      // src: props.chats.avatar ? `${avatarUrl}${props.avatar}` : DefaultImg,
       events: {
         click: (event: Event) => this.selectChat(event),
       },
     })
+    console.log('Chattitle props', this.props)
+  }
+
+  init() {
+    // this.children.avatar = new Image({
+    //   src: this.props.avatar ? `${avatarUrl}${this.props.avatar}` : DefaultImg,
+    //   class: 'chat-avatar',
+    //   alt: 'Avatar',
+    //   tagName: 'img'
+    // })
+    this.children.element = new Element({chats: this.props.chats, tagName: 'li'})
   }
 
   private selectChat(event: Event) {
@@ -32,6 +49,14 @@ export class ChatTitle extends Block<ElementProps> {
     store.set('selectedChat', activeChat[0])
     store.set('selectedChatName', activeChat[0].title)
   }
+
+  // protected componentDidUpdate(oldProps: ElementProps, newProps: ElementProps): boolean {
+  //   const chats = Array.from(this.props.chats)
+  //   console.log('CHAT ELEMNT CDU', chats)
+  //   this.children.element = new Element({chats: this.props.chats, tagName: 'li'})
+  //   // chats.map((e) => (this.children.element = new Element(e)))
+  //   return true
+  // }
 
   // public activeItem(id: string): void {
   //   const chatItem: HTMLElement | null =
