@@ -87,7 +87,7 @@ export class PageChat extends Block<ChatProps> {
     selectedChat
       ? (this.selectedChatName = selectedChat.title)
       : (this.selectedChatName = 'Выберите чат')
-    console.log('CHATS', chats)
+    // console.log('CHATS', chats)
     if (chats) {
       const chatsWithSrc = chats.map((chat) => {
         return {
@@ -98,7 +98,7 @@ export class PageChat extends Block<ChatProps> {
       chats = chatsWithSrc
       // console.log('CHATS WITH SRC', chatsWithSrc)
     }
-    console.log('CHATS WITH SRC', chats)
+    // console.log('CHATS WITH SRC', chats)
     this.children.chatList = new ChatTitle({
       chats,
     })

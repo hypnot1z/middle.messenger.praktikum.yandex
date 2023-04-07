@@ -56,6 +56,7 @@ export class PageProfile extends Block {
       text: 'Выйти',
       id: 'logout-btn',
       type: 'button',
+      class: 'btn',
       events: {
         click: () => AuthController.logout(),
       },

@@ -1,5 +1,6 @@
 $link-color: rgb(17, 125, 248);
 $invalid-color: red;
+$font: 'Comfortaa', cursive;
 
 * {
   box-sizing: border-box;
@@ -7,6 +8,7 @@ $invalid-color: red;
 
 body {
   margin: 0;
+  font-family: $font;
 }
 
 a:active,
