@@ -12,9 +12,11 @@ import { ProfileData } from '../../../api/SetAPI'
 import { withStore } from '../../../utils/Store'
 import { User } from '../../../api/AuthAPI'
 import { ProfileField } from '../../UI/ProfileFields'
+import Avatar from '../../UI/Avatar'
 
 interface ProfileProps extends User {}
-interface EditProfileProps {
+interface EditProfileProps extends User {
+  display_name?: string
   events?: any
   tagName?: string
 }
@@ -22,6 +24,7 @@ class PageEditProfile extends Block {
   constructor(props: EditProfileProps) {
     props.tagName = 'div'
     super(props)
+    console.log('PROF EDIT PROPS', this.props)
   }
 
   render() {
@@ -29,13 +32,13 @@ class PageEditProfile extends Block {
   }
 
   init() {
-    this.children.avatar = new Image({
-      to: '/settings',
-      src: avatar,
-      size: '50',
-      class: 'avatar',
-      alt: 'Аватарка',
-    })
+    // this.children.avatar = new Image({
+    //   to: '/settings',
+    //   src: avatar,
+    //   size: '50',
+    //   class: 'avatar',
+    //   alt: 'Аватарка',
+    // })
     this.children.button = new Button({
       text: 'Сохранить',
       id: 'edit-btn',
@@ -58,13 +61,13 @@ class PageEditProfile extends Block {
   }
 
   protected componentDidUpdate(
-    oldProps: ProfileProps,
-    newProps: ProfileProps
+    oldProps: EditProfileProps,
+    newProps: EditProfileProps
   ): boolean {
     this.children.inputMail = new Input({
       type: 'email',
       name: 'email',
-      placeholder: newProps['email'],
+      value: newProps['email'],
       events: {
         blur: Validation,
       },
@@ -72,7 +75,7 @@ class PageEditProfile extends Block {
     this.children.inputLogin = new Input({
       type: 'text',
       name: 'login',
-      placeholder: newProps['login'],
+      value: newProps['login'],
       events: {
         blur: Validation,
       },
@@ -80,7 +83,7 @@ class PageEditProfile extends Block {
     this.children.inputFname = new Input({
       type: 'text',
       name: 'first_name',
-      placeholder: newProps['first_name'],
+      value: newProps['first_name'],
       events: {
         blur: Validation,
       },
@@ -88,7 +91,7 @@ class PageEditProfile extends Block {
     this.children.inputSname = new Input({
       type: 'text',
       name: 'second_name',
-      placeholder: newProps['second_name'],
+      value: newProps['second_name'],
       events: {
         blur: Validation,
       },
@@ -96,7 +99,7 @@ class PageEditProfile extends Block {
     this.children.inputDname = new Input({
       type: 'text',
       name: 'display_name',
-      placeholder: newProps['display_name'],
+      value: newProps['display_name'],
       events: {
         blur: Validation,
       },
@@ -104,7 +107,7 @@ class PageEditProfile extends Block {
     this.children.inputTel = new Input({
       type: 'tel',
       name: 'phone',
-      placeholder: newProps['phone'],
+      value: newProps['phone'],
       events: {
         blur: Validation,
       },
@@ -112,6 +115,7 @@ class PageEditProfile extends Block {
     this.setProps
     const userName = newProps['first_name']
 
+    this.children.avatar = new Avatar({})
     return false
   }
 }

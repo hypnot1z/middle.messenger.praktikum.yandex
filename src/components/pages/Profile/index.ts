@@ -9,6 +9,7 @@ import { withStore } from '../../../utils/Store'
 import { User } from '../../../api/AuthAPI'
 import { ProfileField } from '../../UI/ProfileFields'
 import ava from '../../../img/avatarCap.svg'
+import Avatar from '../../UI/Avatar'
 
 interface ProfileProps extends User {}
 
@@ -20,6 +21,7 @@ export class PageProfile extends Block {
   constructor(props: PageProfileProps) {
     props.tagName = 'div'
     super(props)
+    console.log('Pageprofile props', this.props)
   }
 
   render() {
@@ -30,13 +32,14 @@ export class PageProfile extends Block {
     // this.children.fields = userFields.map((name) => {
     //   return new ProfileField({ name, value: this.props[name] })
     // })
-    this.children.avatar = new Image({
-      to: '/settings',
-      src: ava,
-      alt: 'Аватарка',
-      size: '10',
-      class: 'avatar'
-    })
+    
+    // this.children.avatar = new Image({
+    //   to: '/settings',
+    //   src: ava,
+    //   alt: 'Аватарка',
+    //   size: '10',
+    //   class: 'avatar'
+    // })
     this.children.settings = new Link({
       to: '/settings',
       label: 'Изменить данные',
@@ -53,6 +56,7 @@ export class PageProfile extends Block {
       text: 'Выйти',
       id: 'logout-btn',
       type: 'button',
+      class: 'btn',
       events: {
         click: () => AuthController.logout(),
       },
@@ -66,7 +70,7 @@ export class PageProfile extends Block {
     for (let key in newProps) {
       this.children.key = new ProfileField({ value: newProps[key] })
     }
-
+    this.children.avatar = new Avatar({})
     return false
   }
 }

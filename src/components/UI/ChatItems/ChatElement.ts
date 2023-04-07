@@ -4,9 +4,12 @@ import { Chats } from '../../../api/ChatAPI'
 import store from '../../../utils/Store'
 import './ChatItemsModule.scss'
 
+export const avatarUrl = `https://ya-praktikum.tech/api/v2/resources/`
+
 interface ElementProps {
-  chats: Chats[]
+  chats?: Chats[]
   tagName?: string
+  src?: string
   selectedChat?: number
   events?: any
 }
@@ -23,21 +26,15 @@ export class ChatTitle extends Block<ElementProps> {
   }
 
   private selectChat(event: Event) {
-    const chatId = (event.target! as HTMLLIElement).id
-    const chats = Array.from(this.props.chats)
+    const chatId = ((event.target as HTMLElement)!.closest('li') as HTMLLIElement).id
+    const chats = this.props.chats
     function selChat(arr: Chats[], id: number) {
       return arr.filter((obj) => obj.id === id)
     }
-    const activeChat = selChat(chats, Number(chatId))
+    const activeChat = selChat(chats as Chats[], Number(chatId))
     store.set('selectedChat', activeChat[0])
     store.set('selectedChatName', activeChat[0].title)
   }
-
-  // public activeItem(id: string): void {
-  //   const chatItem: HTMLElement | null =
-  //     document.getElementById(id)
-  //   chatItem!.classList.add('active')
-  // }
 
   protected render(): DocumentFragment {
     return this.compile(tpl, this.props)

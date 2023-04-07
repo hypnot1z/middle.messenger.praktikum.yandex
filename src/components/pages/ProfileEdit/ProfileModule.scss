@@ -1,5 +1,6 @@
 $bgColor: rgba(194, 191, 191, 0.452);
 $redColor: red;
+$font: 'Comfortaa', cursive;
 
 .profile__list {
   width: 510px;
@@ -22,14 +23,6 @@ $redColor: red;
 
 .profile__list td:last-child {
   text-align: end;
-}
-
-.avatar {
-  width: 130px;
-  height: 130px;
-  border-radius: 50%;
-  background: $bgColor;
-  margin-bottom: 20px;
 }
 
 .profile__nav {

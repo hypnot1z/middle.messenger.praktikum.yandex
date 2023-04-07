@@ -8,7 +8,7 @@ export enum Method {
 
 type Options = {
   method: Method
-  data?: any
+  data?: Record<string, any> | FormData | unknown
 }
 
 export default class HTTPTransport {
@@ -53,7 +53,7 @@ export default class HTTPTransport {
   public delete<Response>(path: string, data?: unknown): Promise<Response> {
     return this.request<Response>(this.endpoint + path, {
       method: Method.Delete,
-      data
+      data,
     })
   }
 
@@ -81,16 +81,23 @@ export default class HTTPTransport {
       xhr.onerror = () => reject({ reason: 'network error' })
       xhr.ontimeout = () => reject({ reason: 'timeout' })
 
-      xhr.setRequestHeader('Content-Type', 'application/json')
+      // xhr.setRequestHeader('Content-Type', 'application/json')
 
       xhr.withCredentials = true
       xhr.responseType = 'json'
 
+      if (!(data instanceof FormData)) {
+        xhr.setRequestHeader('Content-Type', 'application/json')
+      }
       if (method === Method.Get || !data) {
         xhr.send()
-      } else {
-        xhr.send(JSON.stringify(data))
+        return
       }
+      if (data instanceof FormData) {
+        xhr.send(data)
+        return
+      }
+      xhr.send(JSON.stringify(data))
     })
   }
 }
