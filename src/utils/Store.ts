@@ -10,6 +10,7 @@ export enum StoreEvents {
 
 interface State {
   user?: User
+  searchUser?: User[]
   chats?: Chats[]
   selectedChatName?: string
   selectedChat?: Chats

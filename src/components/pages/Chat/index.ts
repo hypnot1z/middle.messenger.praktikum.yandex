@@ -4,11 +4,13 @@ import Block from '../../../utils/Block/block'
 import Button from '../../UI/Button'
 import { Link } from '../../UI/Link'
 import ChatController from '../../../controllers/ChatController'
+import MessageController from '../../../controllers/MessageController'
 import store, { withStore } from '../../../utils/Store'
 import Input from '../../UI/Input'
 import { ChatTitle } from '../../UI/ChatItems/ChatElement'
 import { Chats } from '../../../api/ChatAPI'
 import { Dropdown } from '../../UI/Dropdown'
+import { Dialog } from '../../UI/Dialog'
 import DefaultImg from '../../../img/chat-def.svg'
 
 export const avatarUrl = `https://ya-praktikum.tech/api/v2/resources/`
@@ -22,8 +24,10 @@ interface ChatProps {
 
 export class PageChat extends Block<ChatProps> {
   protected selectedChatName: string
+  protected selectedChatId: number
   constructor(props: ChatProps) {
     super({ ...props, tagName: 'div' })
+    console.log('CHAT PROPS', this.props)
   }
 
   render() {
@@ -69,11 +73,13 @@ export class PageChat extends Block<ChatProps> {
   sendMessage() {
     console.log('sendMessage', this.children.messageInput.value)
     const msg = this.children.messageInput.value
+    console.log(this.selectedChatId)
+    MessageController.sendMessage(this.selectedChatId, msg)
     this.children.messageInput.value = ''
   }
   createChat() {
     const chatName = this.children.chatNameInput.value
-    console.log('createChat', chatName)
+    // console.log('createChat', chatName)
     ChatController.createChat(chatName)
     this.children.chatNameInput.value = ''
   }
@@ -84,21 +90,26 @@ export class PageChat extends Block<ChatProps> {
   ): boolean {
     let { chats, selectedChat } = store.getState()
 
-    selectedChat
-      ? (this.selectedChatName = selectedChat.title)
-      : (this.selectedChatName = 'Выберите чат')
-    // console.log('CHATS', chats)
+    if (selectedChat){
+      this.selectedChatName = selectedChat.title
+      this.selectedChatId = selectedChat.id
+      // : (this.selectedChatName = 'Выберите чат')
+
+    }
     if (chats) {
-      const chatsWithSrc = chats.map((chat) => {
+      const chatsWithSrc = chats.map((chat: Chats) => {
         return {
           ...chat,
           src: chat.avatar ? `${avatarUrl}${chat.avatar}` : DefaultImg,
         }
       })
       chats = chatsWithSrc
-      // console.log('CHATS WITH SRC', chatsWithSrc)
     }
-    // console.log('CHATS WITH SRC', chats)
+
+    if (selectedChat) {
+      console.log('SLEVCTED CHAT', selectedChat)
+      this.children.dialog = new Dialog(selectedChat) 
+    }
     this.children.chatList = new ChatTitle({
       chats,
     })

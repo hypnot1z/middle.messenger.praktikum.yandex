@@ -3,14 +3,17 @@ import './DropdownModule.scss'
 import Block from '../../../utils/Block/block'
 import treeDots from '../../../img/three-dots.svg'
 import Button from '../Button'
-import store from '../../../utils/Store'
+import Input from '../Input'
+import store, {withStore} from '../../../utils/Store'
 import ChatController from '../../../controllers/ChatController'
+import UsersController from '../../../controllers/UserController'
+import { User } from '../../../api/AuthAPI'
 
 const src: string = treeDots
 
 interface DropdownProps {
   tagName?: string
-  selectedChat: any
+  searchUser?: User[]
   img?: string
   alt?: string
   className?: string
@@ -44,6 +47,27 @@ export class Dropdown extends Block<DropdownProps> {
         click: () => this.deleteChat(),
       },
     })
+    this.children.addUserBtn = new Button({
+      text: '+',
+      id: 'addUser-btn',
+      class: 'addUser-btn',
+      type: 'button',
+      events: {
+        click: () => this.addUser(),
+      },
+    })
+    this.children.userLoginInput = new Input({
+      type: 'text',
+      name: 'addUser',
+      placeholder: 'Имя пользователя...',
+      class: 'user-input',
+    })
+  }
+
+  addUser() {
+    const userLogin = this.children.userLoginInput.value
+    UsersController.searchUser(userLogin)
+    console.log('store', store.getState())
   }
 
   deleteChat() {
@@ -58,12 +82,13 @@ export class Dropdown extends Block<DropdownProps> {
   }
 
   public show(): void {
-    const dropdownMenu: HTMLElement | null =
-      document.querySelector('.dropdown-menu')
+    const dropdownMenu: HTMLElement | null = document.querySelector('.dropdown-menu')
+    const dropdown: HTMLElement | null = document.querySelector('.dropdown')
     console.log('SHOW', dropdownMenu)
     dropdownMenu!.classList.add('show')
     window.addEventListener('click', function (event) {
-      if (!event.target.matches('.dots-btn')) {
+      // if (!event.target.matches('.dots-btn')) {
+        if (!dropdownMenu?.contains(event.target) && !dropdown?.contains(event.target)) {
         if (dropdownMenu?.classList.contains('show')) {
           dropdownMenu.classList.remove('show')
         }
@@ -71,3 +96,4 @@ export class Dropdown extends Block<DropdownProps> {
     })
   }
 }
+

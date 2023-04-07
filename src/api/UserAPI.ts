@@ -49,7 +49,7 @@ export class UserAPI extends BaseAPI {
   }
 
   userSearch(data: GetUserByLogin) {
-    return this.http.post('/search', { login: data.login })
+    return this.http.post('/search', { login: data })
   }
 
   read = undefined

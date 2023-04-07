@@ -1,0 +1,12 @@
+.chat-tape {
+    display: flex;
+    flex-direction: column-reverse;
+
+}
+
+.msg {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    max-width: 60%;
+}

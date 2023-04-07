@@ -58,9 +58,12 @@ export class UserController {
 
     async searchUser(data: GetUserByLogin) {
         try {
-            await this.api.userSearch(data).then(res => store.set("searchUser", res)
-                
-            )
+            await this.api.userSearch(data)
+            .then(res => alert(`Find User ${res[0].login}`))
+            .then(res => store.set("searchUser", res))
+            .catch(e => console.log('Error serch', e))
+            // const serchUser = await this.api.userSearch(data)
+            // store.set('userSerch', serchUser)
         } catch(e){
             console.log(e, "error search")
         }
