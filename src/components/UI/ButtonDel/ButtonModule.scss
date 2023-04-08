@@ -1,0 +1,15 @@
+$bgColor: #3369f3;
+$btnTextColor: white;
+
+.btn {
+  background-color: $bgColor;
+  color: $btnTextColor;
+  border-radius: 0.5em;
+  font-family: 'Comfortaa', cursive;
+  font-weight: 500;
+  font-size: 13px;
+  padding: 12 70 12 70;
+  margin-bottom: 14px;
+  border: none;
+  cursor: pointer;
+}

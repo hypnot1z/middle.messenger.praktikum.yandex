@@ -3,6 +3,7 @@ import './DropdownModule.scss'
 import Block from '../../../utils/Block/block'
 import treeDots from '../../../img/three-dots.svg'
 import Button from '../Button'
+import ButtonDel from '../ButtonDel'
 import Input from '../Input'
 import store, { withStore } from '../../../utils/Store'
 import ChatController from '../../../controllers/ChatController'
@@ -17,6 +18,7 @@ interface DropdownProps {
   selectedChat: Chats
   tagName?: string
   searchUser?: User[]
+  selChatUsers: User[]
   img?: string
   alt?: string
   className?: string
@@ -24,20 +26,6 @@ interface DropdownProps {
     click: () => void
   }
 }
-
-const arr = [
-  new Button({
-    text: 'Удалить ДВА',
-    type: 'button',
-
-    class: 'dropdown-item',
-  }),
-  new Button({
-    text: 'Удалить РАЗ',
-    type: 'button',
-    class: 'dropdown-item',
-  }),
-]
 
 export class DropdownBase extends Block<DropdownProps> {
   private selectedChat: Chats
@@ -54,11 +42,10 @@ export class DropdownBase extends Block<DropdownProps> {
         click: () => this.show(),
       },
     })
-    console.log('DROPDOWN PROPS', this.props)
+    console.log('DROPDOWN PROPS DEL', this.props)
   }
 
   init() {
-    this.children.arr = arr
     this.children.deleteChat = new Button({
       text: 'Удалить чат',
       type: 'button',
@@ -83,14 +70,11 @@ export class DropdownBase extends Block<DropdownProps> {
       placeholder: 'Имя пользователя...',
       class: 'user-input',
     })
-    // this.children.delUser = new Button({
-    //   id: 'delUsr-btn',
+    // this.children.delUser = new ButtonDel({
     //   type: 'button',
     //   class: 'dropdown-item',
-    //   text: 'Удалить юзера',
-    //   events: {
-    //     click: () => this.deleteUser(),
-    //   },
+    //   text: 'ssss',
+    //   users: this.selChatUsers,
     // })
   }
 
@@ -102,11 +86,12 @@ export class DropdownBase extends Block<DropdownProps> {
     UsersController.addUser(userLogin, selectedChat.id)
   }
   deleteUser() {
+    console.log('DELETEEEE')
     const { selectedChat } = store.getState()
     ChatController.getChatUsers(selectedChat)
     const { selChatUsers } = store.getState()
     // console.log('SELCHATUSR', selChatUsers)
-    this.children.deleteUserModal = new Modal({ users: selChatUsers })
+    // this.children.deleteUserModal = new Modal({ users: selChatUsers })
   }
 
   deleteChat() {
@@ -120,25 +105,33 @@ export class DropdownBase extends Block<DropdownProps> {
     oldProps: DropdownProps,
     newProps: DropdownProps
   ): boolean {
+    console.log('NNNN', newProps.selChatUsers)
     const { selChatUsers, selectedChat } = store.getState()
     this.selChatUsers = selChatUsers
     this.selectedChat = selectedChat
+    this.children.delUser = new ButtonDel({
+      type: 'button',
+      class: 'dropdown-item',
+      text: 'ssss',
+      users: newProps.selChatUsers,
+    })
+
     // console.log('USERRRRS', selChatUsers)
-    if (selChatUsers) {
-      this.children.delUser = selChatUsers.map((user: User) => {
-        return (this.children.delUser = new Button({
-          text: user.login,
-          type: 'button',
-          class: 'dropdown-item',
-        }))
-      })
-    }
+    // if (selChatUsers) {
+    //   this.children.delUser = selChatUsers.map((user: User) => {
+    //     return (this.children.delUser = new Button({
+    //       text: user.login,
+    //       type: 'button',
+    //       class: 'dropdown-item',
+    //     }))
+    //   })
+    // }
 
     return false
   }
 
   protected render(): DocumentFragment {
-    return this.compile(tpl, { ...this.props, arr })
+    return this.compile(tpl, { ...this.props })
   }
 
   public show(): void {
