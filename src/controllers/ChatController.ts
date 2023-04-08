@@ -30,14 +30,22 @@ export class ChatController {
   }
 
   async getChats() {
-    console.log('getChats')
     try {
       const chats = await this.api.read()
-      console.log('get Chats', chats)
 
       store.set('chats', chats)
     } catch (e: any) {
       console.error(e.message)
+    }
+  }
+
+  async getChatUsers(chatId: string) {
+    try {
+      await this.api
+        .getChatUsers(chatId)
+        .then((res) => store.set('selChatUsers', res))
+    } catch (e) {
+      console.log('Cant get users', e)
     }
   }
 

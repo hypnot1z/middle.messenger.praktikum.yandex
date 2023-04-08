@@ -27,9 +27,20 @@ export class ChatAPI extends BaseAPI {
   }
 
   public delete(id: number) {
-    console.log('CHAT ID', { chatId : id})
-    return this.http.delete('', { chatId : id})
+    console.log('CHAT ID', { chatId: id })
+    return this.http.delete('', { chatId: id })
   }
+
+  public addUser(users: number[], chatId: number) {
+    console.log('CHAT API ADDuser', users, 'chatID', chatId)
+    return this.http.put('/users', { users, chatId })
+  }
+
+  public getChatUsers(chatId: string) {
+    console.log(`/${chatId}/users`)
+    return this.http.get(`/${chatId}/users`)
+  }
+
   update = undefined
 }
 

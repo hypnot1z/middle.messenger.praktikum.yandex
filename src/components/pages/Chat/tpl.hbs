@@ -17,6 +17,15 @@
         {{chatName}}
 
       </h2>
+      <ul class='users-list'>
+        {{#each chatUsers}}
+          <li>
+            {{@index}}
+            :
+            {{this}}
+          </li>
+        {{/each}}
+      </ul>
       {{{treeDots}}}
     </div>
     <div class='chat-tape'>

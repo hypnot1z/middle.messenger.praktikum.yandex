@@ -4,14 +4,16 @@ import Block from '../../../utils/Block/block'
 import treeDots from '../../../img/three-dots.svg'
 import Button from '../Button'
 import Input from '../Input'
-import store, {withStore} from '../../../utils/Store'
+import store, { withStore } from '../../../utils/Store'
 import ChatController from '../../../controllers/ChatController'
 import UsersController from '../../../controllers/UserController'
 import { User } from '../../../api/AuthAPI'
+import { Chats } from '../../../api/ChatAPI'
 
 const src: string = treeDots
 
 interface DropdownProps {
+  selectedChat: Chats
   tagName?: string
   searchUser?: User[]
   img?: string
@@ -65,9 +67,11 @@ export class Dropdown extends Block<DropdownProps> {
   }
 
   addUser() {
+    const { selectedChat } = store.getState()
     const userLogin = this.children.userLoginInput.value
-    UsersController.searchUser(userLogin)
-    console.log('store', store.getState())
+    // UsersController.searchUser(userLogin)
+    // console.log('ADD USER', UsersController.searchUser(userLogin))
+    UsersController.addUser(userLogin, selectedChat.id)
   }
 
   deleteChat() {
@@ -82,13 +86,17 @@ export class Dropdown extends Block<DropdownProps> {
   }
 
   public show(): void {
-    const dropdownMenu: HTMLElement | null = document.querySelector('.dropdown-menu')
+    const dropdownMenu: HTMLElement | null =
+      document.querySelector('.dropdown-menu')
     const dropdown: HTMLElement | null = document.querySelector('.dropdown')
     console.log('SHOW', dropdownMenu)
     dropdownMenu!.classList.add('show')
     window.addEventListener('click', function (event) {
       // if (!event.target.matches('.dots-btn')) {
-        if (!dropdownMenu?.contains(event.target) && !dropdown?.contains(event.target)) {
+      if (
+        !dropdownMenu?.contains(event.target) &&
+        !dropdown?.contains(event.target)
+      ) {
         if (dropdownMenu?.classList.contains('show')) {
           dropdownMenu.classList.remove('show')
         }
@@ -96,4 +104,3 @@ export class Dropdown extends Block<DropdownProps> {
     })
   }
 }
-

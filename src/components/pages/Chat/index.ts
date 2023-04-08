@@ -25,13 +25,18 @@ interface ChatProps {
 export class PageChat extends Block<ChatProps> {
   protected selectedChatName: string
   protected selectedChatId: number
+  protected selectedChatUsers: string[]
   constructor(props: ChatProps) {
     super({ ...props, tagName: 'div' })
     console.log('CHAT PROPS', this.props)
   }
 
   render() {
-    return this.compile(tpl, { ...this.props, chatName: this.selectedChatName })
+    return this.compile(tpl, {
+      ...this.props,
+      chatName: this.selectedChatName,
+      chatUsers: this.selectedChatUsers,
+    })
   }
 
   init() {
@@ -54,20 +59,6 @@ export class PageChat extends Block<ChatProps> {
       placeholder: 'Создать чат...',
       class: 'chat-input',
     })
-    this.children.buttonSend = new Button({
-      text: 'Отправить',
-      id: 'send-btn',
-      type: 'button',
-      events: {
-        click: () => this.sendMessage(),
-      },
-    })
-    this.children.messageInput = new Input({
-      type: 'text',
-      name: 'message',
-      placeholder: '...',
-      class: 'msg-input',
-    })
   }
 
   sendMessage() {
@@ -88,13 +79,14 @@ export class PageChat extends Block<ChatProps> {
     oldProps: ChatProps,
     newProps: ChatProps
   ): boolean {
-    let { chats, selectedChat } = store.getState()
+    let { chats, selectedChat, selChatUsers } = store.getState()
 
-    if (selectedChat){
+    if (selChatUsers) {
+      this.selectedChatUsers = selChatUsers.map((u) => u.login)
+    }
+    if (selectedChat) {
       this.selectedChatName = selectedChat.title
       this.selectedChatId = selectedChat.id
-      // : (this.selectedChatName = 'Выберите чат')
-
     }
     if (chats) {
       const chatsWithSrc = chats.map((chat: Chats) => {
@@ -107,14 +99,26 @@ export class PageChat extends Block<ChatProps> {
     }
 
     if (selectedChat) {
-      console.log('SLEVCTED CHAT', selectedChat)
-      this.children.dialog = new Dialog(selectedChat) 
+      this.children.dialog = new Dialog(selectedChat)
+      this.children.buttonSend = new Button({
+        text: 'Отправить',
+        id: 'send-btn',
+        type: 'button',
+        events: {
+          click: () => this.sendMessage(),
+        },
+      })
+      this.children.messageInput = new Input({
+        type: 'text',
+        name: 'message',
+        placeholder: '...',
+      })
+      this.children.treeDots = new Dropdown({
+        selectedChat,
+      })
     }
     this.children.chatList = new ChatTitle({
       chats,
-    })
-    this.children.treeDots = new Dropdown({
-      selectedChat,
     })
 
     return false
