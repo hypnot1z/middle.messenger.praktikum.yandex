@@ -1,0 +1,7 @@
+{{!-- <div class="{{ styles.message }} {{#if isMine}} {{ styles.message--mine }} {{/if}}"> --}}
+{{!-- <div>{{content}}</div> --}}
+{{#each this}}
+  <div class='msg {{#if this.isMine}} sent-msg{{else}} received-msg{{/if}}'>
+    {{this.content}}
+  </div>
+{{/each}}

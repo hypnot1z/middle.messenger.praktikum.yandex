@@ -1,5 +1,6 @@
 import API, { ChatAPI, Chats, TitleChat } from '../api/ChatAPI'
 import store from '../utils/Store'
+import MessageController from './MessageController'
 import router from '../utils/Router'
 
 export class ChatController {
@@ -30,14 +31,28 @@ export class ChatController {
   }
 
   async getChats() {
-    console.log('getChats')
     try {
       const chats = await this.api.read()
-      console.log('get Chats', chats)
-
+      console.log('CHATS MAP', chats)
+      chats.map(async (chat: any) => {
+        const token = await this.getToken(chat.id)
+        if (token) {
+          await MessageController.connect(chat.id, token)
+        }
+      })
       store.set('chats', chats)
     } catch (e: any) {
       console.error(e.message)
+    }
+  }
+
+  async getChatUsers(chatId: string) {
+    try {
+      await this.api
+        .getChatUsers(chatId)
+        .then((res) => store.set('selChatUsers', res))
+    } catch (e) {
+      console.log('Cant get users', e)
     }
   }
 
@@ -45,6 +60,10 @@ export class ChatController {
     console.log('Sending message...')
     try {
     } catch (error) {}
+  }
+
+  getToken(id: number) {
+    return this.api.getToken(id)
   }
 }
 

@@ -3,6 +3,7 @@ import tpl from './element.hbs'
 import { Chats } from '../../../api/ChatAPI'
 import store from '../../../utils/Store'
 import './ChatItemsModule.scss'
+import ChatController from '../../../controllers/ChatController'
 
 export const avatarUrl = `https://ya-praktikum.tech/api/v2/resources/`
 
@@ -26,7 +27,10 @@ export class ChatTitle extends Block<ElementProps> {
   }
 
   private selectChat(event: Event) {
-    const chatId = ((event.target as HTMLElement)!.closest('li') as HTMLLIElement).id
+    const chatId = (
+      (event.target as HTMLElement)!.closest('li') as HTMLLIElement
+    ).id
+    ChatController.getChatUsers(chatId)
     const chats = this.props.chats
     function selChat(arr: Chats[], id: number) {
       return arr.filter((obj) => obj.id === id)

@@ -22,14 +22,34 @@ export class ChatAPI extends BaseAPI {
     return this.http.post('', data)
   }
 
-  public read(): Promise<Chats> {
+  public read(): Promise<Chats[]> {
     return this.http.get('')
   }
 
   public delete(id: number) {
-    console.log('CHAT ID', { chatId : id})
-    return this.http.delete('', { chatId : id})
+    console.log('CHAT ID', { chatId: id })
+    return this.http.delete('', { chatId: id })
   }
+
+  public addUser(users: number[], chatId: number) {
+    return this.http.put('/users', { users, chatId })
+  }
+
+  public getChatUsers(chatId: string) {
+    console.log(`/${chatId}/users`)
+    return this.http.get(`/${chatId}/users`)
+  }
+
+  async getToken(id: number): Promise<string | void> {
+    try {
+      const response = await this.http.post<{ token: string }>(`/token/${id}`)
+
+      return response.token
+    } catch (e) {
+      console.log('error get token', e)
+    }
+  }
+
   update = undefined
 }
 
