@@ -3,6 +3,7 @@ import EventBus from './Block/event-bus'
 import Block from './Block/block'
 import { User } from '../api/AuthAPI'
 import { Chats } from '../api/ChatAPI'
+import { MessageInfo } from '../controllers/MessageController'
 
 export enum StoreEvents {
   Updated = 'updated',
@@ -11,9 +12,11 @@ export enum StoreEvents {
 interface State {
   user?: User
   searchUser?: User[]
+  selChatUsers?: User[]
   chats?: Chats[]
   selectedChatName?: string
   selectedChat?: Chats
+  messages: Record<number, MessageInfo[]>
 }
 
 export class Store extends EventBus {

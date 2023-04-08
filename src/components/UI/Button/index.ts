@@ -5,7 +5,7 @@ import Block from '../../../utils/Block/block'
 interface ButtonProps {
   tagName?: string
   text?: string
-  id: string
+  id?: string
   type: string
   class?: string
   events?: any

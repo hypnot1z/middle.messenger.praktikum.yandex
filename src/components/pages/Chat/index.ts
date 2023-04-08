@@ -4,13 +4,16 @@ import Block from '../../../utils/Block/block'
 import Button from '../../UI/Button'
 import { Link } from '../../UI/Link'
 import ChatController from '../../../controllers/ChatController'
-import MessageController from '../../../controllers/MessageController'
+import MessageController, {
+  MessageInfo,
+} from '../../../controllers/MessageController'
 import store, { withStore } from '../../../utils/Store'
 import Input from '../../UI/Input'
 import { ChatTitle } from '../../UI/ChatItems/ChatElement'
 import { Chats } from '../../../api/ChatAPI'
 import { Dropdown } from '../../UI/Dropdown'
 import { Dialog } from '../../UI/Dialog'
+import { Message } from '../../UI/Message'
 import DefaultImg from '../../../img/chat-def.svg'
 
 export const avatarUrl = `https://ya-praktikum.tech/api/v2/resources/`
@@ -19,7 +22,10 @@ interface ChatProps {
   tagName?: string
   chats?: Chats[]
   selectedChatName?: string
-  selectedChat?: Chats
+  selectedChatId?: number
+  selectedChat?: Chats | undefined
+  messages: MessageInfo[]
+  userId: number
 }
 
 export class PageChat extends Block<ChatProps> {
@@ -40,6 +46,8 @@ export class PageChat extends Block<ChatProps> {
   }
 
   init() {
+    // this.children.messages = this.createMessages(this.props)
+
     this.children.profile = new Link({
       to: '/profile',
       label: 'Профиль >',
@@ -61,7 +69,8 @@ export class PageChat extends Block<ChatProps> {
     })
   }
 
-  sendMessage() {
+  sendMessage(e: Event) {
+    e.preventDefault()
     console.log('sendMessage', this.children.messageInput.value)
     const msg = this.children.messageInput.value
     console.log(this.selectedChatId)
@@ -75,11 +84,33 @@ export class PageChat extends Block<ChatProps> {
     this.children.chatNameInput.value = ''
   }
 
+  private createMessages(chatId: number, data: any, userId: number) {
+    // console.log('MSG', data)
+    // return data.map((el: MessageInfo) => {
+    //   return (this.children.messages = new Message({
+    //     content: el.content,
+    //     isMine: el.user_id === userId,
+    //   }))
+    // })
+    const content = data.map((m) => {
+      return { content: m.content, isMine: m.user_id === userId }
+    })
+    return (this.children.messages = new Message(content))
+    // return props.messages.map((data) => {
+    //   return new Message({ ...data })
+    //   // return new Message({ ...data, isMine: props.userId === data.user_id })
+    // })
+  }
+
   protected componentDidUpdate(
     oldProps: ChatProps,
     newProps: ChatProps
   ): boolean {
-    let { chats, selectedChat, selChatUsers } = store.getState()
+    let { chats, selectedChat, selChatUsers, user } = store.getState()
+    // console.log('CHAT USER', user)
+    // console.log('CHAT NWE PROPS', newProps)
+
+    // this.children.messages = this.createMessages(newProps)
 
     if (selChatUsers) {
       this.selectedChatUsers = selChatUsers.map((u) => u.login)
@@ -87,6 +118,11 @@ export class PageChat extends Block<ChatProps> {
     if (selectedChat) {
       this.selectedChatName = selectedChat.title
       this.selectedChatId = selectedChat.id
+      this.createMessages(
+        this.selectedChatId,
+        newProps.messages[this.selectedChatId],
+        user.id
+      )
     }
     if (chats) {
       const chatsWithSrc = chats.map((chat: Chats) => {
@@ -99,13 +135,13 @@ export class PageChat extends Block<ChatProps> {
     }
 
     if (selectedChat) {
-      this.children.dialog = new Dialog(selectedChat)
+      // this.children.dialog = new Dialog(selectedChat)
       this.children.buttonSend = new Button({
         text: 'Отправить',
         id: 'send-btn',
-        type: 'button',
+        type: 'submit',
         events: {
-          click: () => this.sendMessage(),
+          click: (e: Event) => this.sendMessage(e),
         },
       })
       this.children.messageInput = new Input({
@@ -126,8 +162,9 @@ export class PageChat extends Block<ChatProps> {
 }
 
 const withData = withStore((state) => ({
-  ...state.chats,
-  ...state.selectedChat,
+  chats: state.chats,
+  selectedChat: state.selectedChat,
+  messages: state.messages,
 }))
 
 const ChatWithTitles = withData(PageChat)

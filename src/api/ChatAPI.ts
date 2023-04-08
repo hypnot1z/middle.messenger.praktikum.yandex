@@ -22,7 +22,7 @@ export class ChatAPI extends BaseAPI {
     return this.http.post('', data)
   }
 
-  public read(): Promise<Chats> {
+  public read(): Promise<Chats[]> {
     return this.http.get('')
   }
 
@@ -32,13 +32,22 @@ export class ChatAPI extends BaseAPI {
   }
 
   public addUser(users: number[], chatId: number) {
-    console.log('CHAT API ADDuser', users, 'chatID', chatId)
     return this.http.put('/users', { users, chatId })
   }
 
   public getChatUsers(chatId: string) {
     console.log(`/${chatId}/users`)
     return this.http.get(`/${chatId}/users`)
+  }
+
+  async getToken(id: number): Promise<string | void> {
+    try {
+      const response = await this.http.post<{ token: string }>(`/token/${id}`)
+
+      return response.token
+    } catch (e) {
+      console.log('error get token', e)
+    }
   }
 
   update = undefined

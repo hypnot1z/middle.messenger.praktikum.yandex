@@ -17,7 +17,7 @@
         {{chatName}}
 
       </h2>
-      <ul class='users-list'>
+      {{!-- <ul class='users-list'>
         {{#each chatUsers}}
           <li>
             {{@index}}
@@ -25,13 +25,12 @@
             {{this}}
           </li>
         {{/each}}
-      </ul>
+      </ul> --}}
       {{{treeDots}}}
     </div>
-    <div class='chat-tape'>
-      {{{dialog}}}
-    </div>
-    <form action='#' class='chat-msg'>
+    {{! <div class='chat-tape'></div> }}
+    {{{messages}}}
+    <form class='chat-msg'>
       {{{messageInput}}}
       {{{buttonSend}}}
     </form>
