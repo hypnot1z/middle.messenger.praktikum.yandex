@@ -33,7 +33,7 @@ export class PageChat extends Block<ChatProps> {
   protected selectedChatUsers: string[]
   constructor(props: ChatProps) {
     super({ ...props, tagName: 'div' })
-    console.log('CHAT PROPS', this.props)
+    // console.log('CHAT PROPS', this.props)
   }
 
   render() {
@@ -96,7 +96,11 @@ export class PageChat extends Block<ChatProps> {
     // console.log('CHAT NWE PROPS', newProps)
 
     // this.children.messages = this.createMessages(newProps)
-
+    // if (!selectedChat && chats) {
+    //   console.log('CHATS', chats[0].id)
+    //   this.selectedChatId = chats[0].id
+    //   this.selectedChatName = chats[0].title
+    // }
     if (chats) {
       const chatsWithSrc = chats.map((chat: Chats) => {
         return {
@@ -137,8 +141,10 @@ export class PageChat extends Block<ChatProps> {
         placeholder: '...',
       })
     }
+
     this.children.chatList = new ChatTitle({
       chats,
+      selectedChat,
     })
 
     return false
@@ -146,8 +152,8 @@ export class PageChat extends Block<ChatProps> {
 }
 
 const withData = withStore((state) => ({
-  chats: state.chats,
-  selectedChat: state.selectedChat,
+  chats: state.chats ? state.chats : [],
+  selectedChat: state.selectedChat ? state.selectedChat : {},
   messages: state.messages,
 }))
 

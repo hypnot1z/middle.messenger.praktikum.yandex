@@ -11,7 +11,7 @@ interface ElementProps {
   chats?: Chats[]
   tagName?: string
   src?: string
-  selectedChat?: number
+  selectedChat?: Chats
   events?: any
 }
 
@@ -36,6 +36,7 @@ export class ChatTitle extends Block<ElementProps> {
       return arr.filter((obj) => obj.id === id)
     }
     const activeChat = selChat(chats as Chats[], Number(chatId))
+
     store.set('selectedChat', activeChat[0])
     store.set('selectedChatName', activeChat[0].title)
   }

@@ -32,7 +32,7 @@ export class ChatController {
   async getChats() {
     try {
       const chats = await this.api.read()
-      console.log('CHATS MAP', chats)
+      // console.log('CHATS MAP', chats)
       chats.map(async (chat: any) => {
         const token = await this.getToken(chat.id)
         if (token) {

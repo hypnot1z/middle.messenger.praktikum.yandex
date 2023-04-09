@@ -1,6 +1,5 @@
 import EventBus from './event-bus'
 import { nanoid } from 'nanoid'
-import { TemplateDelegate } from 'handlebars'
 
 export class Block<
   // P = any,
@@ -45,7 +44,7 @@ export class Block<
     children: Record<string, Block | Block[]>
   } {
     const props: Record<string, any> = {}
-    const children: Record<string, Block> = {}
+    const children: Record<string, Block | Block[]> = {}
 
     Object.entries(ChildrenAndProps).forEach(([key, value]) => {
       if (Array.isArray(value) && value.every((v) => v instanceof Block)) {
@@ -70,15 +69,15 @@ export class Block<
     })
   }
 
-  private _removeEvents() {
-    const { events = {} } = this.props as Record<string, () => void>
+  // private _removeEvents() {
+  //   const { events = {} } = this.props as Record<string, () => void>
 
-    if (events) {
-      Object.entries(events).forEach(([event, listener]) => {
-        this._element!.removeEventListener(event, listener)
-      })
-    }
-  }
+  //   if (events) {
+  //     Object.entries(events).forEach(([event, listener]) => {
+  //       this._element!.removeEventListener(event, listener)
+  //     })
+  //   }
+  // }
 
   private _registerEvents(eventBus: EventBus) {
     eventBus.on(Block.EVENTS.INIT, this._init.bind(this))
@@ -91,8 +90,9 @@ export class Block<
     this._element = this._createDocumentElement(this.tagName) as E
     if (this.tagName === 'div') {
       if (this._element.classList) {
-        this.props.className ? this._element.classList.add(this.props.className) :
-        this._element.classList.add('wrapper')
+        this.props.className
+          ? this._element.classList.add(this.props.className)
+          : this._element.classList.add('wrapper')
       }
     }
   }
@@ -139,6 +139,7 @@ export class Block<
   }
 
   // Может переопределять пользователь, необязательно трогать
+  //@ts-expect-error
   protected componentDidUpdate(oldProps: P, newProps: P) {
     return true
   }
@@ -176,11 +177,17 @@ export class Block<
     this._addEvents()
   }
 
-  protected compile(template: TemplateDelegate, context: any) {
+  protected compile(template: (context: any) => string, context: any) {
     const contextAndStubs = { ...context }
 
     Object.entries(this.children).forEach(([name, component]) => {
-      contextAndStubs[name] = `<div data-id="${component.id}"></div>`
+      if (Array.isArray(component)) {
+        contextAndStubs[name] = component.map(
+          (child) => `<div data-id="${child.id}"></div>`
+        )
+      } else {
+        contextAndStubs[name] = `<div data-id="${component.id}"></div>`
+      }
     })
 
     const html = template(contextAndStubs)
@@ -189,7 +196,7 @@ export class Block<
 
     temp.innerHTML = html
 
-    Object.entries(this.children).forEach(([_, component]) => {
+    const replaceStub = (component: Block) => {
       const stub = temp.content.querySelector(`[data-id="${component.id}"]`)
 
       if (!stub) {
@@ -199,6 +206,14 @@ export class Block<
       component.getContent()?.append(...Array.from(stub.childNodes))
 
       stub.replaceWith(component.getContent()!)
+    }
+
+    Object.entries(this.children).forEach(([_, component]) => {
+      if (Array.isArray(component)) {
+        component.forEach(replaceStub)
+      } else {
+        replaceStub(component)
+      }
     })
 
     return temp.content
