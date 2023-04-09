@@ -3,15 +3,18 @@ import './ButtonModule.scss'
 import Block from '../../../utils/Block/block'
 
 interface ButtonProps {
+  tagName?: string
   text?: string
-  id: string
+  id?: string
   type: string
   class?: string
+  events?: any
 }
 
 export default class Button extends Block<ButtonProps, HTMLButtonElement> {
   constructor(props: ButtonProps) {
-    super('button', props)
+    props.tagName = 'button'
+    super(props)
   }
 
   init() {

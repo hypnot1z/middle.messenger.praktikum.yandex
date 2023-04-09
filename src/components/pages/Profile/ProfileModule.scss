@@ -1,5 +1,6 @@
 $bgColor: rgba(194, 191, 191, 0.452);
 $redColor: red;
+$font: 'Comfortaa', cursive;
 
 .profile__list {
   width: 510px;
@@ -24,14 +25,7 @@ $redColor: red;
   text-align: end;
 }
 
-.avatar {
-  width: 130px;
-  height: 130px;
-  border-radius: 50%;
-  background: $bgColor;
-  margin-bottom: 20px;
-  text-align: center;
-}
+
 
 .profile__nav {
   width: 510px;

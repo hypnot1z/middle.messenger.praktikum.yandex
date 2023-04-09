@@ -4,14 +4,21 @@ import Input from '../../UI/Input'
 import Block from '../../../utils/Block/block'
 import FormData from '../../../utils/FormData'
 import Validation from '../../../utils/Validation'
+import { Image } from '../../UI/Img'
 import './ProfileModule.scss'
+import SettingController from '../../../controllers/SettingController'
+// import AuthAPI from '../../../api/AuthAPI'
+// import ava from '../../../img/avatarCap.svg'
+import Avatar from '../../UI/Avatar'
 
 interface EditPasswordProps {
   events: any
+  tagName?: string
 }
 class PageEditPassword extends Block<EditPasswordProps, HTMLDivElement> {
   constructor(props: EditPasswordProps) {
-    super('div', props)
+    props.tagName = 'div'
+    super(props)
   }
 
   render() {
@@ -19,6 +26,13 @@ class PageEditPassword extends Block<EditPasswordProps, HTMLDivElement> {
   }
 
   init() {
+    // this.children.avatar = new Image({
+    //   to: '/settings',
+    //   src: ava,
+    //   alt: 'Аватарка',
+    //   size: '10',
+    //   class: 'avatar',
+    // })
     this.children.inputOldPass = new Input({
       type: 'password',
       name: 'oldPassword',
@@ -60,7 +74,27 @@ class PageEditPassword extends Block<EditPasswordProps, HTMLDivElement> {
       id: 'edit-btn',
       type: 'submit',
       class: 'btn',
+      events: { click: (event: Event) => this.onSubmit(event) },
     })
+  }
+  onSubmit(event: Event) {
+    event.preventDefault()
+    const values = Object.values(this.children)
+      .filter((child) => child instanceof Input)
+      .map((child) => [(child as Input).name, (child as Input).value])
+
+    const data = Object.fromEntries(values)
+    console.log('EditPass data', data)
+
+    SettingController.updatePassword(data)
+  }
+
+  protected componentDidUpdate(
+    oldProps: EditPasswordProps,
+    newProps: EditPasswordProps
+  ): boolean {
+    this.children.avatar = new Avatar({})
+    return false
   }
 }
 

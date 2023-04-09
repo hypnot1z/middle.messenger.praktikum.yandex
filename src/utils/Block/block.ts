@@ -1,9 +1,9 @@
 import EventBus from './event-bus'
-import Pattern from '../pattern'
 import { nanoid } from 'nanoid'
 import { TemplateDelegate } from 'handlebars'
 
-export default class Block<
+export class Block<
+  // P = any,
   P extends Record<string, any> = any,
   E extends HTMLElement = HTMLElement
 > {
@@ -15,22 +15,20 @@ export default class Block<
   } as const
 
   public id = nanoid(5)
-  private _meta: {
-    tagName: string
-    props: P
-  }
+  private tagName: string
+
   private eventBus: () => EventBus
   private _element: E | null = null
   protected props: P
-  public children: Record<string, Block>
+  public children: Record<string, Block | Block[]>
 
-  constructor(tagName = 'div', propsWithChildren: P) {
+  constructor(propsWithChildren: P) {
     const eventBus = new EventBus()
+
     const { props, children } = this._getChildrenAndProps(propsWithChildren)
-    this._meta = {
-      tagName,
-      props,
-    }
+    const { tagName } = props
+    this.tagName = tagName
+
     this.children = children
 
     this.props = this._makePropsProxy(props)
@@ -42,19 +40,24 @@ export default class Block<
     eventBus.emit(Block.EVENTS.INIT)
   }
 
-  private _getChildrenAndProps(ChildrenAndProps: P) {
-    const props: P = {} as P
+  private _getChildrenAndProps(ChildrenAndProps: P): {
+    props: P
+    children: Record<string, Block | Block[]>
+  } {
+    const props: Record<string, any> = {}
     const children: Record<string, Block> = {}
 
     Object.entries(ChildrenAndProps).forEach(([key, value]) => {
-      if (value instanceof Block) {
-        children[key] = value
+      if (Array.isArray(value) && value.every((v) => v instanceof Block)) {
+        children[key as string] = value
+      } else if (value instanceof Block) {
+        children[key as string] = value
       } else {
-        props[key as keyof P] = value
+        props[key] = value
       }
     })
 
-    return { props, children }
+    return { props: props as P, children }
   }
 
   private _addEvents() {
@@ -85,14 +88,16 @@ export default class Block<
   }
 
   private _createResources() {
-    const { tagName } = this._meta
-    this._element = this._createDocumentElement(tagName) as E
-    if (tagName === 'div') {
-      this._element.classList.add('wrapper')
+    this._element = this._createDocumentElement(this.tagName) as E
+    if (this.tagName === 'div') {
+      if (this._element.classList) {
+        this.props.className ? this._element.classList.add(this.props.className) :
+        this._element.classList.add('wrapper')
+      }
     }
   }
 
-  private _createDocumentElement(tagName: string) {
+  private _createDocumentElement(tagName: string = 'div') {
     // Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
     return document.createElement(tagName)
   }
@@ -117,9 +122,13 @@ export default class Block<
   protected dispatchComponentDidMount() {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM)
 
-    Object.values(this.children).forEach((child) =>
-      child.dispatchComponentDidMount()
-    )
+    Object.values(this.children).forEach((child) => {
+      if (Array.isArray(child)) {
+        child.forEach((ch) => ch.dispatchComponentDidMount())
+      } else {
+        child.dispatchComponentDidMount()
+      }
+    })
   }
 
   private _componentDidUpdate(oldProps: P, newProps: P) {
@@ -134,12 +143,26 @@ export default class Block<
     return true
   }
 
-  protected setProps = (nextProps: Partial<P>) => {
+  protected setProps = (nextProps: P) => {
     if (!nextProps) {
       return
     }
 
+    const oldValue = this.props
     Object.assign(this.props, nextProps)
+    this._componentDidUpdate(oldValue, this.props)
+
+    const { children, props } = this._getChildrenAndProps(nextProps)
+
+    if (Object.values(children).length) {
+      Object.assign(this.children, children)
+    }
+
+    if (Object.values(props).length) {
+      Object.assign(this.props, props)
+    }
+
+    this.eventBus().emit(Block.EVENTS.FLOW_CDU, oldValue, this.props)
   }
 
   get element() {
@@ -151,11 +174,6 @@ export default class Block<
     this._element!.innerHTML = ''
     this._element!.append(fragment)
     this._addEvents()
-    // Этот небезопасный метод для упрощения логики
-    // Используйте шаблонизатор из npm или напишите свой безопасный
-    // Нужно не в строку компилировать (или делать это правильно),
-    // либо сразу в DOM-элементы возвращать из compile DOM-ноду
-    // this._element!.innerHTML = block
   }
 
   protected compile(template: TemplateDelegate, context: any) {
@@ -194,22 +212,6 @@ export default class Block<
     return this.element
   }
 
-  validation(event: Event) {
-    // const element: EventTarget | null = event.target
-    const element = event.target as HTMLInputElement
-    const elementName: string = element!.name
-    const etarget = element!.nextElementSibling as HTMLSpanElement
-    event.target!.addEventListener('blur', () => {
-      const targetPattern: RegExp = new RegExp(Pattern[elementName])
-      const stringValue: string = element!.value
-      if (!targetPattern.test(stringValue)) {
-        etarget.style.display = 'block'
-      } else {
-        etarget.style.display = 'none'
-      }
-    })
-  }
-
   private _makePropsProxy(props: P) {
     // Можно и так передать this
     // Такой способ больше не применяется с приходом ES6+
@@ -242,3 +244,5 @@ export default class Block<
     this.getContent()!.style.display = 'none'
   }
 }
+
+export default Block

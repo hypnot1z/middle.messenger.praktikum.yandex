@@ -1,0 +1,49 @@
+$white: #ffffff;
+$gray-light: #e0e0e0;
+$gray-medium: #a0a0a0;
+$green-light: #dcf8c6;
+$gray-dark: #404040;
+
+$message-border-radius: 4px;
+$message-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+
+.msg-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 16px;
+  padding: 16px;
+  //   background-color: $white;
+  //   border: 1px solid $gray-light;
+  //   border-radius: $message-border-radius;
+  //   box-shadow: $message-box-shadow;
+}
+
+.msg {
+  display: flex;
+  flex-direction: column;
+  max-width: 70%;
+  padding: 12px;
+  border-radius: $message-border-radius;
+}
+
+.sent-msg {
+  align-self: flex-end;
+  background-color: $green-light;
+}
+
+.received-msg {
+  align-self: flex-start;
+  background-color: $gray-light;
+}
+
+.msg-text {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.msg-time {
+  margin-top: 8px;
+  font-size: 12px;
+  color: $gray-medium;
+}

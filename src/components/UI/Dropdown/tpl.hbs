@@ -1,0 +1,20 @@
+<button class='dropdown-toggle'>
+  <img src={{img}} alt={{alt}} class='dots-btn' />
+</button>
+<div class='dropdown-menu'>
+  {{{deleteChat}}}
+  <div class='adduser'>{{{userLoginInput}}}{{{addUserBtn}}}</div>
+  <div>
+    Удалить юзера
+
+  </div>
+  {{!-- <ul>
+    {{#each selChatUsers}}
+      <li>
+        {{this.login}}
+
+      </li>
+    {{/each}}
+  </ul> --}}
+  {{{userList}}}
+</div>

@@ -1,5 +1,18 @@
 $textColor: rgb(109, 109, 109);
 $bgColor: rgba(194, 191, 191, 0.452);
+$white: #fff;
+$light-blue: #b2ebf2;
+$medium-blue: #3369f3;
+$profileLink-border: rgba(0, 0, 0, 0.2);
+$profileLink-bg: rgba(255, 255, 255, 0.5);
+$profileLink-txt: #333;
+$profileLinkHover-bg: rgba(0, 0, 0, 0.1);
+$profileLinkHover-border: rgba(0, 0, 0, 0.4);
+$profileLinkHover-txt: #222;
+$profileLinkActive-bg: rgba(0, 0, 0, 0.2);
+$profileLinkActive-border: rgba(0, 0, 0, 0.6);
+$profileLinkActive-txt: #111;
+$font: 'Comfortaa', cursive;
 
 .links a {
   margin: 10px;
@@ -20,13 +33,43 @@ $bgColor: rgba(194, 191, 191, 0.452);
   grid-template-rows: 80px auto;
   justify-items: stretch;
 }
-.chat-list {
+.chat-box {
   grid-area: B;
   height: 100%;
   display: flex;
   flex-direction: column;
   padding: 10px;
   border-right: 1px solid $bgColor;
+}
+
+.chat-box a {
+  font-family: $font;
+  margin-bottom: 5px;
+  display: inline-block;
+  padding: 10px 20px;
+  // border: 1px solid $profileLink-border;
+  background-color: $profileLink-bg;
+  border-radius: 5px;
+  color: $profileLink-txt;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $profileLinkHover-bg;
+    border-color: $profileLinkHover-border;
+    color: $profileLinkHover-txt;
+  }
+
+  &:active {
+    background-color: $profileLinkActive-bg;
+    border-color: $profileLinkActive-border;
+    color: $profileLinkActive-txt;
+  }
+}
+
+.chat-list button {
+  cursor: pointer;
 }
 
 .chat-block {
@@ -51,10 +94,54 @@ $bgColor: rgba(194, 191, 191, 0.452);
 .chat-msg {
   height: 30px;
   display: flex;
-  // justify-content: space-between;
-  // align-items: stretch;
 }
 
 .chat-msg input {
   width: 100%;
+}
+
+.chat-create {
+  display: flex;
+  flex-direction: row;
+  border: none;
+  padding: 1px;
+  margin-top: 5px;
+  border-radius: 0.2em;
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  outline: none;
+}
+
+.chat-create input {
+  flex-grow: 2;
+  border: none;
+  outline: none;
+}
+
+.createChat-btn {
+  border: 1px solid blue;
+  background: blue;
+  color: aliceblue;
+  border-radius: 0.5em;
+}
+
+.dots-btn {
+  width: 20px;
+  cursor: pointer;
+}
+
+.chat-name {
+  font-family: $font;
+  font-size: 16px;
+  font-weight: normal;
+  color: $profileLink-txt;
+}
+
+.hidden {
+  display: none;
+}
+
+.users-list {
+  font-size: 8px;
+  color: $textColor;
 }

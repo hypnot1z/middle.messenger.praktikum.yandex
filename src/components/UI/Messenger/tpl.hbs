@@ -1,0 +1,33 @@
+<div class='flex flex-col'>
+  {{#if selectedChat}}
+    <div class='flex items-center justify-center h-cover'>
+      <div class='absolute top-1.5 right-1.5'>{{{droppoint}}}</div>
+      <div
+        id='user-menu'
+        class='hidden absolute top-10 right-5 bg-graphite rounded-lg w-content h-content'
+      >
+        {{{addUser}}}
+        {{{deleteUser}}}
+      </div>
+      {{{addUserWindow}}}
+      {{{DeleteUserWindow}}}
+      <div
+        class='flex flex-col customw h-[670px] bg-transparent text-white py-14 px-8 overflow-y-auto scrollbar'
+      >
+        {{#each messages}}
+          {{{this}}}
+        {{/each}}
+      </div>
+    </div>
+    <div class='absolute bottom-0 flex p-4 customw ml-auto'>
+      {{{dropdown}}}
+      {{{dropbutton}}}
+      {{{input}}}
+      {{{button}}}
+    </div>
+  {{else}}
+    <div class='flex min-h-[800px] text-center'>
+      <h3 class='m-auto'>Create or Select Chat</h3>
+    </div>
+  {{/if}}
+</div>
