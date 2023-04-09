@@ -25,7 +25,7 @@ interface ChatProps {
   selectedChatId?: number
   selectedChat?: Chats | undefined
   messages: MessageInfo[]
-  userId: number
+  userId?: number
 }
 
 export class PageChat extends Block<ChatProps> {
@@ -112,18 +112,6 @@ export class PageChat extends Block<ChatProps> {
 
     // this.children.messages = this.createMessages(newProps)
 
-    if (selChatUsers) {
-      this.selectedChatUsers = selChatUsers.map((u) => u.login)
-    }
-    if (selectedChat) {
-      this.selectedChatName = selectedChat.title
-      this.selectedChatId = selectedChat.id
-      this.createMessages(
-        this.selectedChatId,
-        newProps.messages[this.selectedChatId],
-        user.id
-      )
-    }
     if (chats) {
       const chatsWithSrc = chats.map((chat: Chats) => {
         return {
@@ -135,7 +123,21 @@ export class PageChat extends Block<ChatProps> {
     }
 
     if (selectedChat) {
+      if (selChatUsers) {
+        this.selectedChatUsers = selChatUsers.map((u) => u.login)
+        this.children.treeDots = new Dropdown({
+          selectedChat,
+          selChatUsers: selChatUsers,
+        })
+      }
       // this.children.dialog = new Dialog(selectedChat)
+      this.selectedChatName = selectedChat.title
+      this.selectedChatId = selectedChat.id
+      this.createMessages(
+        this.selectedChatId,
+        newProps.messages[this.selectedChatId],
+        user.id
+      )
       this.children.buttonSend = new Button({
         text: 'Отправить',
         id: 'send-btn',
@@ -148,9 +150,6 @@ export class PageChat extends Block<ChatProps> {
         type: 'text',
         name: 'message',
         placeholder: '...',
-      })
-      this.children.treeDots = new Dropdown({
-        selectedChat,
       })
     }
     this.children.chatList = new ChatTitle({

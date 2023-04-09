@@ -1,1 +1,10 @@
-{{{element}}}
+{{#each users}}
+  <div class='chat-element'>
+    <li class='chat-item' id={{this.id}}>
+      <span>
+        {{this.login}}
+      </span>
+    </li>
+  </div>
+
+{{/each}}

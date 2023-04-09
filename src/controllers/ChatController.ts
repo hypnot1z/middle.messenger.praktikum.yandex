@@ -56,6 +56,14 @@ export class ChatController {
     }
   }
 
+  async deleteUser(users: number[], chatId: number) {
+    try {
+      await this.api.deleteUser(users, chatId)
+    } catch (e) {
+      console.log('Cant delete users', e)
+    }
+  }
+
   async sendMsg(msg: string) {
     console.log('Sending message...')
     try {

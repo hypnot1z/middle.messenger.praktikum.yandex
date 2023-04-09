@@ -3,14 +3,13 @@ import './DropdownModule.scss'
 import Block from '../../../utils/Block/block'
 import treeDots from '../../../img/three-dots.svg'
 import Button from '../Button'
-import ButtonDel from '../ButtonDel'
 import Input from '../Input'
 import store, { withStore } from '../../../utils/Store'
 import ChatController from '../../../controllers/ChatController'
 import UsersController from '../../../controllers/UserController'
 import { User } from '../../../api/AuthAPI'
 import { Chats } from '../../../api/ChatAPI'
-import { Modal } from '../Modal'
+import { UserList } from '../ChatItems/UserList'
 
 const src: string = treeDots
 
@@ -42,7 +41,7 @@ export class DropdownBase extends Block<DropdownProps> {
         click: () => this.show(),
       },
     })
-    console.log('DROPDOWN PROPS DEL', this.props)
+    // console.log('DROPDOWN PROPS DEL', this.props)
   }
 
   init() {
@@ -70,12 +69,17 @@ export class DropdownBase extends Block<DropdownProps> {
       placeholder: 'Имя пользователя...',
       class: 'user-input',
     })
+    this.children.userList = new UserList({
+      users: this.props.selChatUsers,
+      selectedChat: this.props.selectedChat,
+    })
     // this.children.delUser = new ButtonDel({
     //   type: 'button',
     //   class: 'dropdown-item',
     //   text: 'ssss',
     //   users: this.selChatUsers,
     // })
+    // this.children.users = this.userList(this.props)
   }
 
   addUser() {
@@ -101,20 +105,38 @@ export class DropdownBase extends Block<DropdownProps> {
     store.set('selectedChat', '')
   }
 
+  private userList() {
+    const { selChatUsers } = store.getState()
+    if (selChatUsers) {
+      console.log('SELUSERS', selChatUsers)
+      this.children.userList = new UserList({
+        users: selChatUsers,
+      })
+    }
+  }
+
   protected componentDidUpdate(
     oldProps: DropdownProps,
     newProps: DropdownProps
   ): boolean {
-    console.log('NNNN', newProps.selChatUsers)
     const { selChatUsers, selectedChat } = store.getState()
     this.selChatUsers = selChatUsers
     this.selectedChat = selectedChat
-    this.children.delUser = new ButtonDel({
-      type: 'button',
-      class: 'dropdown-item',
-      text: 'ssss',
-      users: newProps.selChatUsers,
-    })
+    if (selChatUsers) {
+      // this.btns = this.userList(selChatUsers)
+      // console.log('SELUSERS', selChatUsers)
+      this.children.userList = new UserList({
+        users: selChatUsers,
+      })
+      // this.children.users = this.userList(selChatUsers)
+      // console.log('USERLIST', this.children.users)
+    }
+    // this.children.delUser = new ButtonDel({
+    //   type: 'button',
+    //   class: 'dropdown-item',
+    //   text: 'ssss',
+    //   users: newProps.selChatUsers,
+    // })
 
     // console.log('USERRRRS', selChatUsers)
     // if (selChatUsers) {
@@ -127,14 +149,16 @@ export class DropdownBase extends Block<DropdownProps> {
     //   })
     // }
 
-    return false
+    return true
   }
 
   protected render(): DocumentFragment {
-    return this.compile(tpl, { ...this.props })
+    // const users = = this.userList(selChatUsers)
+    return this.compile(tpl, this.props)
   }
 
   public show(): void {
+    this.userList()
     const dropdownMenu: HTMLElement | null =
       document.querySelector('.dropdown-menu')
     const dropdown: HTMLElement | null = document.querySelector('.dropdown')
