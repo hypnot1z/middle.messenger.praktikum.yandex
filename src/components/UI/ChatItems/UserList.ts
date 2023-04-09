@@ -1,6 +1,5 @@
 import Block from '../../../utils/Block/block'
 import tpl from './list.hbs'
-import store from '../../../utils/Store'
 import './ChatItemsModule.scss'
 import ChatController from '../../../controllers/ChatController'
 import { User } from '../../../api/UserAPI'
@@ -27,7 +26,6 @@ export class UserList extends Block<ElementProps> {
         click: (event: Event) => this.deleteUser(event),
       },
     })
-    console.log('userslist props', this.props)
   }
 
   private deleteUser(event: Event) {
@@ -37,16 +35,7 @@ export class UserList extends Block<ElementProps> {
     const users = []
     users.push(Number(userId))
     const chatId = this.props.selectedChat!.id
-    console.log('delete users:', users, 'chatId:', chatId)
     ChatController.deleteUser(users, chatId)
-    // ChatController.getChatUsers(chatId)
-    // const chats = this.props.chats
-    // function selChat(arr: Chats[], id: number) {
-    //   return arr.filter((obj) => obj.id === id)
-    // }
-    // const activeChat = selChat(chats as Chats[], Number(chatId))
-    // store.set('selectedChat', activeChat[0])
-    // store.set('selectedChatName', activeChat[0].title)
   }
 
   protected render(): DocumentFragment {

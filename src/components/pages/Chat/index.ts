@@ -12,7 +12,6 @@ import Input from '../../UI/Input'
 import { ChatTitle } from '../../UI/ChatItems/ChatElement'
 import { Chats } from '../../../api/ChatAPI'
 import { Dropdown } from '../../UI/Dropdown'
-import { Dialog } from '../../UI/Dialog'
 import { Message } from '../../UI/Message'
 import DefaultImg from '../../../img/chat-def.svg'
 
@@ -46,8 +45,6 @@ export class PageChat extends Block<ChatProps> {
   }
 
   init() {
-    // this.children.messages = this.createMessages(this.props)
-
     this.children.profile = new Link({
       to: '/profile',
       label: 'Профиль >',
@@ -79,27 +76,15 @@ export class PageChat extends Block<ChatProps> {
   }
   createChat() {
     const chatName = this.children.chatNameInput.value
-    // console.log('createChat', chatName)
     ChatController.createChat(chatName)
     this.children.chatNameInput.value = ''
   }
 
   private createMessages(chatId: number, data: any, userId: number) {
-    // console.log('MSG', data)
-    // return data.map((el: MessageInfo) => {
-    //   return (this.children.messages = new Message({
-    //     content: el.content,
-    //     isMine: el.user_id === userId,
-    //   }))
-    // })
     const content = data.map((m) => {
       return { content: m.content, isMine: m.user_id === userId }
     })
     return (this.children.messages = new Message(content))
-    // return props.messages.map((data) => {
-    //   return new Message({ ...data })
-    //   // return new Message({ ...data, isMine: props.userId === data.user_id })
-    // })
   }
 
   protected componentDidUpdate(

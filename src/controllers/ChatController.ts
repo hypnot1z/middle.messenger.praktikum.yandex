@@ -1,7 +1,6 @@
-import API, { ChatAPI, Chats, TitleChat } from '../api/ChatAPI'
+import API, { ChatAPI } from '../api/ChatAPI'
 import store from '../utils/Store'
 import MessageController from './MessageController'
-import router from '../utils/Router'
 
 export class ChatController {
   private readonly api: ChatAPI
@@ -58,16 +57,12 @@ export class ChatController {
 
   async deleteUser(users: number[], chatId: number) {
     try {
-      await this.api.deleteUser(users, chatId)
+      await this.api
+        .deleteUser(users, chatId)
+        .then((res) => console.log('user deleted'))
     } catch (e) {
       console.log('Cant delete users', e)
     }
-  }
-
-  async sendMsg(msg: string) {
-    console.log('Sending message...')
-    try {
-    } catch (error) {}
   }
 
   getToken(id: number) {

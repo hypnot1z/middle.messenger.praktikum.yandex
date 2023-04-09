@@ -15,21 +15,13 @@
     <div class='header'>
       <h2 class='chat-name'>
         {{chatName}}
-
       </h2>
-      {{!-- <ul class='users-list'>
-        {{#each chatUsers}}
-          <li>
-            {{@index}}
-            :
-            {{this}}
-          </li>
-        {{/each}}
-      </ul> --}}
       {{{treeDots}}}
     </div>
-    {{! <div class='chat-tape'></div> }}
-    {{{messages}}}
+    <div class='chat-tape'>
+      {{{messages}}}
+    </div>
+
     <form class='chat-msg'>
       {{{messageInput}}}
       {{{buttonSend}}}
