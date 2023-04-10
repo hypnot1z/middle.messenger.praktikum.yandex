@@ -1,7 +1,7 @@
 ## Мессенджер
 
-Link
-https://startling-melomakarona-c8bc0c.netlify.app/
+Docker deployed:
+https://messenger-317n.onrender.com/messenger
 
 ## Описание
 
