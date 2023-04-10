@@ -1,16 +1,15 @@
 {
   "name": "middle.messenger.praktikum.yandex",
   "version": "0.1.0",
-  "description": "sprint-1",
+  "description": "sprint-4",
   "default": "dist/index.html",
   "source": "static/index.html",
-  "browserlist": "> 0.5%, last 2 version, not dead",
+  
   "targets": {
     "global": {
       "context": "browser",
       "outputFormat": "global"
-    }
-  },
+    }},
   "engines": {
     "node": ">= 14.0"
   },
@@ -18,11 +17,16 @@
     "tsc:w": "tsc -w",
     "eslint": "eslint . --ext .js,.ts",
     "stylelint": "stylelint **/*.scss",
-    "dev": "parcel index.html --port 3000 --no-source-maps --open",
-    "build": "parcel build index.html --no-source-maps --no-cache",
+    "dev": "webpack --mode development",
+    "build": "webpack --mode=production --node-env=production",
     "server": "node app.js",
-    "start": "npm run build && npm run server",
-    "test": "mocha"
+    "serve": "webpack serve",
+    "start": "webpack && npm run server",
+    "test": "mocha",
+    "build:dev": "webpack --mode=development",
+    "build:prod": "webpack --mode=production --node-env=production",
+    "parcel": "parcel index.html --port 3000 --no-source-maps --open",
+    "parcelbuild": "parcel build index.html --no-source-maps --no-cache"
   },
   "keywords": [],
   "author": "A_Zagorskiy",
@@ -38,14 +42,20 @@
     "@typescript-eslint/eslint-plugin": "^5.53.0",
     "@typescript-eslint/parser": "^5.53.0",
     "chai": "^4.3.7",
+    "clean-webpack-plugin": "^4.0.0",
+    "css-loader": "^6.7.3",
     "dotenv": "^16.0.3",
     "eslint": "^8.35.0",
     "eslint-config-airbnb": "^19.0.4",
     "express": "=4.18.2",
     "express-history-api-fallback": "^2.2.1",
+    "file-loader": "^6.2.0",
     "handlebars-loader": "^1.7.3",
+    "handlebars-template-loader": "^1.0.0",
     "html-loader": "^4.2.0",
+    "html-webpack-plugin": "^5.5.0",
     "jsdom": "^21.1.1",
+    "mini-css-extract-plugin": "^2.7.5",
     "mocha": "^10.2.0",
     "nanoid": "3.3.6",
     "parcel": "=2.8.2",
@@ -60,6 +70,7 @@
     "ts-node": "^10.9.1",
     "typescript": "^4.9.5",
     "webpack": "^5.78.0",
+    "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.13.2"
   },
   "dependencies": {

@@ -9,7 +9,6 @@ import EditPassword from './src/components/pages/EditPassword'
 // import { PageErr } from './src/components/pages/ErrorPage'
 import Router from './src/utils/Router'
 import AuthController from './src/controllers/AuthController'
-import store from './src/utils/Store'
 import ChatController from './src/controllers/ChatController'
 
 // const NotFound = new PageErr({ code: '404', text: 'Не туда попали' })
@@ -37,7 +36,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   let isProtectedRoute = true
 
   switch (window.location.pathname) {
-    case Routes.Login:
+      case Routes.Login:
       case Routes.Registr:
       isProtectedRoute = false
       break

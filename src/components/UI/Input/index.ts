@@ -28,6 +28,7 @@ export default class Input extends Block<InputProps, HTMLInputElement> {
   protected init(): void {
     this.element!.classList.add(this.props.class!)
     this.element!.placeholder = this.props.placeholder!
+    //@ts-ignore
     this.props.value ? this.element!.value = this.props.value : null
     // this.element!.value = this.props.value
     this.element!.name = this.props.name

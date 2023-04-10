@@ -19,27 +19,27 @@ describe('Router', () => {
 
   const BlockMock = class {
     getContent = getContentFake
-  } as unknown as Block
+  } as unknown as typeof Block
 
   it('return router instance', () => {
-    const result = Router.use('/', BlockMock)
-
+    const result = Router.use('/',new BlockMock({}))
     expect(result).to.eq(Router)
   })
-
+  
   describe('Back', () => {
+    
     it('should render a page on history back action', () => {
-      Router.use('/', BlockMock).start()
+      Router.use('/',new BlockMock({})).start()
 
       Router.back()
 
       expect(getContentFake.callCount).to.eq(1)
     })
   })
-
   it('should render a page on start', () => {
-    Router.use('/', BlockMock).start()
+    Router.use('/',new BlockMock({})).start()
 
     expect(getContentFake.callCount).to.eq(1)
   })
+  
 })

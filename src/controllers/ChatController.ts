@@ -59,7 +59,7 @@ export class ChatController {
     try {
       await this.api
         .deleteUser(users, chatId)
-        .then((res) => console.log('user deleted'))
+        .then(() => console.log('user deleted'))
     } catch (e) {
       console.log('Cant delete users', e)
     }

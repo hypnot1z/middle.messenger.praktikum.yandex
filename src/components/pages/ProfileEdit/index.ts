@@ -2,19 +2,13 @@ import tpl from './tpl.hbs'
 import Button from '../../UI/Button'
 import Input from '../../UI/Input'
 import Block from '../../../utils/Block/block'
-import { Image } from '../../UI/Img'
-import avatar from '../../../img/avatarCap.svg'
 import Validation from '../../../utils/Validation'
 import './ProfileModule.scss'
-import AuthController from '../../../controllers/AuthController'
 import SettingController from '../../../controllers/SettingController'
-import { ProfileData } from '../../../api/SetAPI'
 import { withStore } from '../../../utils/Store'
 import { User } from '../../../api/AuthAPI'
-import { ProfileField } from '../../UI/ProfileFields'
 import Avatar from '../../UI/Avatar'
 
-interface ProfileProps extends User {}
 interface EditProfileProps extends User {
   display_name?: string
   events?: any
@@ -59,8 +53,8 @@ class PageEditProfile extends Block {
 
     SettingController.updateProfile(data)
   }
-
   protected componentDidUpdate(
+    //@ts-ignore
     oldProps: EditProfileProps,
     newProps: EditProfileProps
   ): boolean {
@@ -113,7 +107,7 @@ class PageEditProfile extends Block {
       },
     })
     this.setProps
-    const userName = newProps['first_name']
+    // const userName = newProps['first_name']
 
     this.children.avatar = new Avatar({})
     return false

@@ -12,7 +12,7 @@ function render(query: string, block: Block) {
   }
 
   root.innerHTML = ''
-
+  console.log('BLOCK RENDER', block)
   root.append(block.getContent()!)
 
   return root

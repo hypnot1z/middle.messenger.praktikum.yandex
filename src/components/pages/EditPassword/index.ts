@@ -4,11 +4,8 @@ import Input from '../../UI/Input'
 import Block from '../../../utils/Block/block'
 import FormData from '../../../utils/FormData'
 import Validation from '../../../utils/Validation'
-import { Image } from '../../UI/Img'
 import './ProfileModule.scss'
 import SettingController from '../../../controllers/SettingController'
-// import AuthAPI from '../../../api/AuthAPI'
-// import ava from '../../../img/avatarCap.svg'
 import Avatar from '../../UI/Avatar'
 
 interface EditPasswordProps {
@@ -90,8 +87,8 @@ class PageEditPassword extends Block<EditPasswordProps, HTMLDivElement> {
   }
 
   protected componentDidUpdate(
-    oldProps: EditPasswordProps,
-    newProps: EditPasswordProps
+    //@ts-ignore
+    oldProps: EditPasswordProps, newProps: EditPasswordProps
   ): boolean {
     this.children.avatar = new Avatar({})
     return false

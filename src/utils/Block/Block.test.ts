@@ -1,18 +1,20 @@
 import { expect } from 'chai'
 import Sinon = require('sinon')
-import type BlockType from './Block'
+import type BlockType from './block'
 import proxyquire = require('proxyquire')
 
 const eventBusMock = {
   on: Sinon.fake(),
   emit: Sinon.fake(),
+  init: Sinon.fake(),
 }
 
 const { default: Block } = proxyquire('./Block', {
   './event-bus': {
-    EventBus: class {
+    default: class {
       emit = eventBusMock.emit
       on = eventBusMock.on
+      init = eventBusMock.init
     },
   },
 }) as { default: typeof BlockType }
