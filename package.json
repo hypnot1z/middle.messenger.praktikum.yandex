@@ -4,12 +4,12 @@
   "description": "sprint-4",
   "default": "dist/index.html",
   "source": "static/index.html",
-  
   "targets": {
     "global": {
       "context": "browser",
       "outputFormat": "global"
-    }},
+    }
+  },
   "engines": {
     "node": ">= 14.0"
   },
@@ -24,15 +24,11 @@
     "start": "webpack && npm run server",
     "test": "mocha",
     "build:dev": "webpack --mode=development",
-    "build:prod": "webpack --mode=production --node-env=production",
-    "parcel": "parcel index.html --port 3000 --no-source-maps --open",
-    "parcelbuild": "parcel build index.html --no-source-maps --no-cache"
+    "build:prod": "webpack --mode=production --node-env=production"
   },
   "keywords": [],
   "author": "A_Zagorskiy",
   "devDependencies": {
-    "@parcel/transformer-inline-string": "=2.8.2",
-    "@parcel/transformer-sass": "=2.8.2",
     "@types/chai": "^4.3.4",
     "@types/jsdom": "^21.1.1",
     "@types/mocha": "^10.0.1",
@@ -58,8 +54,6 @@
     "mini-css-extract-plugin": "^2.7.5",
     "mocha": "^10.2.0",
     "nanoid": "3.3.6",
-    "parcel": "=2.8.2",
-    "parcel-transformer-hbs": "^1.0.4",
     "proxyquire": "^2.1.3",
     "sass-loader": "^13.2.2",
     "sinon": "^15.0.3",
