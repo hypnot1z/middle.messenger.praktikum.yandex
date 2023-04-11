@@ -27,6 +27,11 @@
     "build:prod": "webpack --mode=production --node-env=production",
     "prepare": "husky install"
   },
+  "lint-staged": {
+    "*.ts": "eslint .",
+    ".css": "stylelint '**/*.css'",
+    "*.(js|ts)": ["npm run lint:write", "git add"]  
+  },
   "keywords": [],
   "author": "A_Zagorskiy",
   "devDependencies": {
@@ -53,6 +58,7 @@
     "html-webpack-plugin": "^5.5.0",
     "husky": "^8.0.3",
     "jsdom": "^21.1.1",
+    "lint-staged": "^13.2.1",
     "mini-css-extract-plugin": "^2.7.5",
     "mocha": "^10.2.0",
     "nanoid": "3.3.6",
@@ -72,5 +78,13 @@
   "dependencies": {
     "handlebars": "=4.7.7",
     "sass": "=1.57.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "script": {
+    "prepare": "husky install"
   }
 }
