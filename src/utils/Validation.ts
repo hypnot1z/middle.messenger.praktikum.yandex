@@ -1,9 +1,10 @@
 import Pattern from './pattern'
 
 export default function Validation(event: Event) {
-  const errorElement: HTMLElement | null = event.target!.nextElementSibling
-  const targetPattern: RegExp = new RegExp(Pattern[event.target.name])
-  const value: string = event.target!.value
+  const element = event.target as HTMLInputElement
+  const errorElement = element.nextElementSibling as HTMLElement
+  const targetPattern: RegExp = new RegExp(Pattern[element.name])
+  const value: string = element.value
 
   if (!targetPattern.test(value)) {
     errorElement!.style.display = 'block'

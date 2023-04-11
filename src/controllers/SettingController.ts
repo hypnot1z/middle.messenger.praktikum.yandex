@@ -1,5 +1,4 @@
 import API, { SetAPI, ProfileData, PassData } from '../api/SetAPI'
-import store from '../utils/Store'
 import router from '../utils/Router'
 import AuthController from './AuthController'
 

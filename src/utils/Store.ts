@@ -34,7 +34,7 @@ export class Store extends EventBus {
 }
 
 const store = new Store()
-
+//@ts-ignore
 window.store = store
 
 export function withStore<SP extends Partial<any>>(
@@ -52,7 +52,7 @@ export function withStore<SP extends Partial<any>>(
           const stateProps = mapStateToProps(store.getState())
 
           previousState = stateProps
-
+//@ts-ignore
           this.setProps({ ...stateProps })
         })
       }

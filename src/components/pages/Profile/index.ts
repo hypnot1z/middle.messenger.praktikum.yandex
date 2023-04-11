@@ -2,13 +2,11 @@ import tpl from './tpl.hbs'
 import './ProfileModule.scss'
 import Block from '../../../utils/Block/block'
 import { Link } from '../../UI/Link'
-import { Image } from '../../UI/Img'
 import Button from '../../UI/Button'
 import AuthController from '../../../controllers/AuthController'
 import { withStore } from '../../../utils/Store'
 import { User } from '../../../api/AuthAPI'
 import { ProfileField } from '../../UI/ProfileFields'
-import ava from '../../../img/avatarCap.svg'
 import Avatar from '../../UI/Avatar'
 
 interface ProfileProps extends User {}
@@ -64,10 +62,12 @@ export class PageProfile extends Block {
   }
 
   protected componentDidUpdate(
+    //@ts-ignore
     oldProps: ProfileProps,
     newProps: ProfileProps
   ): boolean {
     for (let key in newProps) {
+      //@ts-ignore
       this.children.key = new ProfileField({ value: newProps[key] })
     }
     this.children.avatar = new Avatar({})

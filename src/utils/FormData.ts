@@ -6,8 +6,10 @@ export default function FormData(event: Event) {
 
   if (form) {
     for (let field of form) {
+      //@ts-ignore
       const { name } = field
       if (name) {
+        //@ts-ignore
         data[name] = field.value
       }
     }

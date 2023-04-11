@@ -40,6 +40,8 @@ export class DropdownBase extends Block<DropdownProps> {
         click: () => this.show(),
       },
     })
+    this.selChatUsers
+    this.selectedChat
   }
 
   init() {
@@ -75,6 +77,7 @@ export class DropdownBase extends Block<DropdownProps> {
 
   addUser() {
     const { selectedChat } = store.getState()
+    //@ts-ignore
     const userLogin = this.children.userLoginInput.value
     UsersController.addUser(userLogin, selectedChat.id)
   }
@@ -97,8 +100,8 @@ export class DropdownBase extends Block<DropdownProps> {
   }
 
   protected componentDidUpdate(
-    oldProps: DropdownProps,
-    newProps: DropdownProps
+    //@ts-ignore
+    oldProps: DropdownProps, newProps: DropdownProps
   ): boolean {
     const { selChatUsers, selectedChat } = store.getState()
     this.selChatUsers = selChatUsers
@@ -123,8 +126,8 @@ export class DropdownBase extends Block<DropdownProps> {
     dropdownMenu!.classList.add('show')
     window.addEventListener('click', function (event) {
       if (
-        !dropdownMenu?.contains(event.target) &&
-        !dropdown?.contains(event.target)
+        !dropdownMenu?.contains(event.target as Node) &&
+        !dropdown?.contains(event.target as Node)
       ) {
         if (dropdownMenu?.classList.contains('show')) {
           dropdownMenu.classList.remove('show')

@@ -19,7 +19,7 @@ export default class Button extends Block<ButtonProps, HTMLButtonElement> {
 
   init() {
     this.element!.classList.add(this.props.class!)
-    this.element!.id = this.props.id
+    this.element!.id = this.props.id!
     this.element!.type = this.props.type
   }
 

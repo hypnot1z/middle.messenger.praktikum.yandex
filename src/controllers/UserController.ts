@@ -27,11 +27,12 @@ export class UserController {
   async changeProfile(user: Partial<User>) {
     try {
       await this.api.changeProfile({
-        first_name: user.first_name,
-        second_name: user.second_name,
+        first_name: user.first_name ? user.first_name : '',
+        second_name: user.second_name ? user.second_name : '',
         display_name: user.display_name,
-        login: user.login,
-        email: user.email,
+        login: user.login ? user.login : '',
+        email: user.email ? user.email : '',
+        //@ts-ignore
         phone: user.phone,
       })
       store.set('user', user)
@@ -76,11 +77,11 @@ export class UserController {
   async addUser(user: GetUserByLogin, chatId: number) {
     console.log('USER CONTRL', user, 'CHAT', chatId)
     try {
-      await this.searchUser(user).then((res) =>
+      await this.searchUser(user).then(() =>
         console.log('RES ADDUSER', store.getState())
       )
       const { searchUser } = store.getState()
-      const users = searchUser.map((u) => u.id)
+      const users = searchUser.map((u: Record<string, string | number>) => u.id)
       try {
         await ChatAPI.addUser(users, chatId)
       } catch (e) {

@@ -14,6 +14,7 @@ import { Chats } from '../../../api/ChatAPI'
 import { Dropdown } from '../../UI/Dropdown'
 import { Message } from '../../UI/Message'
 import DefaultImg from '../../../img/chat-def.svg'
+import { User } from '../../../api/UserAPI'
 
 export const avatarUrl = `https://ya-praktikum.tech/api/v2/resources/`
 
@@ -33,7 +34,7 @@ export class PageChat extends Block<ChatProps> {
   protected selectedChatUsers: string[]
   constructor(props: ChatProps) {
     super({ ...props, tagName: 'div' })
-    console.log('CHAT PROPS', this.props)
+    // console.log('CHAT PROPS', this.props)
   }
 
   render() {
@@ -65,29 +66,35 @@ export class PageChat extends Block<ChatProps> {
       class: 'chat-input',
     })
   }
-
+//todo 'value'
   sendMessage(e: Event) {
     e.preventDefault()
-    console.log('sendMessage', this.children.messageInput.value)
+    // console.log('sendMessage', this.children.messageInput.value)
+    //@ts-ignore
     const msg = this.children.messageInput.value
-    console.log(this.selectedChatId)
+    // console.log(this.selectedChatId)
     MessageController.sendMessage(this.selectedChatId, msg)
+    //@ts-ignore
     this.children.messageInput.value = ''
   }
   createChat() {
+    //@ts-ignore
     const chatName = this.children.chatNameInput.value
     ChatController.createChat(chatName)
+    //@ts-ignore
     this.children.chatNameInput.value = ''
   }
-
+  //todo 'any'
+//@ts-ignore
   private createMessages(chatId: number, data: any, userId: number) {
-    const content = data.map((m) => {
+    const content = data.map((m: any) => {
       return { content: m.content, isMine: m.user_id === userId }
     })
     return (this.children.messages = new Message(content))
   }
 
   protected componentDidUpdate(
+    //@ts-ignore
     oldProps: ChatProps,
     newProps: ChatProps
   ): boolean {
@@ -96,7 +103,11 @@ export class PageChat extends Block<ChatProps> {
     // console.log('CHAT NWE PROPS', newProps)
 
     // this.children.messages = this.createMessages(newProps)
-
+    // if (!selectedChat && chats) {
+    //   console.log('CHATS', chats[0].id)
+    //   this.selectedChatId = chats[0].id
+    //   this.selectedChatName = chats[0].title
+    // }
     if (chats) {
       const chatsWithSrc = chats.map((chat: Chats) => {
         return {
@@ -109,8 +120,9 @@ export class PageChat extends Block<ChatProps> {
 
     if (selectedChat) {
       if (selChatUsers) {
-        this.selectedChatUsers = selChatUsers.map((u) => u.login)
+        this.selectedChatUsers = selChatUsers.map((u: User) => u.login)
         this.children.treeDots = new Dropdown({
+          //@ts-ignore
           selectedChat,
           selChatUsers: selChatUsers,
         })
@@ -137,8 +149,10 @@ export class PageChat extends Block<ChatProps> {
         placeholder: '...',
       })
     }
+
     this.children.chatList = new ChatTitle({
       chats,
+      selectedChat,
     })
 
     return false
@@ -146,10 +160,12 @@ export class PageChat extends Block<ChatProps> {
 }
 
 const withData = withStore((state) => ({
-  chats: state.chats,
-  selectedChat: state.selectedChat,
+  chats: state.chats ? state.chats : [],
+  selectedChat: state.selectedChat ? state.selectedChat : {},
   messages: state.messages,
 }))
-
+//@ts-ignore
 const ChatWithTitles = withData(PageChat)
 export const Chat = new ChatWithTitles({})
+
+//todo edit typings
